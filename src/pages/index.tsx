@@ -62,7 +62,7 @@ const PROJECTS = [
       "Responsive portfolio built with Docusaurus showcasing technical writing samples, project docs, and professional experience. Deployed via GitHub Pages with CI/CD.",
     emoji: "🌐",
     tech: ["Docusaurus", "React", "GitHub Pages", "CI/CD"],
-    code: "https://github.com/FaithKovi/faithkovi-portfolio",
+    code: "https://github.com/FaithKovi/portfolio",
     live: "https://faithkovi.xyz",
   },
   // {
