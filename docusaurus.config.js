@@ -12,6 +12,8 @@ const config = {
   organizationName: "FaithKovi",
   projectName: "portfolio",
 
+  trailingSlash: true, 
+
   onBrokenLinks: "throw",
   markdown: {
     hooks: {
