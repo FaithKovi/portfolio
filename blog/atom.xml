@@ -2,11 +2,61 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://faithkovi.xyz/blog/</id>
     <title>Faith Kovi Blog</title>
-    <updated>2025-10-15T00:00:00.000Z</updated>
+    <updated>2026-03-09T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://faithkovi.xyz/blog/"/>
     <subtitle>Faith Kovi Blog</subtitle>
     <icon>https://faithkovi.xyz/static/img/favicon.svg</icon>
+    <entry>
+        <title type="html"><![CDATA[Writing for the Engineer Who Will Replace You]]></title>
+        <id>https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/</id>
+        <link href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/"/>
+        <updated>2026-03-09T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[There’s a moment where you’re staring at some internal documentation at 11 PM, trying to figure out why a deployment pipeline is failing, and the doc is incomplete. It just stops like the person who wrote it got pulled into a meeting and never came back.]]></summary>
+        <content type="html"><![CDATA[<img src="https://faithkovi.xyz/img/blog/cover-writing-engineer.jpg" alt="An engineer working in the dark.">
+<p>There’s a moment where you’re staring at some internal documentation at 11 PM, trying to figure out why a deployment pipeline is failing, and the doc is incomplete. It just stops like the person who wrote it got pulled into a meeting and never came back.</p>
+<p>Maybe they left, or got promoted and never got back to finishing it. Well, it doesn’t matter. What matters is that you’re the one sitting there now, feeling betrayed by the doc.
+I’ve been on both sides of that moment, staring at broken docs and leaving unfinished ones behind. But somewhere along the way, I started thinking differently about who I was actually writing for and how they would feel with an incomplete doc. And this changed everything about how I approach documentation.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="youre-not-writing-for-your-team">You're Not Writing for Your Team<a href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/#youre-not-writing-for-your-team" class="hash-link" aria-label="Direct link to You're Not Writing for Your Team" title="Direct link to You're Not Writing for Your Team" translate="no">​</a></h2>
+<p>What nobody tells you early: your colleagues might not need your docs. Yes, that's right, they might not. They were in the same Slack threads. Same meetings. They know why the authentication service talks to three different caches because they were there when someone made that questionable decision at 4 PM on a Friday.
+Your real audience is the person who is employed 18 months later, gets handed a laptop, and is told, “You own this now.”
+With no context, no slack history, and no memory of what happened previously, that shaped how the system works today. All they have is what you left behind.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-why-matters-more-than-the-what">The "Why" Matters More Than the "What"<a href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/#the-why-matters-more-than-the-what" class="hash-link" aria-label="Direct link to The &quot;Why&quot; Matters More Than the &quot;What&quot;" title="Direct link to The &quot;Why&quot; Matters More Than the &quot;What&quot;" translate="no">​</a></h2>
+<p>When I started my career, I documented what things I did. Each step was written clearly, with every procedure cleanly written. Well, it became completely useless six months down the line when the step had changed completely, and I didn’t update the doc.
+What I’ve learned is that knowing the why is important. What stays beyond the steps and dashboard interfaces is the reasoning behind the decision.</p>
+<p><em>Why did we choose Kafka over RabbitMQ?</em> <em>Why is the timeout set to 30 seconds and not 10 seconds?</em></p>
+<p>Knowing the context behind decisions is quite important. It’s what lets the next person make good decisions instead of just following what they don’t understand. I started adding more context to almost everything I write. Not like a full-blown write-up every time, sometimes it’s just two sentences that can save someone the time a mistake can cost them.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="write-for-the-2-am-version-of-that-person">Write for the 2 AM Version of That Person<a href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/#write-for-the-2-am-version-of-that-person" class="hash-link" aria-label="Direct link to Write for the 2 AM Version of That Person" title="Direct link to Write for the 2 AM Version of That Person" translate="no">​</a></h2>
+<p>If you’ve ever been on-call, you know there is a difference between reading documentation at your desk while drinking coffee versus reading it at 2 AM when everything is on fire, and your phone keeps buzzing.
+That’s a different reader. One who is not interested in whether you wrote it stylishly. They just want answers fast. They want to know:</p>
+<ul>
+<li class="">what does this service depend on?</li>
+<li class="">what breaks when it goes down?</li>
+<li class="">how do I restart it without making it worse?</li>
+</ul>
+<p>So when I am structuring anything operational, I try to keep that person in mind. I make sure I use short sentences, clear headings, and remove doubt from their minds. If there’s a command they’ll need to run, I include it, making sure it's easy to find and not buried deep into a paragraph section.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="treat-documentation-like-a-product">Treat Documentation Like a Product<a href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/#treat-documentation-like-a-product" class="hash-link" aria-label="Direct link to Treat Documentation Like a Product" title="Direct link to Treat Documentation Like a Product" translate="no">​</a></h2>
+<p>One big shift in my thinking came when I stopped treating doc as a side work and started treating it as a product.
+Think about it this way: if the person replacing you can’t understand the system from your documentation, then you haven’t finished working on that doc.</p>
+<p>When you see documentation as a product, something that has users, a purpose, and a quality standard to follow, you start making different choices. You will think about the structure, what is important to add or what to leave out, and how to maintain it.</p>
+<div style="text-align:center"><img src="https://faithkovi.xyz/img/blog/writingEngineer2.png" alt="A simple flowchart showing Documentation-Users-Feedback-Improvements."><p><em>A simple workflow diagram of documentation lifecycle</em></p></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-i-actually-do-differently-now">What I Actually Do Differently Now<a href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/#what-i-actually-do-differently-now" class="hash-link" aria-label="Direct link to What I Actually Do Differently Now" title="Direct link to What I Actually Do Differently Now" translate="no">​</a></h2>
+<p>Over time, I’ve settled into a few habits that came directly from this mindset.
+I write a summary about the state of things for every system I own. I mention what works well, what’s been held together with tape, and what the potential risks are.</p>
+<p>I document the things I almost forgot. Like if I had to dig through three Jira tickets and a Slack thread to figure something out, then that's a sign it needs to be written down. The fact that it was hard to find means someone will also face the same issue.
+I revisit docs when I use them. Like if I use my own runbook and something is confusing or wrong. I fix it right then and not later. Because the next person who reads it won’t have context to know it’s wrong, they will just trust it.</p>
+<p>And I write like a human, I use “we” and “you.” When something is genuinely confusing, I say, “This is confusing, but here’s the deal”.</p>
+<p>I don’t pretend everything works perfectly when it doesn’t. Being honest in documentation helps build trust, even with someone you’ll never meet.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-uncomfortable-truth">The Uncomfortable Truth<a href="https://faithkovi.xyz/blog/writing-for-the-engineer-who-will-replace-you/#the-uncomfortable-truth" class="hash-link" aria-label="Direct link to The Uncomfortable Truth" title="Direct link to The Uncomfortable Truth" translate="no">​</a></h2>
+<p>A part that’s hard to say out loud is: most of us will eventually leave our jobs. That’s how careers work. Everything you build, every pipeline you configure, every weird shortcut you take to implement things will be inherited by someone else. And the quality of what you leave behind says something about you as a professional.</p>
+<p>I say this because I’ve been on the receiving end of both brilliant and terrible handoffs. When I say brilliant, they weren’t perfect systems. They were brilliant because someone took the time to write things down with the next person in mind. They left a trail that said, "I cared about whoever came after me."</p>]]></content>
+        <author>
+            <name>Faith Kovi</name>
+            <uri>https://faithkovi.xyz</uri>
+        </author>
+        <category label="devops" term="devops"/>
+        <category label="docs" term="docs"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[What Makes API Documentation Work?]]></title>
         <id>https://faithkovi.xyz/blog/what-makes-api-documentation-work/</id>

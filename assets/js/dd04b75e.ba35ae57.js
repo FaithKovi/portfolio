@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkportfolio=globalThis.webpackChunkportfolio||[]).push([[672],{3024(i){i.exports=JSON.parse('{"authors":[{"name":"Faith Kovi","title":"Documentation Engineer","url":"https://faithkovi.xyz","socials":{"linkedin":"https://www.linkedin.com/in/faith-kovi/"},"imageURL":"/img/profile.jpg","key":"Faith Kovi","page":null,"count":3}]}')}}]);
