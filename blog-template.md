@@ -1,7 +1,7 @@
 ---
 slug: hello-world
 title: Hello World
-authors: Faith Kovi
+authors: Faith Wachukwu
 tags: [introduction, docs]
 ---
 

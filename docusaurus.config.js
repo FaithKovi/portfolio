@@ -2,7 +2,7 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Faith Kovi",
+  title: "Faith Wachukwu",
   tagline: "Documentation Engineer & Technical Writer",
   favicon: "/static/img/favicon.svg",
 
@@ -49,14 +49,17 @@ const config = {
     ({
       image: "img/social-card.jpg",
       navbar: {
-        title: "Faith Kovi",
+        title: "Faith Wachukwu",
         logo: {
-          alt: "Faith Kovi",
+          alt: "Faith Wachukwu",
           src: "img/logo.png",
           srcDark: "img/logo.png",
         },
         items: [
-          { to: "/blog/", label: "Blog", position: "left" },
+          { to: "/about", label: "About", position: "left" },
+          { to: "/work", label: "Work", position: "left" },
+          { to: "/blog", label: "Blog", position: "left" },
+          { to: "/contact", label: "Contact", position: "left" },
           {
             href: "https://github.com/FaithKovi",
             label: "GitHub",
@@ -75,7 +78,28 @@ const config = {
         respectPrefersColorScheme: true,
       },
       footer: {
-        copyright: `${new Date().getFullYear()} Faith Kovi. Built with Docusaurus.`,
+        style: "light",
+        links: [
+          {
+            title: "Pages",
+            items: [
+              { label: "About", to: "/about" },
+              { label: "Work", to: "/work" },
+              { label: "Blog", to: "/blog" },
+              { label: "Contact", to: "/contact" },
+            ],
+          },
+          {
+            title: "Connect",
+            items: [
+              // TODO: Replace with your URLs
+              { label: "GitHub", href: "https://github.com/FaithKovi" },
+              { label: "LinkedIn", href: "https://linkedin.com/in/faith-kovi" },
+              { label: "Email", href: "mailto:faithkovi@gmail.com" },
+            ],
+          },
+        ],
+        copyright: `${new Date().getFullYear()} Faith Wachukwu. Built with Docusaurus.`,
       },
       prism: {
         theme: require("prism-react-renderer").themes.github,

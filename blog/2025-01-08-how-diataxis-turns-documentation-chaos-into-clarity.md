@@ -1,7 +1,7 @@
 ---
 slug: how-diataxis-turns-documentation-chaos-into-clarity
 title: How Diátaxis Turns Documentation Chaos into Clarity
-authors: Faith Kovi
+authors: Faith Wachukwu
 tags: [diataxis, docs]
 ---
 

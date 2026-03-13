@@ -1,7 +1,7 @@
 ---
 slug: writing-for-the-engineer-who-will-replace-you
 title: Writing for the Engineer Who Will Replace You
-authors: Faith Kovi
+authors: Faith Wachukwu
 tags: [devops, docs]
 ---
 

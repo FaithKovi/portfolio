@@ -1,7 +1,7 @@
 ---
 slug: docs-and-deployments-the-power-of-clear-documentation-in-devops
 title: 'Docs and Deployments: The Power of Clear Documentation in DevOps' 
-authors: Faith Kovi
+authors: Faith Wachukwu
 tags: [devops, docs, docs as code, documentation]
 ---
 

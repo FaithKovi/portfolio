@@ -1,7 +1,7 @@
 ---
 slug: what-makes-api-documentation-work
 title: What Makes API Documentation Work?
-authors: Faith Kovi
+authors: Faith Wachukwu
 tags: [API documentation, docs, API, technicalwriting]
 ---
 
