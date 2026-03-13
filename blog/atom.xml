@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://faithkovi.xyz/blog/</id>
-    <title>Faith Kovi Blog</title>
+    <title>Faith Wachukwu Blog</title>
     <updated>2026-03-09T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://faithkovi.xyz/blog/"/>
-    <subtitle>Faith Kovi Blog</subtitle>
+    <subtitle>Faith Wachukwu Blog</subtitle>
     <icon>https://faithkovi.xyz/static/img/favicon.svg</icon>
     <entry>
         <title type="html"><![CDATA[Writing for the Engineer Who Will Replace You]]></title>
@@ -51,7 +51,7 @@ I revisit docs when I use them. Like if I use my own runbook and something is co
 <p>A part that’s hard to say out loud is: most of us will eventually leave our jobs. That’s how careers work. Everything you build, every pipeline you configure, every weird shortcut you take to implement things will be inherited by someone else. And the quality of what you leave behind says something about you as a professional.</p>
 <p>I say this because I’ve been on the receiving end of both brilliant and terrible handoffs. When I say brilliant, they weren’t perfect systems. They were brilliant because someone took the time to write things down with the next person in mind. They left a trail that said, "I cared about whoever came after me."</p>]]></content>
         <author>
-            <name>Faith Kovi</name>
+            <name>Faith Wachukwu</name>
             <uri>https://faithkovi.xyz</uri>
         </author>
         <category label="devops" term="devops"/>
@@ -107,7 +107,7 @@ This layered approach serves everyone. New developers get a gentle introduction 
 <p>The platforms that get this right — Stripe, Twilio, GitHub, Spotify, and X don’t just document their APIs. They create experiences that make developers feel capable and confident. That’s the real difference between APIs that get adopted and those that get abandoned.</p>
 <p>Remember this the next time you’re writing documentation: you’re not just describing technical features. You’re potentially making someone’s workday better or helping them solve a problem they’ve been wrestling with for hours. That opportunity is worth the extra effort to get it right.</p>]]></content>
         <author>
-            <name>Faith Kovi</name>
+            <name>Faith Wachukwu</name>
             <uri>https://faithkovi.xyz</uri>
         </author>
         <category label="API documentation" term="API documentation"/>
@@ -219,7 +219,7 @@ Assign ownership for key documents, set review cycles to ensure they stay releva
 <p>So, here’s the real question: <strong>How does your team handle DevOps documentation today?</strong> Is it an afterthought, or something you prioritise in your workflow?</p>
 <p>Let’s discuss this because great documentation can be the difference between smooth and chaotic deployments in DevOps.</p>]]></content>
         <author>
-            <name>Faith Kovi</name>
+            <name>Faith Wachukwu</name>
             <uri>https://faithkovi.xyz</uri>
         </author>
         <category label="devops" term="devops"/>
@@ -285,7 +285,7 @@ Assign ownership for key documents, set review cycles to ensure they stay releva
 <p>Diátaxis transforms documentation from a daunting task into a manageable, iterative process. By focusing on small, meaningful changes and allowing structure to emerge organically, this approach empowers creators to produce user-centric, adaptable documentation. Whether starting from scratch or refining a chaotic body of work, Diátaxis offers the tools and principles to guide you toward clarity and success — one step at a time.</p>
 <p>Documentation is not just a deliverable; it’s a dynamic, evolving process. With Diátaxis, you can embrace the journey, confident that every small step contributes to a clearer, more effective body of work.</p>]]></content>
         <author>
-            <name>Faith Kovi</name>
+            <name>Faith Wachukwu</name>
             <uri>https://faithkovi.xyz</uri>
         </author>
         <category label="diataxis" term="diataxis"/>
