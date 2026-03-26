@@ -13,7 +13,7 @@ Your documentation has a new reader, and it doesn't have eyes. AI tools like cha
 
 That means your docs now serve two audiences: the person trying to solve a problem, and the machine trying to extract the right answer. This changes how documentation should be structured. Not what you write but how you arrange it. Here's how to structure documentation that works for both.
 
-## Why Documentation Structur Matters
+## Why Documentation Structure Matters
 
 Picture this. A backend engineer asks the internal chatbot how to rotate API keys. The accurate answer exists in the docs. But it's split across two pages. "Security Overview" explains the concepts. "Key Management" has the actual steps.  
 
