@@ -105,10 +105,10 @@ const EXPERIENCE = [
     location: "Oslo, Norway · Remote",
     period: "Aug 2025 – Present",
     bullets: [
-      "Write and maintain clear, user-focused technical documentation for client products.",
-      "Translate complex technical concepts into practical, easy-to-use content.",
-      "Collaborate with engineers, product managers, and stakeholders to define documentation needs.",
-      "Adjust tone and depth based on audience, from technical to non-technical users.",
+      "Create and maintain API documentation, developer onboarding guides, and product tutorials for SaaS and developer-tool clients, translating complex features into clear, task-oriented content.",
+      "Collaborate with engineers, product managers, and stakeholders to ensure accuracy and identify gaps in technical content.",
+      "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users."
+
     ],
     tags: ["Technical Writing", "API Docs", "Markdown", "Developer Guides"],
   },
@@ -140,10 +140,10 @@ const EXPERIENCE = [
     location: "Remote",
     period: "Nov 2022 – Jun 2023",
     bullets: [
-      "Migrated PostgreSQL databases to DigitalOcean Managed Database, documenting the migration process for replicability.",
-      "Resolved critical Elastic Beanstalk issues, enhancing application stability and reducing downtime.",
-      "Leveraged AWS services including ECS Fargate, DynamoDB, and Lambda to optimize application scalability.",
-      "Automated CI/CD pipelines using CodeBuild, CodeDeploy, and CodePipeline for faster, reliable releases.",
+      "Migrated PostgreSQL databases to DigitalOcean Managed Database and authored migration runbooks ensuring replicability and knowledge transfer across teams.",
+      "Automated CI/CD pipelines using AWS CodeBuild, CodeDeploy, and CodePipeline; documented deployment workflows and infrastructure architecture for cross-team reference.",
+      "Leveraged AWS services (ECS Fargate, DynamoDB, Lambda) to optimize application scalability, creating technical reference documentation for each component."
+
     ],
     tags: [
       "AWS",
@@ -162,10 +162,9 @@ const EXPERIENCE = [
     location: "New York, USA · Remote",
     period: "Apr 2022 – Oct 2022",
     bullets: [
-      "Automated packaging and deployment of web applications on ECS Fargate using GitHub Actions.",
-      "Migrated multiple domains to AWS Route53 for centralized management.",
-      "Orchestrated deployment of 3-tier applications with AWS Amplify, Elastic Beanstalk, and RDS.",
-      "Implemented comprehensive monitoring and logging with CloudWatch.",
+      "Automated web application packaging and deployment on ECS Fargate using GitHub Actions; maintained internal deployment guides and operational runbooks.",
+      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documenting operational procedures and integrated various AWS services to meet business/client needs."
+
     ],
     tags: [
       "GitHub Actions",
@@ -183,10 +182,8 @@ const EXPERIENCE = [
     location: "Lagos, Nigeria · Remote",
     period: "Aug 2021 – Oct 2021",
     bullets: [
-      "Containerized web applications with Docker for consistent development and deployment environments.",
-      "Automated DevOps tool installation using Ansible, optimizing infrastructure setup.",
-      "Provisioned Google Cloud infrastructure using Terraform for scalable resource management.",
-      "Scripted CI/CD pipelines with Jenkins and CircleCI, automating application deployment.",
+      "Containerized web applications with Docker, provisioned GCP infrastructure using Terraform, and scripted CI/CD pipelines with Jenkins and CircleCI.",
+      "Automated infrastructure setup using Ansible; documented provisioning procedures to reduce onboarding time for incoming team members."
     ],
     tags: ["Docker", "Ansible", "Terraform", "GCP", "Jenkins", "CircleCI"],
   },
