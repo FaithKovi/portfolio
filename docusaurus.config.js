@@ -21,6 +21,52 @@ const config = {
     },
   },
 
+  headTags: [
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:title",
+        content: "Faith Wachukwu — Documentation Engineer & Technical Writer",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:description",
+        content:
+          "Documentation Engineer with 3+ years of experience creating developer-focused docs, API references, and technical tutorials. Available for freelance and full-time roles.",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:type",
+        content: "website",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:url",
+        content: "https://faithkovi.xyz",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:image",
+        content: "https://faithkovi.xyz/img/profile.jpg",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+    },
+  ],
+
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -36,6 +82,16 @@ const config = {
         },
         blog: {
           showReadingTime: true,
+          blogTitle: "Blog — Faith Wachukwu",
+          blogDescription:
+            "Technical writing, documentation strategy, and docs-as-code insights from Faith Wachukwu.",
+          feedOptions: {
+            type: "all",
+            title: "Faith Wachukwu — Blog",
+            description:
+              "Technical writing, documentation strategy, and docs-as-code insights.",
+            copyright: `Copyright © ${new Date().getFullYear()} Faith Wachukwu`,
+          },
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -47,7 +103,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: "img/social-card.jpg",
+      image: "img/profile.jpg",
       navbar: {
         title: "Faith Wachukwu",
         logo: {
@@ -92,10 +148,10 @@ const config = {
           {
             title: "Connect",
             items: [
-              // TODO: Replace with your URLs
               { label: "GitHub", href: "https://github.com/FaithKovi" },
               { label: "LinkedIn", href: "https://linkedin.com/in/faith-kovi" },
               { label: "Email", href: "mailto:faithkovi@gmail.com" },
+              // { label: "RSS Feed", href: "/blog/rss.xml" },
             ],
           },
         ],

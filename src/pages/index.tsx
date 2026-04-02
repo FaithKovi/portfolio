@@ -30,6 +30,66 @@ const SERVICES = [
   },
 ];
 
+const SKILLS = [
+  {
+    category: "Documentation Tools",
+    items: [
+      "Docusaurus",
+      "Markdown / MDX",
+      "Swagger / OpenAPI",
+      "Postman",
+      "Mintlify",
+      "Hugo",
+      "GitBook",
+      "ReadTheDocs",
+    ],
+  },
+  {
+    category: "Writing & Content",
+    items: [
+      "API References",
+      "Developer Guides",
+      "Tutorials & How-Tos",
+      "Release Notes",
+      "Information Architecture",
+      "UX Writing",
+    ],
+  },
+  {
+    category: "Docs Workflow & Tooling",
+    items: [
+      "Git / GitHub",
+      "CI/CD Publishing",
+      "GitHub Actions",
+      "Docs-as-Code",
+      "Version Control",
+      "Peer Review Workflows",
+    ],
+  },
+  {
+    category: "Technical Domains I've Documented",
+    items: [
+      "REST APIs",
+      "CI/CD Pipelines",
+      "Python / Go / Bash",
+      "Saas Products & Developer Platforms",
+      "PaaS / IaaS / Cloud Services",
+    ],
+  },
+];
+
+const EDUCATION = [
+  {
+    school: "University of Port Harcourt",
+    degree: "Bachelor of Science, Biochemistry",
+    year: "2016 – 2021",
+  },
+];
+
+const CERTIFICATES = [
+  { name: "Kubernetes and Cloud Native Associate", year: "2024" },
+];
+
 // COMPONENTS
 
 function HeroSection() {
@@ -37,48 +97,26 @@ function HeroSection() {
     <section className="hero-section">
       <div className="hero-container">
         <div className="hero-content">
-          <span className="hero-label">Documentation Engineer | Technical Writer</span>
           <h1 className="hero-title">Faith Wachukwu</h1>
+        <span className="hero-label">Documentation Engineer | Technical Writer</span>
           <p className="hero-description">
-            Documentation Engineer and Technical Writer with 3+ years of
-            experience creating developer-focused documentation that simplifies
-            complex technical concepts. Passionate about docs-as-code, cloud
-            infrastructure, and improving developer experience.
+            A Documentation Engineer and Technical Writer with over 3+ years of experience creating developer-focused docs that simplify complex concepts.
+          </p>
+          <p className="hero-description">
+            I build scalable docs-as-code workflows, partner with engineering teams on guides and APIs, contribute to open source, and write about developer experience and documentation strategy.
           </p>
           <div className="hero-meta">
             {/* <span>📍 Lagos, Nigeria</span>
             <span>·</span> */}
-            <span>✍️ Freelance</span>
+            {/* <span>✍️ Freelance</span> */}
           </div>
           <div className="hero-actions">
-          <a href="/blog/" className="btn-primary">
-            Read Blog
-          </a>
-           <a href="/work" className="btn-primary">
-              View My Work
-            </a>
-            <a href="/about" className="btn-outline">
-              About Me
+            <a href="/work" className="btn-primary">
+              See My Work
             </a>
             <a href="/contact" className="btn-outline">
               Get In Touch
             </a>
-            {/* <a
-              href="https://github.com/FaithKovi"
-              className="btn-outline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://linkedin.com/in/faith-kovi"
-              className="btn-outline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a> */}
           </div>
         </div>
         <div className="hero-image-wrapper">
@@ -110,6 +148,31 @@ function ServicesSection() {
         ))}
       </div>
     </section>
+  );
+}
+
+function SkillsSection() {
+  return (
+      <div className="work-section-bg">
+        <section className="portfolio-section">
+          <p className="section-label">Skills & Tools</p>
+          <h2 className="section-title">What I work with</h2>
+          <div className="skills-grid">
+            {SKILLS.map((group) => (
+              <div className="skill-card" key={group.category}>
+                <h3>{group.category}</h3>
+                <div className="skill-tags">
+                  {group.items.map((item) => (
+                    <span className="skill-tag" key={item}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
   );
 }
 
@@ -147,6 +210,7 @@ export default function Home(): React.JSX.Element {
       <main>
         <HeroSection />
         <ServicesSection />
+        <SkillsSection />
         <CTASection />
       </main>
     </Layout>

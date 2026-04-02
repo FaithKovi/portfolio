@@ -5,14 +5,30 @@ import Layout from "@theme/Layout";
 
 const PROJECTS = [
   {
+    title: "AI Changelog Generator",
+    description:
+      "A Python CLI tool that reads git commit history and generates polished, categorized changelogs using Gemini's API or Claude's API. Parses commits, filters noise, groups changes by type (Added, Changed, Fixed, Security), and outputs publish-ready markdown following the Keep a Changelog standard.",
+    emoji: "✨",
+    tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
+    code: "https://github.com/FaithKovi/changelog-generator",
+  },
+  {
     title: "Portfolio Website",
     description:
-      "Responsive portfolio built with Docusaurus showcasing technical writing samples, project docs, and professional experience. Deployed via GitHub Pages with CI/CD.",
+      "This site — a docs-as-code portfolio built with Docusaurus, auto-deployed via GitHub Actions, with RSS, dark mode, and Formspree contact integration.",
     emoji: "🌐",
     tech: ["Docusaurus", "React", "GitHub Pages", "CI/CD"],
     code: "https://github.com/FaithKovi/portfolio",
     live: "https://faithkovi.xyz",
   },
+  // {
+  //   title: "Helm Documentation Contributions",
+  //   description:
+  //     "Open-source contributions to Helm's official documentation — improving clarity of installation guides, chart development workflows, and plugin reference pages for the Kubernetes package manager.",
+  //   emoji: "⎈",
+  //   tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
+  //   code: "https://github.com/helm/helm-www",
+  // },
 ];
 
 const ARTICLES = [
@@ -33,48 +49,48 @@ const ARTICLES = [
   {
     title: "Exploring API latency analysis using Golang",
     platform: "Medium",
-    description: "Users expect instantaneous responses and seamless experience from applications. If an application doesn’t do this it impacts the user experience. This is why a critical performance metric called API latency is important to monitor.",
+    description: "Users expect instantaneous responses and seamless experience from applications. If an application doesn't do this it impacts the user experience. This is why a critical performance metric called API latency is important to monitor.",
     url: "https://vera-kaka.medium.com/exploring-api-latency-analysis-using-golang-372d54178ff8",
     date: "Apr 2024",
   },
   {
     title: "Serverless Computing and DevOps: The Future of Cloud Deployment",
-    platform: "Hackernoon",
+    platform: "HackerNoon",
     description: "The world of serverless computing is where innovation drives operations and applications scale seamlessly to meet demand. It is a game changer in the computing industry. This article will highlight its benefits in the future of cloud deployment.",
     url: "https://hackernoon.com/serverless-computing-and-devops-the-future-of-cloud-deployment",
     date: "Nov 2023",
   },
   {
     title: "Introduction to AWS Elastic Beanstalk",
-    platform: "MEDIUM(AWSTIP)",
-    description: "AWS Elastic Beanstalk is a powerful platform-as-a-service (PaaS) offering that simplifies the deployment and management of applications in the AWS cloud. It abstracts away the underlying infrastructure, allowing developers to focus on writing code and delivering value to users. In this article, we will explore the key features and benefits of AWS Elastic Beanstalk, and how it can help you streamline your application deployment process.",
+    platform: "AWS in Plain English",
+    description: "AWS Elastic Beanstalk is a powerful platform-as-a-service (PaaS) offering that simplifies the deployment and management of applications in the AWS cloud. It abstracts away the underlying infrastructure, allowing developers to focus on writing code and delivering value to users.",
     url: "https://awstip.com/introduction-to-aws-elastic-beanstalk-126d5628c657",
     date: "Jan 2023",
   },
   {
     title: "How to Add Environment Variables to Applications Deployed on AWS Amplify",
-    platform: "MEDIUM(AWSTIP)",
+    platform: "AWS in Plain English",
     description: "Environment variables are essential for managing application configurations in different environments. This article explains how to set and manage environment variables for applications deployed on AWS Amplify.",
     url: "https://awstip.com/how-to-add-environment-variables-to-applications-deployed-on-aws-amplify-9610e6b6e20e",
     date: "Jan 2023",
   },
   {
     title: "My DevSecOps Journey",
-    platform: "MEDIUM",
+    platform: "Medium",
     description: "A personal journey through the world of DevSecOps, exploring best practices and lessons learned in integrating security into the development lifecycle.",
     url: "https://vera-kaka.medium.com/my-devsecops-journey-65e3708562a9",
     date: "Mar 2022",
   },
   {
     title: "How to deploy a 3-tier application using docker-compose on GCE",
-    platform: "MEDIUM",
+    platform: "Medium",
     description: "This article explains how to deploy a 3-tier application using docker-compose on Google Compute Engine (GCE). It covers setting up the environment, creating the necessary Docker containers, and deploying the application.",
     url: "https://vera-kaka.medium.com/deploying-a-three-tier-application-to-google-kubernetes-engine-gke-c0ce25f7a3c3",
     date: "Oct 2021",
   },
   {
     title: "How to automate the creation of VPC and subnets using Terraform",
-    platform: "MEDIUM",
+    platform: "Medium",
     description: "Terraform is a powerful infrastructure-as-code tool that allows you to define and provision cloud infrastructure using declarative configuration files. This article explains how to automate the creation of VPC and subnets using Terraform.",
     url: "https://vera-kaka.medium.com/automate-the-creation-of-vpc-and-subnets-using-terraform-f198f1f57900",
     date: "Oct 2021",
@@ -83,7 +99,7 @@ const ARTICLES = [
 
 const EXPERIENCE = [
   {
-    logo: "LR",
+    logo: "/img/literally-logo.jpg",
     role: "Freelance Technical Writer",
     company: "Literally",
     location: "Oslo, Norway · Remote",
@@ -97,7 +113,7 @@ const EXPERIENCE = [
     tags: ["Technical Writing", "API Docs", "Markdown", "Developer Guides"],
   },
   {
-    logo: "CD",
+    logo: "/img/clouddley-logo.jpg",
     role: "Documentation Engineer",
     company: "Clouddley",
     location: "Delaware, USA · Remote",
@@ -117,7 +133,8 @@ const EXPERIENCE = [
     ],
   },
   {
-    logo: "FD",
+    logo: "",
+    initials: "FL",
     role: "Freelance DevOps Engineer",
     company: "Freelance",
     location: "Remote",
@@ -138,7 +155,8 @@ const EXPERIENCE = [
     ],
   },
   {
-    logo: "GR",
+    logo: "",
+    initials: "GR",
     role: "Junior DevOps/QA Engineer",
     company: "Grais",
     location: "New York, USA · Remote",
@@ -158,7 +176,8 @@ const EXPERIENCE = [
     ],
   },
   {
-    logo: "SC",
+    logo: "",
+    initials: "SC",
     role: "Cloud Engineer Intern",
     company: "She Code Africa",
     location: "Lagos, Nigeria · Remote",
@@ -173,11 +192,23 @@ const EXPERIENCE = [
   },
 ];
 
+const EDUCATION = [
+  {
+    school: "University of Port Harcourt",
+    degree: "Bachelor of Science, Biochemistry",
+    year: "2016 – 2021",
+  },
+];
+
+const CERTIFICATES = [
+  { name: "Kubernetes and Cloud Native Associate", year: "2024" },
+];
+
 // ─── PAGE ────────────────────────────────────────────────────
 
 export default function Work(): React.JSX.Element {
   const [tab, setTab] = useState<"projects" | "articles" | "experience">(
-    "projects"
+    "experience"
   );
 
   return (
@@ -194,10 +225,10 @@ export default function Work(): React.JSX.Element {
         <section className="portfolio-section" style={{ paddingTop: 0 }}>
           <div className="tab-buttons">
             <button
-              className={`tab-btn ${tab === "projects" ? "active" : ""}`}
-              onClick={() => setTab("projects")}
+              className={`tab-btn ${tab === "experience" ? "active" : ""}`}
+              onClick={() => setTab("experience")}
             >
-              Projects
+              Experience
             </button>
             <button
               className={`tab-btn ${tab === "articles" ? "active" : ""}`}
@@ -206,10 +237,10 @@ export default function Work(): React.JSX.Element {
               Articles
             </button>
             <button
-              className={`tab-btn ${tab === "experience" ? "active" : ""}`}
-              onClick={() => setTab("experience")}
+              className={`tab-btn ${tab === "projects" ? "active" : ""}`}
+              onClick={() => setTab("projects")}
             >
-              Experience
+              Projects
             </button>
           </div>
 
@@ -284,32 +315,86 @@ export default function Work(): React.JSX.Element {
 
           {/* Experience Tab */}
           {tab === "experience" && (
-            <div className="experience-list">
-              {EXPERIENCE.map((exp) => (
-                <div className="experience-card" key={exp.role + exp.company}>
-                  <img className="exp-logo" src={exp.logo} alt={exp.company} />
-                  <div className="exp-content">
-                    <h4>{exp.role}</h4>
-                    <p className="exp-company">{exp.company}</p>
-                    <p className="exp-meta">
-                      {exp.period} · {exp.location}
-                    </p>
-                    <ul>
-                      {exp.bullets.map((b, i) => (
-                        <li key={i}>{b}</li>
-                      ))}
-                    </ul>
-                    <div className="exp-tags">
-                      {exp.tags.map((t) => (
-                        <span className="project-tech-tag" key={t}>
-                          {t}
-                        </span>
-                      ))}
+            <>
+              <div className="experience-list">
+                {EXPERIENCE.map((exp) => (
+                  <div className="experience-card" key={exp.role + exp.company}>
+                    {exp.logo ? (
+                      <img className="exp-logo" src={exp.logo} alt={exp.company} />
+                    ) : (
+                      <div className="exp-logo exp-logo-initials">
+                        {exp.initials || exp.company.substring(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="exp-content">
+                      <h4>{exp.role}</h4>
+                      <p className="exp-company">{exp.company}</p>
+                      <p className="exp-meta">
+                        {exp.period} · {exp.location}
+                      </p>
+                      <ul>
+                        {exp.bullets.map((b, i) => (
+                          <li key={i}>{b}</li>
+                        ))}
+                      </ul>
+                      <div className="exp-tags">
+                        {exp.tags.map((t) => (
+                          <span className="project-tech-tag" key={t}>
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Education, Certificates & Communities */}
+              <div className="about-details-stacked" style={{ marginTop: "3rem" }}>
+                <div>
+                  <p className="section-label">Education</p>
+                  <div className="education-list">
+                    {EDUCATION.map((edu) => (
+                      <div className="education-card" key={edu.school}>
+                        <div className="edu-icon">🎓</div>
+                        <div className="edu-content">
+                          <h4>{edu.school}</h4>
+                          <p>{edu.degree}</p>
+                          <p className="edu-year">{edu.year}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+
+                <div>
+                  <p className="section-label">Certificates</p>
+                  <div
+                    style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}
+                  >
+                    {CERTIFICATES.map((cert) => (
+                      <span className="cert-badge" key={cert.name}>
+                        🏅 {cert.name} ({cert.year})
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="section-label">Communities</p>
+                  <div
+                    style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}
+                  >
+                    <span className="cert-badge">
+                      🤝 CHAOSS Community (Contributor) · Jun 2022 – Present
+                    </span>
+                    <span className="cert-badge">
+                      ⎈ Helm Documentation (Contributor)
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </section>
       </main>

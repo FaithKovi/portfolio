@@ -16,7 +16,6 @@ export default function Contact(): React.JSX.Element {
     const data = new FormData(form);
 
     try {
-      // TODO: Replace YOUR_FORM_ID with your Formspree form ID
       const response = await fetch("https://formspree.io/f/mwpblqjg", {
         method: "POST",
         body: data,

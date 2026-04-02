@@ -8,7 +8,7 @@ tags: [technical-writing, documentation, AI, RAG, developer-experience, content-
 <img src="/img/blog/cover-docs-humans-ai.png" alt="A hand-drawn style illustration showing a document in the center with two readers: a stick-figure human on the left reading the document from top to bottom, and a boxy robot on the right reaching in to grab a single highlighted chunk. Text reads: Your docs now have two readers. Write for both, compromise on neither." />
 
 
-Your documentation has a new reader, and it doesn't have eyes. AI tools like chatbots, IDE assistants, and RAG systems now stand between your carefully written docs and the engineer who needs them. These tools chop your pages into chunks, search for relevant matches, and generate responses before a human ever visits the actual page.  
+Your documentation has a new reader, and it doesn't have eyes. AI tools like chatbots, IDE assistants, and Retrieval-Augmented Generation (RAG) systems now stand between your carefully written docs and the engineer who needs them. These tools chop your pages into chunks, search for relevant matches, and generate responses before a human ever visits the actual page.  
 <!-- truncate -->
 
 That means your docs now serve two audiences: the person trying to solve a problem, and the machine trying to extract the right answer. This changes how documentation should be structured. Not what you write but how you arrange it. Here's how to structure documentation that works for both.
@@ -77,7 +77,7 @@ The fix is to restructure each section so the answer comes first, followed by th
 
 You don't need to rewrite everything. These are targeted changes that make a real difference.
 
-#### 1. Every Section Should Answer One Specific Question 
+#### 1. Every Section Should Answer One Specific Question
 
 Before writing a section, ask: what question is this answering? Not vaguely. Not *"this section is about deployments."* More like: *How do I deploy a container to Amazon ECS?*
 
