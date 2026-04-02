@@ -82,6 +82,7 @@ const config = {
         },
         blog: {
           showReadingTime: true,
+          blogSidebarCount: 'ALL',
           blogTitle: "Blog — Faith Wachukwu",
           blogDescription:
             "Technical writing, documentation strategy, and docs-as-code insights from Faith Wachukwu.",
