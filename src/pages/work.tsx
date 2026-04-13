@@ -33,6 +33,13 @@ const PROJECTS = [
 
 const ARTICLES = [
   {
+    title: "How to Set Up Your Monitoring System Alerts",
+    platform: "AppSignal Blog",
+    description: "Learn how to set up your monitoring system alerts for your application in AppSignal. This article provides a guide to configuring effective alerts that help you stay on top of your application's performance and reliability.",
+    url: "https://blog.appsignal.com/2026/04/07/how-to-set-up-your-monitoring-system-alerts",
+    date: "Apr 2026",
+  },
+  {
     title: "Run apps, databases, brokers, and AI anywhere - with no vendor lock-in",
     platform: "Clouddley",
     description: "Discover how to run your applications, databases, message brokers, and AI workloads anywhere without vendor lock-in. This article explores strategies for achieving cloud portability and flexibility in modern application deployment with Clouddley",
