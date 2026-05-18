@@ -4,11 +4,71 @@
         <title>Faith Wachukwu — Blog</title>
         <link>https://faithkovi.xyz/blog/</link>
         <description>Technical writing, documentation strategy, and docs-as-code insights.</description>
-        <lastBuildDate>Mon, 13 Apr 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 18 May 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2026 Faith Wachukwu</copyright>
+        <item>
+            <title><![CDATA[Why On-Call Engineers Ignore Your Runbooks ]]></title>
+            <link>https://faithkovi.xyz/blog/why on-call engineers ignore your runbooks/</link>
+            <guid>https://faithkovi.xyz/blog/why on-call engineers ignore your runbooks/</guid>
+            <pubDate>Mon, 18 May 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[It's 5 payments-api, p99 latency > 2000ms for 5m. Olivia's on call. The team has a runbook, but that’s not where she looks for the solution. She completely ignores it. The last few times she followed one at 5 AM, the fix didn’t match the symptom, or the runbook links attached to the alerts were wrong. So she opens Slack, finds a thread from eight months ago, copies the fix, and goes back to bed.]]></description>
+            <content:encoded><![CDATA[<img src="https://faithkovi.xyz/img/blog/oncall-cover.png" alt="#">
+<p>It's 5:15 AM. An alert fires: <em>payments-api, p99 latency &gt; 2000ms for 5m</em>. Olivia's on call. The team has a runbook, but that’s not where she looks for the solution. She completely ignores it. The last few times she followed one at 5 AM, the fix didn’t match the symptom, or the runbook links attached to the alerts were wrong. So she opens Slack, finds a thread from eight months ago, copies the fix, and goes back to bed.</p>
+<p>You wrote that runbook. She didn't use it, and she had reasons. This isn't a failure on Olivia's part. Here's why on-call engineers reach for Slack history before the docs you maintain, and what you can do about it.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-myth-of-the-calm-reader">The myth of the calm reader<a href="https://faithkovi.xyz/blog/why%20on-call%20engineers%20ignore%20your%20runbooks/#the-myth-of-the-calm-reader" class="hash-link" aria-label="Direct link to The myth of the calm reader" title="Direct link to The myth of the calm reader" translate="no">​</a></h2>
+<p>In most cases, documentation is written for a reader who has time. They have the mental bandwidth to read prose, follow a tutorial sequentially, and absorb all the concepts. For an on-call engineer like Olivia, she doesn’t have that time. She’s triaging. She scans, copies and pastes, and bails if it doesn’t work. If your runbook starts with three paragraphs of context before the first command, she’s gone.</p>
+<p><a href="https://sre.google/sre-book/being-on-call/" target="_blank" rel="noopener noreferrer" class="">The Google SRE book</a> made this point years ago: the quantity of on-call can be calculated by the percentage of time spent by engineers on on-call duty.</p>
+<p>So, for on-call engineers, a runbook isn’t documentation in the literary sense. It’s a tool. What matters is whether it helps shorten the incident.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-your-docs-lose-at-3-am">Why your docs lose at 3 AM<a href="https://faithkovi.xyz/blog/why%20on-call%20engineers%20ignore%20your%20runbooks/#why-your-docs-lose-at-3-am" class="hash-link" aria-label="Direct link to Why your docs lose at 3 AM" title="Direct link to Why your docs lose at 3 AM" translate="no">​</a></h2>
+<p>There are a few patterns that show up in almost every team that struggles with on-call docs. Let's take a look at some of them:</p>
+<ul>
+<li class="">
+<p><strong>The docs aren’t where the alert is</strong>. The runbooks live on Confluence, the alert fires on PagerDuty, the dashboard is in Grafana, while Olivia is in her terminal. None was linked to the others. She is context-switching more often to get information; this is costing her thirty seconds per switch and a little more of her composure while she is frantically searching for a solution.</p>
+</li>
+<li class="">
+<p><strong>The runbook is a tutorial, not a checklist</strong>. It explains in deep details how the payments service works. It does not say <em>if p99 &gt; 2s, check queue depth first; if queue depth &gt; 10k, scale workers; if workers are healthy, page the database team</em>. The <a href="https://diataxis.fr/" target="_blank" rel="noopener noreferrer" class="">Diataxis framework</a> nailed this distinction between tutorials, how-to-guides, references, and explanation. They are four different things, and runbooks are how-tos. You don’t need to start explaining in details.</p>
+</li>
+<li class="">
+<p><strong>The runbook is stale</strong>. It tells Olivia to restart <em>payments-worker</em> meanwhile, that service was renamed <em>txn-processor</em> seven months ago. She runs the command, gets service not found, and now she trusts nothing on that page.</p>
+</li>
+<li class="">
+<p><strong>Nobody owns it</strong>. The original author has left the company. The team that runs the service has never opened the doc to update it. There have been countless postmortem-generated action items to update runbooks that weren’t assigned to anyone or verified either.</p>
+</li>
+</ul>
+<div style="text-align:center"><img src="https://faithkovi.xyz/img/blog/oncall-1.png" alt="A simple incident response flowchart showing an alert leading to a broken or missing runbook link, then to stale commands, ending with a frustrated engineer during an outage."><p><em>A flowchart showing a bad runbook chain reaction: the alert fires, the documentation link fails, the commands are outdated, and the engineer loses time during an incident.</em></p></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-makes-a-runbook-usable-during-incidents">What makes a runbook usable during incidents<a href="https://faithkovi.xyz/blog/why%20on-call%20engineers%20ignore%20your%20runbooks/#what-makes-a-runbook-usable-during-incidents" class="hash-link" aria-label="Direct link to What makes a runbook usable during incidents" title="Direct link to What makes a runbook usable during incidents" translate="no">​</a></h2>
+<p>For teams whose runbooks actually get read, share a few things in common.</p>
+<ol>
+<li class="">
+<p>They link the runbook from the alert itself. <a href="https://response.pagerduty.com/" target="_blank" rel="noopener noreferrer" class="">PagerDuty</a>, <a href="https://www.atlassian.com/software/opsgenie/it-alerting" target="_blank" rel="noopener noreferrer" class="">Opsgenie</a>, and <a href="https://grafana.com/docs/grafana-cloud/monitor-infrastructure/kubernetes-monitoring/respond-to-alerts/" target="_blank" rel="noopener noreferrer" class="">Grafana Alerting</a> all support adding runbook URLs in the alert payload. If your alert doesn’t include the link, it's like the runbook isn't available.</p>
+</li>
+<li class="">
+<p>They start with action to take, not lots of context. The first thing on the page is what to do, how severe, what the symptoms look like, and commands you can copy to solve it. The explanations come much later, for those who want them after they’ve solved the problem.</p>
+</li>
+<li class="">
+<p>They write for the worst version of the reader. The runbook works for someone who is half-asleep, new to the team, and has their adrenaline up. Not only for the senior engineer who wrote it.</p>
+</li>
+<li class="">
+<p>They treat every incident as a doc bug. As <a href="https://www.atlassian.com/incident-management" target="_blank" rel="noopener noreferrer" class="">Atlassian’s incident handbook</a> puts it: <em>"Every incident should be tracked and documented so you can identify trends and make comparisons over time."</em></p>
+</li>
+<li class="">
+<p>They keep runbooks close to code. The Markdown is in the same repo as the code. The runbooks are reviewed in the same PR change that needs it. When docs live far from the code, they tend to rot. And that’s because those writing the code for the fix aren’t going to navigate to a separate wiki to update it.</p>
+</li>
+</ol>
+<div style="text-align:center"><img src="https://faithkovi.xyz/img/blog/oncall3.png" alt="An example alert payload showing a runbook_url field."><p><em>Runbook link included directly in the alert payload for quick access during incidents.</em></p></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-uncomfortable-part">The uncomfortable part<a href="https://faithkovi.xyz/blog/why%20on-call%20engineers%20ignore%20your%20runbooks/#the-uncomfortable-part" class="hash-link" aria-label="Direct link to The uncomfortable part" title="Direct link to The uncomfortable part" translate="no">​</a></h2>
+<p>If you’re a docs engineer and the on-call team keeps ignoring your work, it’s tempting to blame them for not searching, reading, or following the process. With a customer-facing outage happening, they definitely would want a solution fast.</p>
+<p>The reader, just like Olivia you’re writing for, is exhausted, scared, and looking for one specific sentence that tells her what to do next to fix the problem.
+Make sure you write that sentence, put it at the top, link it from the alert, update it after every incident, and delete what is not needed.</p>
+<p>The on-call engineer doesn’t read your docs, so make docs that don’t need to be read, but only used.</p>]]></content:encoded>
+            <category>On-call</category>
+            <category>documentation</category>
+            <category>technical writing</category>
+            <category>engineer</category>
+        </item>
         <item>
             <title><![CDATA[Documentation UX: Why It Matters More Than Accurate Content Alone]]></title>
             <link>https://faithkovi.xyz/blog/documentation-ux-and-why-matters-more-than-accurate-content-alone/</link>
