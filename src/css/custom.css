@@ -1006,6 +1006,156 @@ body {
 }
 
 /* ==========================================
+   AVAILABILITY BADGE (HERO)
+   ========================================== */
+
+.availability-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #047857;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.01em;
+}
+
+[data-theme="dark"] .availability-badge {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #6ee7b7;
+}
+
+.availability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+  animation: pulse-dot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.08);
+  }
+}
+
+/* ==========================================
+   IMPACT STATS
+   ========================================== */
+
+.impact-section {
+  text-align: center;
+}
+
+.impact-section .section-title {
+  margin-bottom: 2.5rem;
+}
+
+.impact-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.impact-stat-card {
+  padding: 2rem 1.5rem;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.impact-stat-card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.08);
+}
+
+.impact-stat-number {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.impact-stat-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.impact-stat-sublabel {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ==========================================
+   TESTIMONIALS
+   ========================================== */
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  margin: 0;
+  padding: 1.75rem;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  border-left: 3px solid var(--accent-blue);
+  transition: all 0.25s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.08);
+}
+
+.testimonial-card blockquote {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  font-style: italic;
+  border: none;
+}
+
+.testimonial-card figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+}
+
+.testimonial-card figcaption strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.testimonial-card figcaption span {
+  color: var(--text-muted);
+}
+
+/* ==========================================
    RESPONSIVE
    ========================================== */
 
@@ -1074,6 +1224,23 @@ body {
     flex-direction: column;
     align-items: center;
   }
+
+  .availability-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .impact-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .impact-stat-number {
+    font-size: 2.1rem;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1091,6 +1258,10 @@ body {
 
   .tab-buttons {
     flex-wrap: wrap;
+  }
+
+  .impact-stats-grid {
+    grid-template-columns: 1fr;
   }
 }
 
