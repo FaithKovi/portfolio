@@ -30,6 +30,48 @@ const SERVICES = [
   },
 ];
 
+const IMPACT_STATS = [
+  {
+    number: "80%",
+    label: "Reduction in support tickets",
+    sublabel: "via documentation rebuild at Clouddley",
+  },
+  {
+    number: "3+",
+    label: "Years shipping developer docs",
+    sublabel: "for SaaS, PaaS, and developer-tool teams",
+  },
+  {
+    number: "CNCF",
+    label: "Open-source contributor",
+    sublabel: "Helm, CHAOSS — docs & community",
+  },
+  {
+    number: "15+",
+    label: "Published technical articles",
+    sublabel: "on AppSignal, Clouddley, HackerNoon, Medium",
+  },
+];
+
+// TODO: Replace these with real testimonials from past managers, engineering
+// partners, or clients. Ask for 1–3 sentences focused on outcomes ("docs
+// rebuild cut our support load…", "X turned around API references in Y weeks…").
+// Until at least one real quote is in place, leave TESTIMONIALS as an empty array
+// and the section will not render.
+const TESTIMONIALS: {
+  quote: string;
+  author: string;
+  role: string;
+}[] = [
+  // Example entry shape (uncomment and replace with a real quote):
+  // {
+  //   quote:
+  //     "Faith rebuilt our docs from the ground up and cut our support load by 80% in six months. She doesn't just write — she owns the user's journey end to end.",
+  //   author: "[Name]",
+  //   role: "[Title], Clouddley",
+  // },
+];
+
 const SKILLS = [
   {
     category: "Documentation Tools",
@@ -97,13 +139,19 @@ function HeroSection() {
     <section className="hero-section">
       <div className="hero-container">
         <div className="hero-content">
+          <span className="availability-badge">
+            <span className="availability-dot" /> Open to Senior Documentation
+            Engineer & Technical Writer roles — remote
+          </span>
           <h1 className="hero-title">Faith Wachukwu</h1>
         <span className="hero-label">Documentation Engineer | Technical Writer</span>
           <p className="hero-description">
-            A Documentation Engineer and Technical Writer with over 3+ years of experience creating developer-focused docs that simplify complex concepts.
+            A Documentation Engineer and Technical Writer with 3+ years building
+            developer-focused docs. My last rebuild cut inbound support tickets
+            by 80%.
           </p>
           <p className="hero-description">
-            I build scalable docs-as-code workflows, partner with engineering teams on guides and APIs, contribute to open source, and write about developer experience and documentation strategy.
+            I build scalable docs-as-code workflows, partner with engineering teams on guides and APIs, contribute to open source (Helm, CHAOSS), and write about developer experience and documentation strategy.
           </p>
           <div className="hero-meta">
             {/* <span>📍 Lagos, Nigeria</span>
@@ -126,6 +174,47 @@ function HeroSection() {
             alt="Faith Wachukwu"
           />
         </div>
+      </div>
+    </section>
+  );
+}
+
+function ImpactStatsSection() {
+  return (
+    <div className="work-section-bg">
+      <section className="portfolio-section impact-section">
+        <p className="section-label">By The Numbers</p>
+        <h2 className="section-title">Impact across teams I've worked with</h2>
+        <div className="impact-stats-grid">
+          {IMPACT_STATS.map((stat) => (
+            <div className="impact-stat-card" key={stat.label}>
+              <div className="impact-stat-number">{stat.number}</div>
+              <div className="impact-stat-label">{stat.label}</div>
+              <div className="impact-stat-sublabel">{stat.sublabel}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function TestimonialsSection() {
+  if (TESTIMONIALS.length === 0) return null;
+  return (
+    <section className="portfolio-section">
+      <p className="section-label">What People Say</p>
+      <h2 className="section-title">Working with me</h2>
+      <div className="testimonials-grid">
+        {TESTIMONIALS.map((t) => (
+          <figure className="testimonial-card" key={t.author}>
+            <blockquote>“{t.quote}”</blockquote>
+            <figcaption>
+              <strong>{t.author}</strong>
+              <span>{t.role}</span>
+            </figcaption>
+          </figure>
+        ))}
       </div>
     </section>
   );
@@ -209,8 +298,10 @@ export default function Home(): React.JSX.Element {
     >
       <main>
         <HeroSection />
+        <ImpactStatsSection />
         <ServicesSection />
         <SkillsSection />
+        <TestimonialsSection />
         <CTASection />
       </main>
     </Layout>
