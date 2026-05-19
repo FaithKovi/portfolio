@@ -5,13 +5,39 @@ import Layout from "@theme/Layout";
 
 const PROJECTS = [
   {
+    title: "Helm Documentation Contributions",
+    description:
+      "Active open-source documentation contributions to Helm, the CNCF-graduated Kubernetes package manager. Work spans the Helm 4 docs migration on helm-www — auditing pages against live source, correcting factual inaccuracies, and improving clarity of installation, plugin reference, and chart development workflows for a 225+ star, 596-fork project relied on by Kubernetes users worldwide.",
+    emoji: "⎈",
+    tech: ["Helm", "Kubernetes", "CNCF", "Docusaurus", "MDX", "Open Source"],
+    code: "https://github.com/helm/helm-www",
+    live: "https://helm.sh/docs/",
+  },
+  {
+    title: "Clouddley Documentation Rebuild",
+    description:
+      "Led a ground-up rebuild of the developer documentation at Clouddley — restructuring information architecture, rewriting onboarding and reference content, and shipping a docs-as-code pipeline. Outcome: 80% reduction in inbound support tickets within the first 6 months, with developers self-serving onboarding, integration, and troubleshooting flows.",
+    emoji: "📉",
+    tech: ["Docs-as-Code", "Information Architecture", "Developer Onboarding", "Git", "CI/CD"],
+    live: "https://docs.clouddley.com",
+  },
+  {
     title: "AI Changelog Generator",
     description:
-      "A Python CLI tool that reads git commit history and generates polished, categorized changelogs using Gemini's API or Claude's API. Parses commits, filters noise, groups changes by type (Added, Changed, Fixed, Security), and outputs publish-ready markdown following the Keep a Changelog standard.",
+      "A Python CLI that reads git commit history and generates polished, categorized changelogs using Claude or Gemini APIs. Parses commits, filters noise, groups changes by type (Added, Changed, Fixed, Security), and outputs publish-ready markdown following the Keep a Changelog standard. Dual-provider design lets teams choose their model.",
     emoji: "✨",
-    tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
+    tech: ["Python", "Anthropic API", "Gemini API", "Git", "Docs-as-Code", "Markdown"],
     code: "https://github.com/FaithKovi/changelog-generator",
   },
+  // TODO: Uncomment and add `code` URL once docpin is published.
+  // {
+  //   title: "docpin",
+  //   description:
+  //     "An open-source CLI tool that audits documentation sites for stale version references across pages — catches outdated SDK versions, broken release links, and drift between docs and the products they describe. Designed to plug into CI for any docs-as-code workflow.",
+  //   emoji: "🔍",
+  //   tech: ["CLI", "Docs-as-Code", "Static Analysis", "CI/CD", "Open Source"],
+  //   code: "https://github.com/FaithKovi/docpin",
+  // },
   {
     title: "Portfolio Website",
     description:
@@ -21,14 +47,6 @@ const PROJECTS = [
     code: "https://github.com/FaithKovi/portfolio",
     live: "https://faithkovi.xyz",
   },
-  // {
-  //   title: "Helm Documentation Contributions",
-  //   description:
-  //     "Open-source contributions to Helm's official documentation — improving clarity of installation guides, chart development workflows, and plugin reference pages for the Kubernetes package manager.",
-  //   emoji: "⎈",
-  //   tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
-  //   code: "https://github.com/helm/helm-www",
-  // },
 ];
 
 const ARTICLES = [
@@ -112,10 +130,9 @@ const EXPERIENCE = [
     location: "Oslo, Norway · Remote",
     period: "Aug 2025 – Present",
     bullets: [
-      "Create and maintain API documentation, developer onboarding guides, and product tutorials for SaaS and developer-tool clients, translating complex features into clear, task-oriented content.",
-      "Collaborate with engineers, product managers, and stakeholders to ensure accuracy and identify gaps in technical content.",
-      "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users."
-
+      "Build and maintain API documentation, developer onboarding guides, and product tutorials for SaaS and developer-tool clients — translating complex features into clear, task-oriented content that shortens time-to-first-call.",
+      "Partner with engineering, product, and design stakeholders to surface and close documentation gaps before they become support load.",
+      "Tailor tone, structure, and depth for diverse audiences — from senior backend engineers integrating an API to non-technical end users following step-by-step workflows.",
     ],
     tags: ["Technical Writing", "API Docs", "Markdown", "Developer Guides"],
   },
@@ -126,10 +143,10 @@ const EXPERIENCE = [
     location: "Delaware, USA · Remote",
     period: "Jul 2023 – Dec 2025",
     bullets: [
-      "Produced comprehensive technical documentation for internal and customer use, enhancing product understanding and user experience.",
-      "Curated and maintained a repository of tutorials and help systems, improving user onboarding and support efficiency.",
-      "Collaborated with engineering teams to translate technical features into user-friendly docs, resulting in an 80% reduction in support tickets.",
-      "Implemented documentation-as-code workflows using Git, enabling version control, peer reviews, and automated publishing.",
+      "Rebuilt the entire developer documentation set — restructuring information architecture, rewriting onboarding flows, and shipping production-grade API references — which cut inbound support tickets by 80%.",
+      "Established a docs-as-code pipeline (Git-based authoring, peer review, automated publishing) that made docs a first-class deliverable shipped alongside every release.",
+      "Partnered with engineers and PMs to translate complex platform features (deployments, databases, message brokers, AI workloads) into task-oriented developer guides and runbooks.",
+      "Owned the full content lifecycle: discovery, drafting, technical review, publication, and post-release maintenance — including a continuously updated tutorial library that became the primary onboarding asset for new users.",
     ],
     tags: [
       "Docs-as-Code",
