@@ -24,7 +24,8 @@ export default function About(): React.JSX.Element {
               <p>
                 Hi, I'm Faith Wachukwu — a Documentation Engineer and Technical
                 Writer who turns complex technical concepts into clear,
-                actionable content.
+                actionable content. My last documentation rebuild cut inbound
+                support tickets by <strong>80%</strong>.
               </p>
               <p>
                 I started out in Cloud Engineering and DevOps, working hands-on
@@ -47,16 +48,27 @@ export default function About(): React.JSX.Element {
                 continuously deployed.
               </p>
               <p>
-                Outside work, I contribute to the CHAOSS open-source community, Helm Docs,
-                and write technical articles on developer platforms. I hold a
-                Kubernetes and Cloud Native Associate certification, and I'm
-                always exploring new ways to make technical knowledge more
-                accessible.
+                Outside client work, I contribute documentation to{" "}
+                <a
+                  href="https://github.com/helm/helm-www"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Helm
+                </a>{" "}
+                — the CNCF-graduated Kubernetes package manager — and to the
+                CHAOSS open-source community. I hold a Kubernetes and Cloud
+                Native Associate (KCNA) certification, write a{" "}
+                <a href="/blog">technical blog</a> on docs strategy and
+                developer experience, and I'm always exploring new ways to make
+                technical knowledge more accessible.
               </p>
               <p>
-                If you're looking to improve your documentation or create
-                technical content that truly serves your users —{" "}
-                <a href="/contact">let's talk</a>.
+                <strong>Currently open to</strong> Senior Documentation
+                Engineer, Technical Writer, and Developer Experience roles —
+                remote, full-time or contract. If you're looking to improve
+                your documentation or create technical content that truly
+                serves your users — <a href="/contact">let's talk</a>.
               </p>
             </div>
           </div>
