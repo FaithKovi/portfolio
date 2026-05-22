@@ -98,6 +98,7 @@ function HeroSection() {
       <div className="hero-container">
         <div className="hero-content">
           <h1 className="hero-title">Faith Wachukwu</h1>
+          <h6>(formerly Faith Kovi)</h6>
         <span className="hero-label">Documentation Engineer | Technical Writer</span>
           <p className="hero-description">
             A Documentation Engineer and Technical Writer with over 3+ years of experience creating developer-focused docs that simplify complex concepts.
