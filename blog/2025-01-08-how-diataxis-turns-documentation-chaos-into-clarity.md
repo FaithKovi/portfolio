@@ -23,7 +23,6 @@ However, Diátaxis warns against this approach. Instead of creating empty sectio
 
 This is done by addressing what the user needs at that specific time and improving the content piece by piece; then your documentation will organically align with the Diátaxis framework. This inside-out development makes sure the structure reflects well-formed content.
 
-
 ## The Power of Small Steps
 
 One of Diátaxis’ key principles is iterative improvement. Even if your documentation feels like an unmanageable mess, there’s always a way forward by taking it one small step at a time. Here’s how to apply this method:  

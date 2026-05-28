@@ -63,11 +63,11 @@ Even though it’s in its early stages, it works. The [GitHub Repo](https://gith
   *Zensical’s landing page introducing its modern documentation platform.*
 </div>
 
-## Migration
+## The Migration
 
 Before migrating to Zensical, make sure your current setup meets the following prerequisites. 
 
-### Prerequisites
+#### Prerequisites
 
 - A working Material for MkDocs site
 - [Git installed](https://git-scm.com/install/)
@@ -86,7 +86,7 @@ If a key plugin isn’t supported yet, don’t force it. Either you wait or plan
 
 Once you’ve reviewed these, follow these steps:
 
-### Step 1: Create a migration branch
+#### Step 1: Create a migration branch
 
 ```bash
 git checkout -b migrate/zensical
@@ -94,7 +94,7 @@ git checkout -b migrate/zensical
 
 You’ll keep `main` as your baseline. When something breaks during migration, you need something to compare against, or in case a rollback is needed. Otherwise, you will spend more time guessing.  
 
-### Step 2: Install Zensical in a new virtual environment
+#### Step 2: Install Zensical in a new virtual environment
 
 Install Zensical in a new virtual environment. You won’t want to mess up your existing mkdocs environment. Run the commands:
 
@@ -112,7 +112,7 @@ For `uv` users:
 uv tool install "zensical==0.0.43"
 ```
 
-### Step 3: Build off your existing mkdocs.yml
+#### Step 3: Build off your existing mkdocs.yml
 
 You don’t need to switch to `zensical.toml` yet, Zensical works with `mkdocs.yml`. From the directory containing your `mkdocs.yml` file, run the command:
 
@@ -131,7 +131,7 @@ Some of the common ones include:
 | Unknown setting remote_branch / hooks / etc. | One of the unsupported settings. Remove. |
 | `material.extensions.*` unresolved | Rename to `zensical.extensions.*` — see step 5. |
 
-### Step 4: Select your theme variant
+#### Step 4: Select your theme variant
 
 To minimize drift during your migration, start with the `classic` variant.
 
@@ -144,7 +144,7 @@ theme:
 
 You can switch to `modern` later if you want.
 
-### Step 5: Rename Material extensions and icons
+#### Step 5: Rename Material extensions and icons
 
 Do a namespace swap from `material.` to `zensical.`:
 
@@ -164,7 +164,7 @@ markdown_extensions:
 
 For icons, swap the Material brightness icons for Lucide equivalents: `material/brightness-7 → lucide/sun`, and `material/brightness-4 → lucide/moon`.
 
-### Step 6: Preview locally
+#### Step 6: Preview locally
 
 Run the command:
 
@@ -188,7 +188,7 @@ If you use `mike` for versioning, double-check version switching. There's an [of
 Some setups need temporary pinning to avoid conflicts.
 :::
 
-### Step 7: Update your build pipeline
+#### Step 7: Update your build pipeline
 
 If you have a pipeline already setup, replace your CI build command with:
 
