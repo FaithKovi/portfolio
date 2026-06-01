@@ -470,50 +470,67 @@ I revisit docs when I use them. Like if I use my own runbook and something is co
             <link>https://faithkovi.xyz/blog/what-makes-api-documentation-work/</link>
             <guid>https://faithkovi.xyz/blog/what-makes-api-documentation-work/</guid>
             <pubDate>Wed, 15 Oct 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[Have you ever noticed how some APIs click while others leave you scratching your head? The difference usually comes down to one thing: how well they explain themselves. After examining the documentation strategies of five tech giants — Stripe, Twilio, GitHub, Spotify, and X, clear patterns show that they transform confusing code into delightful developer experiences.]]></description>
+            <description><![CDATA[Some APIs can be easily understood from the moment you open their documentation, while others will leave you hovering from one page to another to get started. The key difference is rarely about the API but the quality of documentation created for it. By studying the documentation practices of companies like Stripe, Twilio, GitHub, Spotify, and X, there are several characteristics that show up consistently. Let’s take a look at some of them.]]></description>
             <content:encoded><![CDATA[<img src="https://faithkovi.xyz/img/blog/apidocswork.jpg" alt="What makes API documentation work?.">
-<p>Have you ever noticed how some APIs click while others leave you scratching your head? The difference usually comes down to one thing: how well they explain themselves. After examining the documentation strategies of five tech giants — <a href="https://docs.stripe.com/api" target="_blank" rel="noopener noreferrer" class="">Stripe</a>, <a href="https://www.twilio.com/docs" target="_blank" rel="noopener noreferrer" class="">Twilio</a>, <a href="https://docs.github.com/en/rest?apiVersion=2022-11-28" target="_blank" rel="noopener noreferrer" class="">GitHub</a>, <a href="https://developer.spotify.com/documentation/web-api" target="_blank" rel="noopener noreferrer" class="">Spotify</a>, and <a href="https://docs.x.com/x-api/introduction" target="_blank" rel="noopener noreferrer" class="">X</a>, clear patterns show that they transform confusing code into delightful developer experiences.</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-foundation-every-great-api-documentation-builds-on">The Foundation Every Great API Documentation Builds On<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#the-foundation-every-great-api-documentation-builds-on" class="hash-link" aria-label="Direct link to The Foundation Every Great API Documentation Builds On" title="Direct link to The Foundation Every Great API Documentation Builds On" translate="no">​</a></h2>
-<p><strong>Authentication You Can Actually Follow</strong></p>
-<p>Authentication is where developers form their first impression of your API. All five platforms understand that authentication is your first impression. But instead of throwing technical jargon at you, they walk you through the process like a patient teacher. Stripe handles this well by showing you exactly what your API keys look like — test mode and live mode secret keys both start with<code>sk_</code>, making them immediately recognizable as Stripe API keys. They even include working test keys in their examples so you can try calls immediately without setting up an account first.</p>
-<p>When developers can authenticate successfully on their first try, they’re more likely to keep going. When they can’t, they’ll probably look elsewhere.</p>
-<p><strong>Examples That Work Out of the Box</strong></p>
-<p>There’s a big difference between code examples and working code examples. The best documentation gives you something you can copy, paste, and run right away. Complete curl commands with all required parameters. Sample code in multiple languages that actually compiles. Expected responses so you know what success looks like.</p>
-<p>This approach builds confidence fast. When your first API call works, you feel ready to tackle harder integrations.</p>
-<p><strong>Error Messages That Guide Instead of Frustrate</strong></p>
-<p>Every developer hits errors. Great documentation turns those moments into learning opportunities instead of frustration.</p>
-<p>Twilio does this particularly well. Their error responses include:</p>
+<p>Some APIs can be easily understood from the moment you open their documentation, while others will leave you hovering from one page to another to get started. The key difference is rarely about the API but the quality of documentation created for it. By studying the documentation practices of companies like <a href="https://docs.stripe.com/api" target="_blank" rel="noopener noreferrer" class="">Stripe</a>, <a href="https://www.twilio.com/docs" target="_blank" rel="noopener noreferrer" class="">Twilio</a>, <a href="https://docs.github.com/en/rest?apiVersion=2022-11-28" target="_blank" rel="noopener noreferrer" class="">GitHub</a>, <a href="https://developer.spotify.com/documentation/web-api" target="_blank" rel="noopener noreferrer" class="">Spotify</a>, and <a href="https://docs.x.com/x-api/introduction" target="_blank" rel="noopener noreferrer" class="">X</a>, there are several characteristics that show up consistently. Let’s take a look at some of them.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="clear-getting-started-guides">Clear getting started guides<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#clear-getting-started-guides" class="hash-link" aria-label="Direct link to Clear getting started guides" title="Direct link to Clear getting started guides" translate="no">​</a></h2>
+<p>For developers, their experience in the first few minutes of opening the documentation shapes their outlook on the API. This often determines if they continue exploring how to use the API or move to a different alternative.</p>
+<p>In effective documentation, there is a clear path from account creation to making your first successful API request. The focus is on helping developers achieve their first win rather than pushing technical details in their faces.</p>
+<p><a href="https://docs.stripe.com/development" target="_blank" rel="noopener noreferrer" class="">Stripe</a>, for example, provides dedicated getting started resources, SDK installation instructions, testing guides, and integration tools that can help developers build things quickly.</p>
+<p>A clear getting started guide should answer the following questions immediately:</p>
 <ul>
-<li class="">An HTTP status code</li>
-<li class="">A clear description of what went wrong</li>
-<li class="">A Twilio-specific error code</li>
-<li class="">A link to documentation about that specific error</li>
+<li class="">What does this API do?</li>
+<li class="">How do I authenticate?</li>
+<li class="">How do I make my first request?</li>
+<li class="">What should I expect in the response?</li>
 </ul>
-<p>When you get a <code>400</code> error with code <code>21211</code>, you also get a <code>Learn more</code> pointing straight to help for that exact problem. That's the difference between spending 5 minutes fixing an issue and spending an hour.</p>
-<div style="text-align:center"><img src="https://faithkovi.xyz/img/blog/twilio.png" alt="error codes in Twilio docs."><p><em>Error codes in Twilio docs</em></p></div>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-great-documentation-organises-information">How Great Documentation Organises Information<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#how-great-documentation-organises-information" class="hash-link" aria-label="Direct link to How Great Documentation Organises Information" title="Direct link to How Great Documentation Organises Information" translate="no">​</a></h2>
-<p><strong>Building Knowledge Step by Step</strong></p>
-<p>The most effective API documentation follows a careful progression from simple to complex. Think of it like learning a new language; you start with basic vocabulary before attempting complex sentences. All five platforms structure their content this way, beginning with fundamental concepts before diving into advanced features.
-This layered approach serves everyone. New developers get a gentle introduction that builds confidence, while experienced users can jump directly to the specific reference they need. It’s about meeting people where they are.</p>
-<p><strong>Learning by Doing</strong></p>
-<p>Modern API guides go beyond simple explanations by offering hands-on experiences. Stripe’s documentation features live code editors, allowing you to modify parameters and view results instantly. GitHub’s built-in testing allows you to experiment with endpoints directly through your browser. These features turn static documentation into engaging, practical tutorials that help developers understand through experimentation.</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-makes-documentation-memorable">What Makes Documentation Memorable<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#what-makes-documentation-memorable" class="hash-link" aria-label="Direct link to What Makes Documentation Memorable" title="Direct link to What Makes Documentation Memorable" translate="no">​</a></h2>
-<p><strong>Predictable Patterns</strong></p>
-<p>Once developers understand how one part of your API works, they should be able to predict how other parts behave. Consistent naming conventions matter. Standard response formats matter. Predictable error handling matters.</p>
-<p>Stripe follows this principle throughout their API. Authentication works the same way for every endpoint. Error responses follow the same structure. Pagination works consistently across all list operations. This consistency reduces mental overhead and makes the entire system feel more intuitive.</p>
-<p><strong>Context That Connects the Dots</strong></p>
-<p>Generic examples are forgettable. Real scenarios stick in your mind. Instead of showing you how to create a random user record, great documentation shows you how to build a complete registration workflow, handle edge cases, and integrate with other system components.</p>
-<p>When you provide context, developers understand not just what an API does, but when and why they’d use it.</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-human-element">The Human Element<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#the-human-element" class="hash-link" aria-label="Direct link to The Human Element" title="Direct link to The Human Element" translate="no">​</a></h2>
-<p><strong>Writing That Feels Like a Conversation</strong></p>
-<p>Technical documentation doesn’t have to sound robotic. The most effective guides read like explanations from a knowledgeable colleague. They anticipate your questions, acknowledge when something might be tricky, and celebrate when you get things right.</p>
-<p><strong>Understanding Developer Frustrations</strong></p>
-<p>Great documentation writers remember what it’s like to be stuck on a problem at midnight with a looming deadline. This empathy shows up in helpful tips, common mistake warnings, and detailed troubleshooting sections.</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-real-secret">The Real Secret<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#the-real-secret" class="hash-link" aria-label="Direct link to The Real Secret" title="Direct link to The Real Secret" translate="no">​</a></h2>
-<p>Creating documentation that developers enjoy using is about recognising that behind every API call is a person trying to solve a real problem. The best documentation helps them succeed as quickly and smoothly as possible.</p>
-<p>When you combine logical structure, working examples, helpful error guidance, and conversational explanations, you create something special. You build a bridge between what your API can accomplish and what developers want to achieve.</p>
-<p>The platforms that get this right — Stripe, Twilio, GitHub, Spotify, and X don’t just document their APIs. They create experiences that make developers feel capable and confident. That’s the real difference between APIs that get adopted and those that get abandoned.</p>
-<p>Remember this the next time you’re writing documentation: you’re not just describing technical features. You’re potentially making someone’s workday better or helping them solve a problem they’ve been wrestling with for hours. That opportunity is worth the extra effort to get it right.</p>]]></content:encoded>
+<p>When developers find these answers within minutes, it becomes easier for them to adopt the API.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="practical-code-examples">Practical code examples<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#practical-code-examples" class="hash-link" aria-label="Direct link to Practical code examples" title="Direct link to Practical code examples" translate="no">​</a></h2>
+<p>For developers, they learn by doing. There is no amount of descriptive text that can replace a working code example. To create effective documentation, you should include examples that demonstrate real-world cases. The examples should be complete enough to copy, run, and modify.</p>
+<p>A good example is Twilio’s documentation that includes multi-language code examples to help developers understand how to implement across different environments.</p>
+<div style="text-align:center"><img src="https://faithkovi.xyz/img/blog/twilio-multilang.png" alt="A multi-language code example in the Twilio API docs."><p><em>A multi-language code example in the Twilio API docs</em></p></div>
+<p>Good examples normally:</p>
+<ul>
+<li class="">Use realistic data</li>
+<li class="">Show complete requests and responses</li>
+<li class="">Cover common workflows</li>
+<li class="">Include error-handling examples</li>
+</ul>
+<p><a href="https://arxiv.org/abs/2102.08486" target="_blank" rel="noopener noreferrer" class="">Research on API documentation</a> has also shown that developers place significant value on practical usage scenarios and examples when learning about new APIs.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="comprehensive-api-references">Comprehensive API references<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#comprehensive-api-references" class="hash-link" aria-label="Direct link to Comprehensive API references" title="Direct link to Comprehensive API references" translate="no">​</a></h2>
+<p>In API documentation, guides help developers get started, but with references, they can build production applications.
+A good API reference should clearly document:</p>
+<ul>
+<li class="">Endpoints</li>
+<li class="">Parameters</li>
+<li class="">Authentication requirements</li>
+<li class="">Request formats</li>
+<li class="">Response schemas</li>
+<li class="">Status codes</li>
+<li class="">Error messages</li>
+</ul>
+<p><a href="https://docs.stripe.com/api" target="_blank" rel="noopener noreferrer" class="">Stripe's API reference</a> is a strong example of this approach. It provides predictable resource structures, request formats, authentication guidance, testing information, and error-handling documentation in a consistent format.</p>
+<p>For these references, completeness matters because developers frequently rely on references while troubleshooting. When there are missing parameters or unclear error responses, it can lead to frustration.</p>
+<div style="text-align:center"><img src="https://faithkovi.xyz/img/blog/stripe-error-page.png" alt="Error codes page in Stripe API docs."><p><em>Error codes page in Stripe API docs</em></p></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="excellent-navigation-and-search">Excellent navigation and search<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#excellent-navigation-and-search" class="hash-link" aria-label="Direct link to Excellent navigation and search" title="Direct link to Excellent navigation and search" translate="no">​</a></h2>
+<p>Even with the best content, if developers cannot find it, it becomes ineffective. Your documentation should be organized around the user’s goals rather than how the internal product is structured. The navigation should make it easy to move between tutorials, guides, API references, troubleshooting resources, and changelogs.</p>
+<p>Developers can easily identify poor navigation in your documentation and weak search experiences.
+Good documentation sites should make it easy to answer questions such as:</p>
+<ul>
+<li class="">How do I authenticate?</li>
+<li class="">How do webhooks work?</li>
+<li class="">What causes this error?</li>
+<li class="">Has this endpoint changed recently?</li>
+</ul>
+<p>How quickly the developers can find the answers they are looking for leads to the likelihood of trusting the documentation.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="documentation-that-stays-current">Documentation that stays current<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#documentation-that-stays-current" class="hash-link" aria-label="Direct link to Documentation that stays current" title="Direct link to Documentation that stays current" translate="no">​</a></h2>
+<p>Documentation should be viewed as a product that requires continuous maintenance.</p>
+<p>Having outdated examples, deprecated SDK references, and inaccurate endpoint information will create confusion and increase support costs. Developers can judge how reliable an API is by the reliability of its documentation.</p>
+<p>Top API providers invest heavily in versioning, changelogs, and regular documentation updates. Stripe, for example, maintains versioning guidance, API upgrade documentation, and changelogs to help developers manage these changes over time. This means that maintaining documentation should be part of the development lifecycle.</p>
+<p>Using <a href="https://www.writethedocs.org/guide/docs-as-code/" target="_blank" rel="noopener noreferrer" class="">docs-as-code</a> practices, automated reviews, and implementing documentation ownership models can help teams keep content accurate as the product evolves.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="conclusion">Conclusion<a href="https://faithkovi.xyz/blog/what-makes-api-documentation-work/#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion" translate="no">​</a></h2>
+<p>What makes API documentation work is its ability to help developers achieve their goals with minimal friction.
+Good documentation shares several characteristics: clear getting-started guides, practical examples, comprehensive references, excellent navigation, and consistent maintenance. Together, these characteristics transform the developer experience. When documentation helps the developers quickly, the API is easier to trust and adopt.</p>]]></content:encoded>
             <category>API documentation</category>
             <category>docs</category>
             <category>API</category>
@@ -525,7 +542,7 @@ This layered approach serves everyone. New developers get a gentle introduction 
             <guid>https://faithkovi.xyz/blog/docs-and-deployments-the-power-of-clear-documentation-in-devops/</guid>
             <pubDate>Mon, 23 Jun 2025 00:00:00 GMT</pubDate>
             <description><![CDATA[DevOps teams love talking about automation, observability, infrastructure as code, and deployment speed. But what usually determines whether systems survive incidents, handoffs, or employee exits is accurate documentation.]]></description>
-            <content:encoded><![CDATA[<p>DevOps teams love talking about automation, observability, infrastructure as code, and deployment speed. But what usually determines whether systems survive incidents, handoffs, or employee exits is accurate documentation.</p>
+            <content:encoded><![CDATA[<p>DevOps teams love talking about automation, observability, infrastructure as code, and deployment speed. But what usually determines whether systems survive incidents, handoffs, or employee exits is <strong>accurate documentation</strong>.</p>
 <p>For teams to ship reliably, they need up-to-date runbooks, READMEs, and architecture docs. In this post, you’ll learn why documentation is <strong>non-negotiable</strong> in DevOps, the types of documentation in DevOps, best practices and common challenges, and how to overcome them. Let’s dive right in.</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-documentation-matters-in-devops">Why documentation matters in DevOps<a href="https://faithkovi.xyz/blog/docs-and-deployments-the-power-of-clear-documentation-in-devops/#why-documentation-matters-in-devops" class="hash-link" aria-label="Direct link to Why documentation matters in DevOps" title="Direct link to Why documentation matters in DevOps" translate="no">​</a></h2>
 <ul>
@@ -605,7 +622,7 @@ To solve this, you have to make documentation a part of the workflow rather than
 </li>
 <li class="">
 <p><strong>“Documentation is inconsistent across teams.”</strong>
-Make sure you establish clear documentation standards and templates so that teams can follow. This ensures consistency across all documentation.</p>
+Make sure you establish clear documentation standards and templates that teams can follow. This ensures consistency across all documentation.</p>
 </li>
 <li class="">
 <p><strong>“Keeping documentation updated is hard.”</strong>
