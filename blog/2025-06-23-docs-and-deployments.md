@@ -5,7 +5,7 @@ authors: Faith Wachukwu
 tags: [devops, docs, docs as code, documentation]
 ---
 
-DevOps teams love talking about automation, observability, infrastructure as code, and deployment speed. But what usually determines whether systems survive incidents, handoffs, or employee exits is accurate documentation.  
+DevOps teams love talking about automation, observability, infrastructure as code, and deployment speed. But what usually determines whether systems survive incidents, handoffs, or employee exits is **accurate documentation**.  
 
 For teams to ship reliably, they need up-to-date runbooks, READMEs, and architecture docs. In this post, you’ll learn why documentation is **non-negotiable** in DevOps, the types of documentation in DevOps, best practices and common challenges, and how to overcome them. Let’s dive right in.
 <!-- truncate -->
@@ -79,7 +79,7 @@ Teams often face challenges that affect accuracy, consistency, collaboration, an
 To solve this, you have to make documentation a part of the workflow rather than waiting till the end. Ask for updates during sprint reviews or integrate them into pull requests.
 
 2. **“Documentation is inconsistent across teams.”**
-Make sure you establish clear documentation standards and templates so that teams can follow. This ensures consistency across all documentation.
+Make sure you establish clear documentation standards and templates that teams can follow. This ensures consistency across all documentation.
 
 3. **“Keeping documentation updated is hard.”**
 You should assign ownership for key documents, track them, set review cycles to ensure they stay relevant, and automate updates where possible.
