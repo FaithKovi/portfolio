@@ -1,5 +1,5 @@
 ---
-slug: Migrating from Material for MkDocs to Zensical:/ A documentation engineer's walkthrough
+slug: migrating-from-material-for-mkdocs-to-zensical
 title: "Migrating from Material for MkDocs to Zensical: A Documentation Engineer Walkthrough"
 authors: Faith Wachukwu
 tags: [technical-writing, documentation, Zensical, Material for MkDocs, Docs]

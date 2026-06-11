@@ -7,21 +7,15 @@ tags: [technical-writing, documentation, AI, RAG, developer-experience, content-
 
 <img src="/img/blog/cover-docs-humans-ai.png" alt="A hand-drawn style illustration showing a document in the center with two readers: a stick-figure human on the left reading the document from top to bottom, and a boxy robot on the right reaching in to grab a single highlighted chunk. Text reads: Your docs now have two readers. Write for both, compromise on neither." />
 
-
-Your documentation has a new reader, and it doesn't have eyes. AI tools like chatbots, IDE assistants, and Retrieval-Augmented Generation (RAG) systems now stand between your carefully written docs and the engineer who needs them. These tools chop your pages into chunks, search for relevant matches, and generate responses before a human ever visits the actual page.  
+Your documentation has a new reader with no eyes. AI tools like the chatbots, IDE assistants, and **Retrieval-Augmented Generation (RAG)** systems now stand between your docs and the engineer who needs them. These tools chop your pages into chunks, search for relevant matches, and then generate their responses.
 <!-- truncate -->
+That means your documentation now serve two audiences: the person trying to solve a problem, and the machine trying to extract the right answer. In this post, you’ll learn how to write documentation that serves both the human and the AI retrieval systems.
+ 
+## Why Structure Matters in Documentation
 
-That means your docs now serve two audiences: the person trying to solve a problem, and the machine trying to extract the right answer. This changes how documentation should be structured. Not what you write but how you arrange it. Here's how to structure documentation that works for both.
+Human and AI retrieval systems function differently during information retrieval. A human can open a page with badly structured content, scan and find the specific information they came for. But for AI retrieval systems, if the information it’s looking for is in a different heading other than the heading it came for, it retrieves the wrong information. This impacts the quality of the output.  
 
-## Why Documentation Structure Matters
-
-Picture this. A backend engineer asks the internal chatbot how to rotate API keys. The accurate answer exists in the docs. But it's split across two pages. "Security Overview" explains the concepts. "Key Management" has the actual steps.  
-
-The chatbot grabs the overview because the heading matches the query. It misses the step-by-step instructions entirely because those live under a vague heading on a separate page. The engineer gets a response that says something like "refer to your organization's security policy."  
-
-Ten minutes wasted. The information was actually there. The structure buried it.
-
-This kind of failure isn't rare. It's the natural result of documentation written for linear reading in a world that increasingly relies on retrieval. And fixing it requires being more deliberate about where answers live within each section.  
+This kind of documentation was written for linear reading, and these AI retrieval systems don’t work that way. Even for a human, that’s bad structure. This is why it's important to be deliberate about where answers to questions live in documentation.
 
 <div style={{ textAlign: 'center' }}>
   <img src="/img/blog/excalidraw1.png" alt="A flowchart showing how a RAG system processes documentation: a full document is split into smaller chunks, each chunk is converted into a vector embedding, a user query triggers a similarity search across those embeddings, and the most relevant chunk is fed into a language model to generate a response." />
@@ -33,27 +27,25 @@ This kind of failure isn't rare. It's the natural result of documentation writte
 
 ### The Human Reader
 
-When someone opens a doc page, they have a problem. They want to solve it without reading more than they have to, but they also need enough context to understand why a solution works.  
+When a reader opens a documentation page, they have a problem they want to solve. In doing that, they don’t want to read more than they have to. They need enough context to solve their problem.  
 
-Good documentation explains ideas that build on each other. Headings, spacing, and code blocks reduce the mental effort of parsing information. The [Nielsen Norman Group's research on the inverted pyramid](https://www.nngroup.com/articles/inverted-pyramid/) confirms what most tech writers already feel: people scan first, read second. They want the core idea before the deep implementation.  
+Good documentation should explain ideas that build on each other. With headings, spacing, and code blocks in place, the mental effort needed to parse information is reduced. The [Nielsen Norman Group's research on the inverted pyramid](https://www.nngroup.com/articles/inverted-pyramid/) confirms what most tech writers already feel: people scan first and read second. They want to understand the core idea before the deep implementation.  
 
-This is the principle of progressive disclosure. Start with the simplest version of the explanation and layer complexity gradually. It reflects how people actually learn.
+This principle is called **progressive disclosure**. You start with the simplest version of the explanation and gradually layer the complex parts. This reflects how people actually learn.
 
 ### The Machine Reader
 
-A chatbot or RAG tool reads your docs completely differently. It doesn't start at the top and build understanding. It [breaks your page into chunks](https://weaviate.io/blog/chunking-strategies-for-rag), searches for the most relevant match to a query, and uses whatever it finds to generate a response.
+For the chatbot or RAG tool, it’s a different ball game. It doesn’t start at the top and build understanding. It breaks your page into chunks, searches for the most relevant match to the query, and uses what it finds to generate a response. This means each section has to stand on its own. If a section depends on a context from three sections earlier, the retrieval system will respond without it, and the reader gets an incomplete answer.  
 
-This means each section needs to stand on its own. If a section depends on context from three sections earlier, the retrieval system will respond without that context, and the reader gets a confusing or incomplete answer.
+RAG systems perform better when they receive self-sufficient sections with clear headings and consistent metadata that indicate what each page covers.
 
-RAG systems perform better when they get self-sufficient sections with clear headings and consistent metadata that signals what each page covers.
+An example is an engineer asking an AI assistant: *“How do I roll back a failed deployment on Y?”*
 
-A quick example. An engineer asks an AI assistant: *"How do I roll back a failed deployment?"*
+Consider these two versions of the documentation:  
 
-Consider two versions of the docs:
-
-Version A — Page title: Release Workflow. Section heading: Post-deployment considerations.
-
-Version B — Page title: Roll back a failed deployment. Section heading: How to roll back a deployment. Tags: `deployment`, `rollback`, `incident response`.
+>**Version A** — Page title: Release Workflow. Section heading: Post-deployment considerations.  
+>
+>**Version B** — Page title: Roll back a failed deployment. Section heading: How to roll back a deployment. Tags: deployment, rollback, >incident response.  
 
 Version B makes it easy for both humans and machines to find the right answer.
 
@@ -64,27 +56,23 @@ Version B makes it easy for both humans and machines to find the right answer.
 </div>
 
 ## Where the Two Readers Clash
+Some best practices for human readers aren’t for AI retrieval systems. An example is progressive disclosure. Humans benefit from getting the context before the answer, and this feels natural. It’s like getting a good explanation from a colleague. But with AI retrieval systems, it doesn’t care about your buildup. It wants the answer straight up. If you lead with context and bury the solution four paragraphs down in an unrelated heading, the system would grab the preamble and miss the instructions.  
 
-Some best practices for human readers actively trip up retrieval systems. Progressive disclosure is the clearest example. Humans benefit from context before the answer, and this feels natural, like a good explanation from a colleague. But a retrieval system doesn't care about your buildup. It wants the answer in the first sentence. If you lead with context and bury the solution four paragraphs down, the system grabs your preamble and misses the instructions.
+Let’s say you’ve written a section on *"configuring retry policies"*. A human reader would benefit from the first paragraph explaining why the retry policies matter. But for an AI retrieval system, it just needs: "`Set maxRetries` to `3` and `backoffMultiplier` to `2.9` in your service config.” Looking at that, both readers need that information, but in a different order.  
 
-Say you've written a section on configuring retry policies. A human reader benefits from the first paragraph explaining why retry policies matter. A retrieval system just needs: "Set `maxRetries` to 3 and `backoffMultiplier` to 2.0 in your service config."
-
-Both readers need that information. They just need it in a different order.
-
-The fix is to restructure each section so the answer comes first, followed by the context. Journalists have done this for over a century and it's called the [inverted pyramid](https://owl.purdue.edu/owl/subject_specific_writing/journalism_and_journalistic_writing/the_inverted_pyramid.html). The machine gets its clean extraction target. The human gets their narrative. You just flip the sequence.
+To make it serve them both, restructure each section so the answer comes first, followed by the context. Journalists have done this for over a century, and it’s called the [inverted pyramid](https://owl.purdue.edu/owl/subject_specific_writing/journalism_and_journalistic_writing/the_inverted_pyramid.html). The machine gets its clean answer while the human gets their narrative.
 
 ## Five Structural Rules That Serve Both Readers
 
-You don't need to rewrite everything. These are targeted changes that make a real difference.
+You don’t need to rewrite everything. You should make these changes:  
 
 #### 1. Every Section Should Answer One Specific Question
 
-Before writing a section, ask: what question is this answering? Not vaguely. Not *"this section is about deployments."* More like: *How do I deploy a container to Amazon ECS?*
+Before you write any section, ask yourself: *“What question is this section answering?”*  
+Then drive at answering that question.
+When a section answers one question, the human readers can scan the table of contents and jump straight to what they need. The same goes for the AI retrieval system; it can match the section directly to the query without parsing unnecessary information.  
 
-When a section maps to one question, human readers can scan the table of contents and jump straight to what they need. Retrieval systems can match the section directly to a query without parsing through unrelated material.
-The moment you start mixing topics, the deployment steps tangle with monitoring setup and a detour into logging, then you've made the section harder to scan and harder to retrieve. Split them up.
-
-The [Diátaxis framework](https://diataxis.fr/) applies a similar principle at the page level, separating documentation into tutorials, how-to guides, reference, and explanation. The idea scales down to individual sections, too.  
+The [Diátaxis framework](https://diataxis.fr/) applies a similar principle at the page level, separating documentation into tutorials, how-to guides, reference, and explanation. This idea scales down to individual sections, too.
 
 <div style={{ textAlign: 'center' }}>
   <img src="/img/blog/diataxis.png" alt="Diataxis framework" />
@@ -94,37 +82,23 @@ The [Diátaxis framework](https://diataxis.fr/) applies a similar principle at t
 
 #### 2. Write Headings Like Search Queries
 
-There's a difference between a heading that names a category and one that names a problem. "Troubleshooting" is a category. "How to fix a failing Kubernetes deployment" is something an engineer would actually type into a search bar.
+Writing vague headings forces the reader to open the section and scan through to decide if it’s relevant or not. They also make it nearly impossible for an AI retrieval system to match the section to a query.
 
-Vague headings like "Advanced Usage" or "Additional Configuration" force the reader to open the section and scan through it to decide if it's relevant. They also make it nearly impossible for a retrieval system to match the section to a query.
-
-The [Google developer documentation style guide](https://developers.google.com/style/headings) recommends task-based headings that describe what the reader will accomplish. That advice serves AI retrieval systems just as well.
+The  [Google developer documentation style](https://developers.google.com/style/headings) guide recommends the use of task-based headings that describe what the reader will accomplish. This serves the AI retrieval systems just as well.
 
 #### 3. Open Every Section with the Answer
 
-This is the highest-impact change you can make, and it'll feel wrong at first. Every writing instinct says to set the stage before delivering the punchline. Resist it. Documentation isn't a mystery novel.
+Opening every section with the answer is a high-impact change you can make. It’ll feel wrong at first, but for documentation, you aim to solve a problem and not write too much prose as you’d do in a novel.  
 
-Open with the key idea in the first sentence: *"To restart a Kubernetes pod, delete the pod and let the controller create a replacement."*
-
-The reader immediately knows they're in the right place. The retrieval system has the correct answer in the first chunk it grabs. Then use the rest of the section for explanation, context, and examples. You've moved the answer to the front of the line.
-
-This mirrors the [inverted pyramid structure](https://www.nngroup.com/articles/inverted-pyramid/) that's been the backbone of news writing since the telegraph era.
+Open with the key ideas in the first sentence, then use the rest of the section to explain and give more context with examples. Your answer is now at the frontline. The human reader immediately knows they’re in the right place, and the AI retrieval system has the correct answer in the first chunk it grabs. This mirrors the [inverted pyramid](https://www.nngroup.com/articles/inverted-pyramid/) structure that's been the backbone of news writing since the telegraph era.
 
 #### 4. Make Every Code Example Self-Contained
 
-An engineer arrives at your code example from a chatbot response. They didn't read the setup section three scrolls up. They don't have the environment variables you configured in step two. They're staring at a function call to something defined somewhere else.
-
-Phrases like "as configured in the previous section" or "using the client we created earlier" are red flags. They mean your example only works for someone reading linearly from the top. Everyone else, including every retrieval system, is stranded.
-
-Include everything needed to understand or run the example right there: import statements, variable definitions, and configuration values. Yes, it means some repetition. But that's worthwhile.
+Using phrases like “as configured in the previous section” might not work for AI retrieval systems. When adding code examples, include everything needed to understand or run the example right there, like the import statements, variable definitions, and configuration values. Yes, looks like repetition, but it’s worthwhile.
 
 #### 5. Write Metadata Like You're the One Searching
 
-Most teams treat frontmatter metadata as an afterthought. A title, maybe a description, some tags somebody picked six months ago. But metadata is the first thing search systems and retrieval tools use to decide if your page is relevant.
-
-Not "ECS Deployment Guide" — that's your internal label. Instead: "Deploy a Node.js Application to Amazon ECS." That's what someone would actually type.
-
-You could structure every section perfectly, but none of it matters if the retrieval system can't find the page in the first place. Metadata is what gets your docs into the room.
+Metadata is the first thing search systems and AI retrieval systems use to decide whether your page is relevant. You could structure every section well, but none of it matters if readers can’t find your page in the first place. Metadata is what gets your documentation into the room.
 
 ## Before and After
 
@@ -151,7 +125,7 @@ After (structured for both readers):
 >
 > Retry policies handle transient errors like network timeouts and temporary outages. Without them, a single failed request surfaces as a user-facing error even when the issue resolves in milliseconds. Exponential backoff — doubling the wait between each retry — gives the downstream service time to recover without piling on additional load.
 
-Same information. Same depth. The answer just comes first. A retrieval system grabs the solution on the first pass. A human gets the answer immediately and reads on to understand why.
+This example shows they both have the same information and depth, except that in the second, the answer comes first. An AI retrieval system grabs the solution on the first pass. A human gets the answer immediately and reads on to understand why.
 
 Another example can be seen in this image below:
 
@@ -161,9 +135,6 @@ Another example can be seen in this image below:
   *The difference between a useless chatbot response and a helpful one often comes down to where the answer sits in the section*
 </div>
 
-## Start with One Page
+## Conclusion
 
-Don't overhaul everything at once. Pick your most-linked or most-asked-about page. Audit it against these five rules. Restructure it. Watch whether the chatbot returns better answers and if engineers stop asking the same follow-up questions.
-Then do the next page.
-
-Documentation is infrastructure. The teams that structure it for both human and machine readers are building a knowledge base that actually scales.
+To make your documentation fit for both human and AI retrieval systems, don’t overhaul everything at once. Pick your most visited page and start from there. Audit it against these five rules. Restructure it and watch whether the AI retrieval systems and engineers get better answers. Then do the next page. Teams that structure documentation for both the human and machine readers are building knowledge bases that actually scale.

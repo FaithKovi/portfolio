@@ -69,7 +69,8 @@ export default function Contact(): React.JSX.Element {
                 }}
               >
                 Whether it's API docs, developer guides, or a full docs-as-code
-                setup — I'm available for freelance projects and full-time roles.
+                setup — I'm open to documentation roles, remote or with
+                relocation, and select consulting.
               </p>
               <div className="contact-direct-links">
                 <a
@@ -104,6 +105,18 @@ export default function Contact(): React.JSX.Element {
                   <div>
                     <strong>Email</strong>
                     <span>faithkovi@gmail.com</span>
+                  </div>
+                </a>
+                <a
+                  href="/Faith_Wachukwu_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-direct-link"
+                >
+                  <span className="contact-link-icon">📄</span>
+                  <div>
+                    <strong>Download CV</strong>
+                    <span>PDF résumé</span>
                   </div>
                 </a>
               </div>

@@ -4,7 +4,7 @@
 const config = {
   title: "Faith Wachukwu",
   tagline: "Documentation Engineer & Technical Writer",
-  favicon: "/static/img/favicon.svg",
+  favicon: "/static/img/favicon-img.svg",
 
   url: "https://faithkovi.xyz",
   baseUrl: "/",
@@ -34,7 +34,7 @@ const config = {
       attributes: {
         property: "og:description",
         content:
-          "Documentation Engineer with 3+ years of experience creating developer-focused docs, API references, and technical tutorials. Available for freelance and full-time roles.",
+          "Documentation Engineer building docs-as-code systems, API references, and developer guides that measurably reduce support load. KCNA-certified, DevOps background, open-source contributor to Helm.",
       },
     },
     {
@@ -109,12 +109,13 @@ const config = {
         title: "Faith Wachukwu",
         logo: {
           alt: "Faith Wachukwu",
-          src: "img/logo.png",
-          srcDark: "img/logo.png",
+          src: "img/favicon-image.png",
+          srcDark: "img/favicon-image.png",
         },
         items: [
           { to: "/about", label: "About", position: "left" },
           { to: "/work", label: "Work", position: "left" },
+          { to: "/docs/intro", label: "How I Structure Docs", position: "left" },
           { to: "/blog", label: "Blog", position: "left" },
           { to: "/contact", label: "Contact", position: "left" },
           {
@@ -142,6 +143,7 @@ const config = {
             items: [
               { label: "About", to: "/about" },
               { label: "Work", to: "/work" },
+              { label: "How I Structure Docs", to: "/docs/intro" },
               { label: "Blog", to: "/blog" },
               { label: "Contact", to: "/contact" },
             ],

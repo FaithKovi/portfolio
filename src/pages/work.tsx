@@ -5,6 +5,14 @@ import Layout from "@theme/Layout";
 
 const PROJECTS = [
   {
+    title: "Documentation Sample Set (Diátaxis)",
+    description:
+      "A walk-the-talk documentation set built on the Diátaxis framework — tutorials, how-to guides, reference, and explanation — documenting a real CLI tool. Demonstrates information architecture, task-oriented writing, and docs-as-code structure end to end.",
+    emoji: "📚",
+    tech: ["Diátaxis", "Docs-as-Code", "Technical Writing", "Information Architecture"],
+    live: "/docs/intro",
+  },
+  {
     title: "AI Changelog Generator",
     description:
       "A Python CLI tool that reads git commit history and generates polished, categorized changelogs using Gemini's API or Claude's API. Parses commits, filters noise, groups changes by type (Added, Changed, Fixed, Security), and outputs publish-ready markdown following the Keep a Changelog standard.",
@@ -12,23 +20,57 @@ const PROJECTS = [
     tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
     code: "https://github.com/FaithKovi/changelog-generator",
   },
+  // {
+  //   title: "Helm Documentation (helm-www)",
+  //   description:
+  //     "Ongoing open-source documentation contributions to Helm, the Kubernetes package manager — including the v3-to-v4 plugin migration guide and contributor-workflow improvements on the official helm.sh site.",
+  //   emoji: "⎈",
+  //   tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
+  //   code: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi",
+  // },
   {
     title: "Portfolio Website",
     description:
-      "This site — a docs-as-code portfolio built with Docusaurus, auto-deployed via GitHub Actions, with RSS, dark mode, and Formspree contact integration.",
+      "My portfolio built with Docusaurus, auto-deployed via GitHub Actions, with RSS, dark mode, and Formspree contact integration.",
     emoji: "🌐",
-    tech: ["Docusaurus", "React", "GitHub Pages", "CI/CD"],
+    tech: ["Docusaurus", "Docs-as-Code", "React", "GitHub Pages", "CI/CD"],
     code: "https://github.com/FaithKovi/portfolio",
     live: "https://faithkovi.xyz",
   },
-  // {
-  //   title: "Helm Documentation Contributions",
-  //   description:
-  //     "Open-source contributions to Helm's official documentation — improving clarity of installation guides, chart development workflows, and plugin reference pages for the Kubernetes package manager.",
-  //   emoji: "⎈",
-  //   tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
-  //   code: "https://github.com/helm/helm-www",
-  // },
+];
+
+const OPEN_SOURCE = [
+  {
+    org: "Helm",
+    icon: "⎈",
+    blurb:
+      "Authoring the v3-to-v4 plugin migration guide for the new Wasm-based plugin system, plus contributor-guide and release-history improvements on the official documentation site.",
+    links: [
+      { label: "Migration guide PR #2074", url: "https://github.com/helm/helm-www/pull/2074" },
+      { label: "MDX/CommonMark note #2044", url: "https://github.com/helm/helm-www/pull/2044" },
+      { label: "Helm 4 history #2036", url: "https://github.com/helm/helm-www/pull/2036" },
+      { label: "All my Helm PRs ↗", url: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi" },
+    ],
+  },
+  {
+    org: "Kubernetes SIGs · image-builder",
+    icon: "☸",
+    blurb:
+      "Cleaned up YAML formatting across the image-builder project to improve consistency and readability of build configuration.",
+    links: [
+      { label: "YAML cleanup PR #1328", url: "https://github.com/kubernetes-sigs/image-builder/pull/1328" },
+    ],
+  },
+  {
+    org: "CHAOSS Africa",
+    icon: "🤝",
+    blurb:
+      "Contributing to the CHAOSS community's African open-source initiatives — repository structure and documentation for the AFOS (African Open Source) program.",
+    links: [
+      { label: "chaoss-africa structure #4", url: "https://github.com/chaoss/chaoss-africa/pull/4" },
+      { label: "AFOS docs #17", url: "https://github.com/chaoss/AFOS-AfricanOpenSource/pull/17" },
+    ],
+  },
 ];
 
 const ARTICLES = [
@@ -112,12 +154,11 @@ const EXPERIENCE = [
     location: "Oslo, Norway · Remote",
     period: "Aug 2025 – Present",
     bullets: [
-      "Create and maintain API documentation, developer onboarding guides, and product tutorials for SaaS and developer-tool clients, translating complex features into clear, task-oriented content.",
+      "Develop AI-assisted documentation workflows for identifying documentation gaps, improving consistency, reducing manual effort, while maintaining quality through editorial review.",
       "Collaborate with engineers, product managers, and stakeholders to ensure accuracy and identify gaps in technical content.",
-      "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users."
-
+      "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users.",
     ],
-    tags: ["Technical Writing", "API Docs", "Markdown", "Developer Guides"],
+    tags: ["Docs-as-Code", "Technical Writing", "Markdown", "Developer Guides"],
   },
   {
     logo: "/img/clouddley-logo.jpg",
@@ -126,18 +167,12 @@ const EXPERIENCE = [
     location: "Delaware, USA · Remote",
     period: "Jul 2023 – Dec 2025",
     bullets: [
-      "Produced comprehensive technical documentation for internal and customer use, enhancing product understanding and user experience.",
-      "Curated and maintained a repository of tutorials and help systems, improving user onboarding and support efficiency.",
-      "Collaborated with engineering teams to translate technical features into user-friendly docs, resulting in an 80% reduction in support tickets.",
-      "Implemented documentation-as-code workflows using Git, enabling version control, peer reviews, and automated publishing.",
+      "Collaborated closely with engineering teams to translate technical features into user-friendly documentation and tutorials, resulting in an 80% reduction in customer support tickets.",
+      "Produced comprehensive technical documentation for internal and customer use, enhancing product understanding and user experience.","Curated and maintained a repository of tutorials and help systems, improving user onboarding and support efficiency.",
+      "Implemented documentation-as-code workflows using Git, enabling version control, peer reviews, and automated publishing processes.",
     ],
-    tags: [
-      "Docs-as-Code",
-      "Git",
-      "Tutorials",
-      "Technical Docs",
-      "Onboarding",
-    ],
+    tags: ["Docs-as-Code", "Diátaxis", "Git", "Information Architecture", "Onboarding"],
+    // caseStudy: "/case-studies/clouddley",
   },
   {
     logo: "",
@@ -149,17 +184,9 @@ const EXPERIENCE = [
     bullets: [
       "Migrated PostgreSQL databases to DigitalOcean Managed Database and authored migration runbooks ensuring replicability and knowledge transfer across teams.",
       "Automated CI/CD pipelines using AWS CodeBuild, CodeDeploy, and CodePipeline; documented deployment workflows and infrastructure architecture for cross-team reference.",
-      "Leveraged AWS services (ECS Fargate, DynamoDB, Lambda) to optimize application scalability, creating technical reference documentation for each component."
-
+      "Leveraged AWS services (ECS Fargate, DynamoDB, Lambda) to optimize application scalability, creating technical reference documentation for each component.",
     ],
-    tags: [
-      "AWS",
-      "ECS Fargate",
-      "DynamoDB",
-      "Lambda",
-      "CI/CD",
-      "DigitalOcean",
-    ],
+    tags: ["AWS", "ECS Fargate", "DynamoDB", "Lambda", "CI/CD", "DigitalOcean"],
   },
   {
     logo: "",
@@ -170,16 +197,9 @@ const EXPERIENCE = [
     period: "Apr 2022 – Oct 2022",
     bullets: [
       "Automated web application packaging and deployment on ECS Fargate using GitHub Actions; maintained internal deployment guides and operational runbooks.",
-      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documenting operational procedures and integrated various AWS services to meet business/client needs."
-
+      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documenting operational procedures and integrated various AWS services to meet business/client needs.",
     ],
-    tags: [
-      "GitHub Actions",
-      "AWS",
-      "Route53",
-      "CloudWatch",
-      "ECS Fargate",
-    ],
+    tags: ["GitHub Actions", "AWS", "Route53", "CloudWatch", "ECS Fargate"],
   },
   {
     logo: "",
@@ -190,7 +210,7 @@ const EXPERIENCE = [
     period: "Aug 2021 – Oct 2021",
     bullets: [
       "Containerized web applications with Docker, provisioned GCP infrastructure using Terraform, and scripted CI/CD pipelines with Jenkins and CircleCI.",
-      "Automated infrastructure setup using Ansible; documented provisioning procedures to reduce onboarding time for incoming team members."
+      "Automated infrastructure setup using Ansible; documented provisioning procedures to reduce onboarding time for incoming team members.",
     ],
     tags: ["Docker", "Ansible", "Terraform", "GCP", "Jenkins", "CircleCI"],
   },
@@ -208,12 +228,43 @@ const CERTIFICATES = [
   { name: "Kubernetes and Cloud Native Associate", year: "2024" },
 ];
 
+const CV_URL = "/Faith_Wachukwu_Resume.pdf";
+
+// ─── HELPERS ─────────────────────────────────────────────────
+
+function isExternal(href: string): boolean {
+  return /^https?:\/\//.test(href);
+}
+
+function SmartLink({
+  href,
+  children,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+}): React.JSX.Element {
+  if (isExternal(href)) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  );
+}
+
 // ─── PAGE ────────────────────────────────────────────────────
 
 export default function Work(): React.JSX.Element {
-  const [tab, setTab] = useState<"projects" | "articles" | "experience">(
-    "experience"
-  );
+  const [tab, setTab] = useState<
+    "experience" | "projects" | "opensource" | "articles"
+  >("experience");
 
   return (
     <Layout title="Work" description="Projects, articles, and experience">
@@ -222,11 +273,31 @@ export default function Work(): React.JSX.Element {
           <p className="section-label">Work</p>
           <h1 className="page-title">Things I've built and written</h1>
           <p className="page-subtitle">
-            Projects, published articles, and professional experience.
+            Projects, published articles, open-source contributions, and
+            professional experience.
           </p>
+          <div className="page-header-actions">
+            <a className="btn-outline" href={CV_URL} target="_blank" rel="noopener noreferrer">
+              Download CV ↓
+            </a>
+          </div>
         </section>
 
-        <section className="portfolio-section" style={{ paddingTop: 0 }}>
+        {/* Featured case study banner */}
+        {/* <section className="portfolio-section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <a className="featured-case-study" href="/case-studies/clouddley">
+            <span className="fcs-tag">Featured case study</span>
+            <h3>Cutting support tickets ~80% with a Diátaxis docs rebuild</h3>
+            <p>
+              How restructuring Clouddley's documentation around user intent —
+              and closing the highest-volume gaps — measurably reduced inbound
+              support load.
+            </p>
+            <span className="fcs-link">Read the case study →</span>
+          </a>
+        </section> */}
+
+        <section className="portfolio-section" style={{ paddingTop: "2rem" }}>
           <div className="tab-buttons">
             <button
               className={`tab-btn ${tab === "experience" ? "active" : ""}`}
@@ -235,16 +306,22 @@ export default function Work(): React.JSX.Element {
               Experience
             </button>
             <button
-              className={`tab-btn ${tab === "articles" ? "active" : ""}`}
-              onClick={() => setTab("articles")}
-            >
-              Articles
-            </button>
-            <button
               className={`tab-btn ${tab === "projects" ? "active" : ""}`}
               onClick={() => setTab("projects")}
             >
               Projects
+            </button>
+            <button
+              className={`tab-btn ${tab === "opensource" ? "active" : ""}`}
+              onClick={() => setTab("opensource")}
+            >
+              Open Source
+            </button>
+            <button
+              className={`tab-btn ${tab === "articles" ? "active" : ""}`}
+              onClick={() => setTab("articles")}
+            >
+              Articles
             </button>
           </div>
 
@@ -259,22 +336,12 @@ export default function Work(): React.JSX.Element {
                     <p>{project.description}</p>
                     <div className="project-links">
                       {project.code && (
-                        <a
-                          href={project.code}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Code ↗
-                        </a>
+                        <SmartLink href={project.code}>Code ↗</SmartLink>
                       )}
                       {project.live && (
-                        <a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Live ↗
-                        </a>
+                        <SmartLink href={project.live}>
+                          {isExternal(project.live) ? "Live ↗" : "View →"}
+                        </SmartLink>
                       )}
                     </div>
                     <div className="project-tech-tags">
@@ -284,6 +351,33 @@ export default function Work(): React.JSX.Element {
                         </span>
                       ))}
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Open Source Tab */}
+          {tab === "opensource" && (
+            <div className="oss-list">
+              {OPEN_SOURCE.map((oss) => (
+                <div className="oss-card" key={oss.org}>
+                  <div className="oss-header">
+                    <span className="oss-icon">{oss.icon}</span>
+                    <h4 className="oss-org">{oss.org}</h4>
+                  </div>
+                  <p className="oss-blurb">{oss.blurb}</p>
+                  <div className="oss-links">
+                    {oss.links.map((l) => (
+                      <a
+                        key={l.url}
+                        href={l.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {l.label}
+                      </a>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -341,6 +435,11 @@ export default function Work(): React.JSX.Element {
                           <li key={i}>{b}</li>
                         ))}
                       </ul>
+                      {/* {exp.caseStudy && (
+                        <a className="exp-case-link" href={exp.caseStudy}>
+                          Read the full case study →
+                        </a>
+                      )} */}
                       <div className="exp-tags">
                         {exp.tags.map((t) => (
                           <span className="project-tech-tag" key={t}>

@@ -1,0 +1,2008 @@
+From 91158d61023d871e96ad11a5dd3b6a3b7693cc72 Mon Sep 17 00:00:00 2001
+From: Portfolio Bot <noreply@example.com>
+Date: Tue, 2 Jun 2026 11:00:42 +0000
+Subject: [PATCH 1/3] wip: diataxis docs, case study, index/sidebars rewrite
+
+---
+ docs/explanation/how-it-works.md             |  81 +++++++
+ docs/how-to/automate-with-github-actions.md  |  96 ++++++++
+ docs/how-to/prepend-to-existing-changelog.md |  45 ++++
+ docs/how-to/switch-to-claude-provider.md     |  55 +++++
+ docs/intro.md                                |  39 +++-
+ docs/reference/cli-reference.md              |  86 ++++++++
+ docs/tutorials/getting-started.md            |  97 +++++++++
+ sidebars.js                                  |  28 ++-
+ src/pages/case-studies/clouddley.md          |  73 +++++++
+ src/pages/index.tsx                          | 217 +++++++++++++------
+ 10 files changed, 748 insertions(+), 69 deletions(-)
+ create mode 100644 docs/explanation/how-it-works.md
+ create mode 100644 docs/how-to/automate-with-github-actions.md
+ create mode 100644 docs/how-to/prepend-to-existing-changelog.md
+ create mode 100644 docs/how-to/switch-to-claude-provider.md
+ create mode 100644 docs/reference/cli-reference.md
+ create mode 100644 docs/tutorials/getting-started.md
+ create mode 100644 src/pages/case-studies/clouddley.md
+
+diff --git a/docs/explanation/how-it-works.md b/docs/explanation/how-it-works.md
+new file mode 100644
+index 0000000..741a876
+--- /dev/null
++++ b/docs/explanation/how-it-works.md
+@@ -0,0 +1,81 @@
++---
++sidebar_position: 1
++title: How it works
++description: The design decisions behind the changelog generator — why it's built this way.
++---
++
++# How it works
++
++This page explains the *why* behind the tool. It isn't a task you follow or a flag you look
++up — it's the reasoning that makes the other docs make sense. If you just want to generate a
++changelog, the [tutorial](../tutorials/getting-started.md) is the faster path.
++
++## The problem it's solving
++
++Changelogs decay in a predictable way. Teams either skip them, dump raw commit messages that
++no human wants to read, or spend half an hour before every release hand-sorting commits into
++categories. All three failure modes share a root cause: the *source* material (commit
++messages) and the *audience* material (a release note) are written for different readers, and
++bridging them is tedious manual work.
++
++The tool's premise is that this bridge — categorize, rewrite, format — is exactly the kind of
++bounded, well-specified transformation an LLM does reliably, *if* the prompt constrains it
++tightly enough.
++
++## The pipeline
++
++```
++Git History → Parse Commits → Filter Noise → LLM → Polished Changelog
++```
++
++Each stage exists to make the next one's job smaller:
++
++1. **Read** commit messages via `git log`.
++2. **Filter** out noise — merge commits, WIP commits, trivial typo fixes — before anything
++   reaches the model. Cleaning input deterministically is cheaper and more reliable than
++   asking the model to ignore noise.
++3. **Prompt** the model to categorize and rewrite what remains.
++4. **Emit** Keep a Changelog–formatted markdown.
++
++## Why the prompt is structured the way it is
++
++The single biggest lever on output quality is the prompt, so it's built from distinct,
++intentional parts rather than one loose instruction:
++
++- **Role framing** tells the model it's acting as a technical writer, not a chat assistant.
++  This shifts tone away from conversational filler toward terse, user-facing descriptions.
++- **Categorization rules** map commits onto the fixed Keep a Changelog vocabulary (Added,
++  Changed, Fixed, Removed, Security, Documentation, Infrastructure). A closed set prevents the
++  model from inventing idiosyncratic headings that break downstream tooling.
++- **A rewrite instruction** forces the model to *translate* commit messages into user-facing
++  language instead of pasting them. "fix npe in auth handler" becomes "Fixed a crash when
++  logging in without a saved session."
++- **Noise filtering** in the prompt is a second line of defense behind the deterministic
++  filter, catching low-value commits that slipped through.
++- **Traceability** requires a short commit hash on each line, so a reader can always jump from
++  the human-readable note back to the actual change.
++
++The prompt lives in `build_prompt()` in `changelog.py` precisely so it can be edited. The
++design assumption is that every team's changelog conventions differ slightly, and the right
++place to encode those conventions is one readable function — not scattered across the codebase.
++
++## Why two providers
++
++Gemini is the default because it's free with no billing setup, which removes the most common
++barrier to a first run. Claude is offered as an opt-in for teams that want a specific tone or
++are already standardized on Anthropic. Crucially, **provider choice does not change the output
++contract** — both are driven by the same prompt and produce the same Keep a Changelog
++structure. The provider is an implementation detail behind a stable interface, which is why
++[switching](../how-to/switch-to-claude-provider.md) is a single flag.
++
++## Why one file
++
++The entire tool is one Python file. For a utility this size, a multi-module structure would
++add navigation cost without adding clarity. Keeping it in `changelog.py` means a new
++contributor can read the whole thing top to bottom in one sitting — which is itself a
++documentation decision.
++
++## See also
++
++- [CLI reference](../reference/cli-reference.md) — the concrete surface this design produces.
++- [Getting started](../tutorials/getting-started.md) — see the pipeline run end to end.
+diff --git a/docs/how-to/automate-with-github-actions.md b/docs/how-to/automate-with-github-actions.md
+new file mode 100644
+index 0000000..3772116
+--- /dev/null
++++ b/docs/how-to/automate-with-github-actions.md
+@@ -0,0 +1,96 @@
++---
++sidebar_position: 1
++title: Automate changelog generation in CI
++description: Generate a changelog automatically on every GitHub release.
++---
++
++# Automate changelog generation in CI
++
++**Goal:** produce a changelog automatically whenever you publish a GitHub release, so no
++one has to remember to run the tool by hand.
++
++This guide assumes you already have the tool working locally. If not, start with the
++[getting-started tutorial](../tutorials/getting-started.md).
++
++## Before you start
++
++You'll need:
++
++- A repository on GitHub with permission to add workflows and secrets
++- A Gemini API key (or an Anthropic key if you prefer Claude)
++
++## 1. Store your API key as a secret
++
++In your repository, go to **Settings → Secrets and variables → Actions → New repository
++secret**. Add:
++
++- **Name:** `GEMINI_API_KEY`
++- **Value:** your key
++
++Never commit the key to the workflow file.
++
++## 2. Add the workflow
++
++Create `.github/workflows/changelog.yml`:
++
++```yaml
++name: Generate Changelog
++on:
++  release:
++    types: [created]
++
++jobs:
++  changelog:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++        with:
++          fetch-depth: 0          # full history is required for git log
++
++      - uses: actions/setup-python@v5
++        with:
++          python-version: "3.12"
++
++      - name: Install dependencies
++        run: pip install google-genai python-dotenv
++
++      - name: Generate changelog
++        env:
++          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
++        run: |
++          python changelog.py \
++            --since ${{ github.event.release.tag_name }} \
++            --version ${{ github.event.release.tag_name }} \
++            --output CHANGELOG.md --prepend
++```
++
++:::caution `fetch-depth: 0` is not optional
++The default checkout fetches only the latest commit. The tool reads history with
++`git log`, so a shallow clone produces an empty or truncated changelog. Setting
++`fetch-depth: 0` pulls the full history.
++:::
++
++## 3. Commit the result
++
++The step above writes to `CHANGELOG.md` but doesn't persist it. Add a final step to commit
++the change back:
++
++```yaml
++      - name: Commit changelog
++        run: |
++          git config user.name "github-actions[bot]"
++          git config user.email "github-actions[bot]@users.noreply.github.com"
++          git add CHANGELOG.md
++          git commit -m "docs: update changelog for ${{ github.event.release.tag_name }}" || echo "No changes"
++          git push
++```
++
++## Verify it works
++
++Publish a release in the GitHub UI. Within a minute the **Actions** tab should show a
++green run, and your `CHANGELOG.md` should have a new entry at the top.
++
++## Related
++
++- [Switch to the Claude provider](./switch-to-claude-provider.md) if you'd rather use Anthropic.
++- [CLI reference](../reference/cli-reference.md) for every flag used above.
+diff --git a/docs/how-to/prepend-to-existing-changelog.md b/docs/how-to/prepend-to-existing-changelog.md
+new file mode 100644
+index 0000000..0cd8c5e
+--- /dev/null
++++ b/docs/how-to/prepend-to-existing-changelog.md
+@@ -0,0 +1,45 @@
++---
++sidebar_position: 3
++title: Append a release without overwriting history
++description: Add a new entry to the top of an existing CHANGELOG.md.
++---
++
++# Append a release without overwriting history
++
++**Goal:** add a new release entry to the **top** of an existing `CHANGELOG.md` while
++keeping everything already in the file.
++
++By default, `--output` overwrites the target file. That's fine for a one-off, but during a
++normal release cycle you want to *accumulate* history, not replace it.
++
++## The one flag that matters: `--prepend`
++
++```bash
++python changelog.py \
++  --since v1.0.0 \
++  --version 1.1.0 \
++  --output CHANGELOG.md \
++  --prepend
++```
++
++With `--prepend`, the tool inserts the new entry above the existing content instead of
++replacing the file. Your older releases stay exactly where they are.
++
++## A complete release flow
++
++```bash
++git tag v1.1.0
++python changelog.py --since v1.0.0 --version 1.1.0 --output CHANGELOG.md --prepend
++git add CHANGELOG.md
++git commit -m "docs: update changelog for v1.1.0"
++```
++
++:::tip Scope the range with `--since`
++Passing the previous tag to `--since` keeps the entry focused on what actually changed in
++this release, instead of re-summarizing commits you've already documented.
++:::
++
++## Related
++
++- [Automate this in CI](./automate-with-github-actions.md) so it runs on every release.
++- [CLI reference](../reference/cli-reference.md) for `--since`, `--output`, and `--prepend`.
+diff --git a/docs/how-to/switch-to-claude-provider.md b/docs/how-to/switch-to-claude-provider.md
+new file mode 100644
+index 0000000..587f405
+--- /dev/null
++++ b/docs/how-to/switch-to-claude-provider.md
+@@ -0,0 +1,55 @@
++---
++sidebar_position: 2
++title: Use Claude instead of Gemini
++description: Switch the changelog generator from Gemini to Anthropic Claude.
++---
++
++# Use Claude instead of Gemini
++
++**Goal:** run the generator against Anthropic's Claude rather than the default Gemini
++provider.
++
++Gemini is the default because it's free. Claude is worth switching to when you want a
++particular tone, are already standardized on Anthropic, or are comparing output quality
++across providers.
++
++## 1. Add your Anthropic key
++
++Get a key from [console.anthropic.com](https://console.anthropic.com) and add it to your
++`.env`:
++
++```bash
++ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
++```
++
++You can keep `GEMINI_API_KEY` in the same file — the tool only reads the key for the
++provider you select.
++
++## 2. Install the Anthropic package
++
++The Anthropic SDK is an optional dependency, so it isn't installed by default:
++
++```bash
++pip install anthropic
++```
++
++## 3. Run with `--provider claude`
++
++```bash
++python changelog.py --repo ./some-repo --last 15 --provider claude
++```
++
++That's the entire change — every other flag behaves identically.
++
++## Troubleshooting
++
++| Symptom | Likely cause | Fix |
++|---------|--------------|-----|
++| `ModuleNotFoundError: anthropic` | SDK not installed | `pip install anthropic` |
++| Authentication error | `ANTHROPIC_API_KEY` missing or wrong | Re-check the value in `.env` |
++| Output looks unchanged | `--provider` flag omitted | Confirm `--provider claude` is present |
++
++## Related
++
++- [CLI reference](../reference/cli-reference.md) — full provider and flag list.
++- [How it works](../explanation/how-it-works.md) — why provider choice doesn't change the output format.
+diff --git a/docs/intro.md b/docs/intro.md
+index 27056be..4da0224 100644
+--- a/docs/intro.md
++++ b/docs/intro.md
+@@ -1,7 +1,42 @@
+ ---
+ sidebar_position: 1
++title: Documentation Samples
++description: A working documentation set, organized with the Diátaxis framework.
+ ---
+ 
+-# Introduction
++# Documentation Samples
+ 
+-Welcome to my documentation portfolio. This section contains writing samples and technical documentation examples.
++This section is a **working writing sample**, not a description of one. Rather than
++link to scattered PDFs, I documented a real, open-source tool end to end and organized
++the result the way I organize production documentation: with the
++[Diátaxis](https://diataxis.fr/) framework.
++
++The subject is the [Changelog Generator](https://github.com/FaithKovi/changelog-generator)
++— a small Python CLI that turns git history into a publish-ready changelog using an LLM.
++It is intentionally a *real* tool with real edge cases, so the docs have to do real work:
++onboard a first-time user, answer task-specific questions, serve as a lookup reference,
++and explain the design decisions underneath.
++
++## How this is organized
++
++Diátaxis splits documentation into four modes based on what the reader needs *right now*.
++Mixing them is the most common reason docs feel cluttered — a tutorial that keeps
++stopping to explain architecture loses the beginner; a reference padded with narrative
++slows down the expert.
++
++| Mode | Reader's question | Where it lives |
++|------|-------------------|----------------|
++| **Tutorial** | "I'm new — walk me through it." | [Getting started](./tutorials/getting-started.md) |
++| **How-to guide** | "I have a specific task to finish." | [How-to guides](./how-to/automate-with-github-actions.md) |
++| **Reference** | "What does this flag do, exactly?" | [CLI reference](./reference/cli-reference.md) |
++| **Explanation** | "Why is it built this way?" | [How it works](./explanation/how-it-works.md) |
++
++If you only read one page to judge the writing, read the
++[getting-started tutorial](./tutorials/getting-started.md) for instructional voice, or
++the [CLI reference](./reference/cli-reference.md) for structured, scannable reference design.
++
++## Want the impact story instead?
++
++For an outcome-focused write-up rather than a product doc, see the
++[Clouddley support-deflection case study](/case-studies/clouddley) — a documentation
++rebuild that cut inbound support tickets by ~80%.
+diff --git a/docs/reference/cli-reference.md b/docs/reference/cli-reference.md
+new file mode 100644
+index 0000000..db64758
+--- /dev/null
++++ b/docs/reference/cli-reference.md
+@@ -0,0 +1,86 @@
++---
++sidebar_position: 1
++title: CLI reference
++description: Complete reference for every command-line flag, default, and environment variable.
++---
++
++# CLI reference
++
++Complete, lookup-oriented reference for the `changelog.py` command. For a guided
++walkthrough, use the [getting-started tutorial](../tutorials/getting-started.md) instead.
++
++## Synopsis
++
++```bash
++python changelog.py [--repo PATH] [--since REF] [--last N]
++                    [--version LABEL] [--output FILE] [--prepend]
++                    [--provider {gemini,claude}]
++```
++
++Run with no arguments, the tool summarizes the **last 50 commits** of the **current
++directory** using **Gemini** and prints the result to **stdout**.
++
++## Options
++
++| Flag | Argument | Description | Default |
++|------|----------|-------------|---------|
++| `--repo` | path | Path to a local git repository. | Current directory |
++| `--since` | date or tag | Start point for history. Accepts an ISO date (`2025-01-01`) or a git tag (`v1.2.0`). Overrides `--last` when both are set. | None |
++| `--last` | integer | Number of recent commits to include. | `50` |
++| `--version` | string | Version label used in the release heading. | `Unreleased` |
++| `--output`, `-o` | file | Write to a file instead of printing to stdout. | None (prints) |
++| `--prepend` | flag | Insert output at the top of an existing `--output` file instead of overwriting it. | Off |
++| `--provider` | `gemini` \| `claude` | LLM provider used to generate the changelog. | `gemini` |
++
++## Heading format
++
++The `--version` value produces a Keep a Changelog–style heading with the current date:
++
++```
++## [v1.0.0] — 2026-03-30
++```
++
++If `--version` is omitted, the heading reads `[Unreleased]`.
++
++## Environment variables
++
++Read from a `.env` file in the working directory (git-ignored by default).
++
++| Variable | Required when | Notes |
++|----------|---------------|-------|
++| `GEMINI_API_KEY` | Using the default Gemini provider | Free key from Google AI Studio. |
++| `ANTHROPIC_API_KEY` | `--provider claude` | Requires `pip install anthropic`. |
++
++## Output categories
++
++Generated entries are grouped into the following sections, following the
++[Keep a Changelog](https://keepachangelog.com) standard. Empty categories are omitted.
++
++`Added` · `Changed` · `Fixed` · `Removed` · `Security` · `Documentation` · `Infrastructure`
++
++## Examples
++
++```bash
++# Last 50 commits of the current repo, printed to stdout
++python changelog.py
++
++# A specific repo, last 15 commits, labeled v1.0.0
++python changelog.py --repo ./some-repo --last 15 --version 1.0.0
++
++# Everything since the previous tag, appended to an existing file
++python changelog.py --since v1.2.0 --version 1.3.0 --output CHANGELOG.md --prepend
++
++# Everything since a date
++python changelog.py --since "2025-06-01"
++
++# Use Claude instead of Gemini
++python changelog.py --repo ./some-repo --last 15 --provider claude
++```
++
++## Exit behavior
++
++The tool reads commits with `git log`, so it must be run inside (or pointed at) a directory
++that is a git repository with history available. In a shallow clone (for example, a default
++CI checkout), history may be missing — see
++[Automate in CI](../how-to/automate-with-github-actions.md) for the `fetch-depth: 0`
++requirement.
+diff --git a/docs/tutorials/getting-started.md b/docs/tutorials/getting-started.md
+new file mode 100644
+index 0000000..e0b8eee
+--- /dev/null
++++ b/docs/tutorials/getting-started.md
+@@ -0,0 +1,97 @@
++---
++sidebar_position: 1
++title: "Tutorial: Generate your first changelog"
++description: A guided, end-to-end first run of the Changelog Generator.
++---
++
++# Generate your first changelog
++
++This tutorial takes you from an empty terminal to a polished changelog in about ten
++minutes. You will install the tool, point it at a real repository, and produce a release
++entry you could paste straight into a `CHANGELOG.md`.
++
++You do **not** need to understand how the tool works internally yet — that is what the
++[explanation](../explanation/how-it-works.md) is for. Here, just follow along; every
++command is meant to be run exactly as written.
++
++## What you'll need
++
++- **Python 3.8 or newer** (`python --version` to check)
++- **Git** installed and on your `PATH`
++- A free **Google account** — we'll use Gemini, which has no credit-card requirement
++
++That's it. No paid API key is required to finish this tutorial.
++
++## Step 1 — Get the tool
++
++```bash
++git clone https://github.com/FaithKovi/changelog-generator.git
++cd changelog-generator
++```
++
++## Step 2 — Create an isolated environment
++
++```bash
++python -m venv venv
++source venv/bin/activate      # Windows: venv\Scripts\activate
++pip install -r requirements.txt
++```
++
++Your prompt should now show `(venv)` at the start of the line. That tells you the
++environment is active.
++
++## Step 3 — Add a free Gemini key
++
++Copy the example environment file:
++
++```bash
++cp .env.example .env
++```
++
++Then:
++
++1. Open [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in.
++2. Click **Create API Key** and copy the value.
++3. Paste it into `.env`:
++
++   ```bash
++   GEMINI_API_KEY=AIzaSy-your-key-here
++   ```
++
++:::tip
++The `.env` file is already git-ignored, so your key will not be committed. Never paste an
++API key directly into a command or a tracked file.
++:::
++
++## Step 4 — Run it against a real repository
++
++Let's generate a changelog for an actual open-source project so the output is meaningful:
++
++```bash
++git clone https://github.com/pallets/flask.git
++python changelog.py --repo ./flask --last 20 --version 1.0.0
++```
++
++In a few seconds you'll see a categorized, Keep a Changelog–style entry printed to your
++terminal — grouped into **Added**, **Changed**, **Fixed**, and so on, with short commit
++hashes for traceability.
++
++## Step 5 — Save it to a file
++
++```bash
++python changelog.py --repo ./flask --last 20 --version 1.0.0 --output CHANGELOG.md
++```
++
++Open `CHANGELOG.md` and you'll find the same entry, ready to commit.
++
++## What you just did
++
++You installed the tool, authenticated against a free LLM provider, and turned twenty raw
++commits into a readable release note — without hand-sorting a single line.
++
++## Where to go next
++
++- **Have a specific job to do?** The [how-to guides](../how-to/automate-with-github-actions.md)
++  cover automating this in CI, switching to Claude, and appending to an existing changelog.
++- **Want every flag explained?** See the [CLI reference](../reference/cli-reference.md).
++- **Curious how categorization works?** Read [how it works](../explanation/how-it-works.md).
+diff --git a/sidebars.js b/sidebars.js
+index 93cfb60..0baaadb 100644
+--- a/sidebars.js
++++ b/sidebars.js
+@@ -1,10 +1,34 @@
+ /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+ const sidebars = {
+   docs: [
++    "intro",
+     {
+       type: "category",
+-      label: "Getting Started",
+-      items: ["intro"],
++      label: "Tutorials",
++      collapsed: false,
++      items: ["tutorials/getting-started"],
++    },
++    {
++      type: "category",
++      label: "How-to guides",
++      collapsed: false,
++      items: [
++        "how-to/automate-with-github-actions",
++        "how-to/switch-to-claude-provider",
++        "how-to/prepend-to-existing-changelog",
++      ],
++    },
++    {
++      type: "category",
++      label: "Reference",
++      collapsed: false,
++      items: ["reference/cli-reference"],
++    },
++    {
++      type: "category",
++      label: "Explanation",
++      collapsed: false,
++      items: ["explanation/how-it-works"],
+     },
+   ],
+ };
+diff --git a/src/pages/case-studies/clouddley.md b/src/pages/case-studies/clouddley.md
+new file mode 100644
+index 0000000..d1c7714
+--- /dev/null
++++ b/src/pages/case-studies/clouddley.md
+@@ -0,0 +1,73 @@
++---
++title: "Case study: cutting support tickets by ~80%"
++description: How a documentation rebuild at Clouddley deflected the majority of inbound support tickets.
++---
++
++# Cutting support tickets by ~80% with a documentation rebuild
++
++**Role:** Documentation Engineer, Clouddley · **Timeframe:** 2023–2025 · **Outcome:** ~80% reduction in inbound support tickets.
++
++This is the impact-focused companion to the [documentation samples](/docs/intro). Where
++those pages show *how* I write, this shows *why it matters* — what a documentation
++investment returns when it's treated as a product surface rather than an afterthought.
++
++## The situation
++
++Clouddley is a cloud platform that lets teams run apps, databases, brokers, and AI workloads
++across providers without vendor lock-in. Powerful surface area — and every bit of that power
++was a potential support question. Users hit the same recurring walls: onboarding friction,
++configuration questions, and "how do I do X" tasks that had no self-serve answer. Each one
++became a ticket, and each ticket pulled an engineer away from building.
++
++The core problem wasn't that answers didn't exist — engineers *could* answer these questions.
++It was that the answers lived in people's heads and in Slack threads, not in a place a user
++could find at 2 a.m.
++
++## The approach
++
++I treated the documentation like production software, not a wiki.
++
++**1. Find the real questions.** I started from the support queue itself, clustering tickets by
++theme to see which topics actually generated load. Documentation effort went where the tickets
++were, not where it felt productive to write.
++
++**2. Structure for the reader's intent.** I separated learning-oriented onboarding from
++task-oriented how-tos and lookup-oriented reference, so a new user and a returning user each
++had a path that fit what they needed in that moment. (The reasoning behind that split is in my
++[Diátaxis write-up](/blog/how-diataxis-turns-documentation-chaos-into-clarity).)
++
++**3. Build a docs-as-code pipeline.** I moved documentation into a Git-based workflow with peer
++review, version control, and automated publishing. Docs shipped through the same rigor as code:
++reviewed, versioned, and continuously deployed. That made the docs *maintainable* — the
++difference between a one-time cleanup and a system that stays accurate.
++
++**4. Close the loop with engineering.** I worked directly with engineers and product to catch
++inaccuracies and surface the gaps users were quietly hitting, so the docs tracked the product
++instead of drifting from it.
++
++## The result
++
++Inbound support tickets dropped by roughly **80%**. The questions that used to interrupt
++engineers were answered before they were ever asked, because the answer was now discoverable,
++accurate, and current.
++
++The second-order effects mattered as much as the headline number:
++
++- **Engineering time returned to engineering.** Fewer repeat questions meant fewer context
++  switches for the people building the product.
++- **Faster onboarding.** New users reached a working state without needing a human in the loop.
++- **A maintainable system, not a snapshot.** Because the docs lived in a reviewed, continuously
++  deployed pipeline, the deflection held instead of decaying.
++
++## What I'd track to prove it on day one
++
++For a hiring manager evaluating this: the metric I anchor to is **ticket deflection** — tickets
++per active user, segmented by topic, before and after a documentation change. I instrument the
++docs the same way: search queries with no results, top-exited pages, and "was this helpful"
++signals all point to the *next* gap to close. Documentation is only finished when you can
++measure that it's working.
++
++## Related
++
++- [Documentation samples](/docs/intro) — a full Diátaxis-structured doc set.
++- [Why on-call engineers ignore your runbooks](/blog/why-on-call-engineers-ignore-your-runbooks) — the same deflection thinking applied to incident docs.
+diff --git a/src/pages/index.tsx b/src/pages/index.tsx
+index 000dbc9..0c5523c 100644
+--- a/src/pages/index.tsx
++++ b/src/pages/index.tsx
+@@ -1,8 +1,34 @@
+-import React, { useState } from "react";
++import React from "react";
+ import Layout from "@theme/Layout";
+ 
+ // ─── DATA ────────────────────────────────────────────────────
+ 
++const METRICS = [
++  {
++    value: "~80%",
++    label: "Reduction in inbound support tickets",
++    detail: "via a documentation rebuild at Clouddley",
++    href: "/case-studies/clouddley",
++  },
++  {
++    value: "3+ yrs",
++    label: "Documentation engineering",
++    detail: "across SaaS, PaaS, and developer platforms",
++  },
++  {
++    value: "15+",
++    label: "Published technical articles",
++    detail: "on Clouddley, AppSignal, HackerNoon & more",
++    href: "/work",
++  },
++  {
++    value: "OSS",
++    label: "Open-source contributor",
++    detail: "Helm documentation & the CHAOSS community",
++    href: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi",
++  },
++];
++
+ const SERVICES = [
+   {
+     icon: "📡",
+@@ -18,9 +44,9 @@ const SERVICES = [
+   },
+   {
+     icon: "⚙️",
+-    title: "Docs-as-Code Setup",
++    title: "Docs-as-Code Systems",
+     description:
+-      "End-to-end documentation systems using tools like Docusaurus, GitBook, or Mintlify — with Git workflows, CI/CD publishing, and version control baked in.",
++      "End-to-end documentation pipelines in Docusaurus, GitBook, or Mintlify — with Git workflows, peer review, CI/CD publishing, and versioning built in from day one.",
+   },
+   {
+     icon: "🎓",
+@@ -33,16 +59,7 @@ const SERVICES = [
+ const SKILLS = [
+   {
+     category: "Documentation Tools",
+-    items: [
+-      "Docusaurus",
+-      "Markdown / MDX",
+-      "Swagger / OpenAPI",
+-      "Postman",
+-      "Mintlify",
+-      "Hugo",
+-      "GitBook",
+-      "ReadTheDocs",
+-    ],
++    items: ["Docusaurus", "Markdown / MDX", "OpenAPI / Swagger", "Mintlify", "GitBook"],
+   },
+   {
+     category: "Writing & Content",
+@@ -51,7 +68,7 @@ const SKILLS = [
+       "Developer Guides",
+       "Tutorials & How-Tos",
+       "Release Notes",
+-      "Information Architecture",
++      "Information Architecture (Diátaxis)",
+       "UX Writing",
+     ],
+   },
+@@ -59,10 +76,9 @@ const SKILLS = [
+     category: "Docs Workflow & Tooling",
+     items: [
+       "Git / GitHub",
++      "Docs-as-Code",
+       "CI/CD Publishing",
+       "GitHub Actions",
+-      "Docs-as-Code",
+-      "Version Control",
+       "Peer Review Workflows",
+     ],
+   },
+@@ -71,23 +87,31 @@ const SKILLS = [
+     items: [
+       "REST APIs",
+       "CI/CD Pipelines",
++      "Kubernetes & Cloud-Native",
+       "Python / Go / Bash",
+-      "Saas Products & Developer Platforms",
+-      "PaaS / IaaS / Cloud Services",
++      "SaaS, PaaS & IaaS Platforms",
+     ],
+   },
+ ];
+ 
+-const EDUCATION = [
++// TODO (Faith): replace these with real, attributed quotes from managers,
++// engineers, or clients. Keep name + role + company — unattributed quotes read
++// as filler to hiring managers. Aim for 2–3 strong ones, then delete this note.
++const TESTIMONIALS = [
+   {
+-    school: "University of Port Harcourt",
+-    degree: "Bachelor of Science, Biochemistry",
+-    year: "2016 – 2021",
++    quote:
++      "Replace this with a real quote about the measurable impact of your documentation work — ideally one that names an outcome (faster onboarding, fewer tickets, a cleaner release process).",
++    name: "Name Surname",
++    role: "Engineering Manager",
++    company: "Company",
++  },
++  {
++    quote:
++      "Replace this with a second quote — an engineer or PM you collaborated with describing what it was like to work with you and what changed because of the docs.",
++    name: "Name Surname",
++    role: "Senior Engineer",
++    company: "Company",
+   },
+-];
+-
+-const CERTIFICATES = [
+-  { name: "Kubernetes and Cloud Native Associate", year: "2024" },
+ ];
+ 
+ // COMPONENTS
+@@ -99,46 +123,85 @@ function HeroSection() {
+         <div className="hero-content">
+           <h1 className="hero-title">Faith Wachukwu</h1>
+           <h6>(formerly Faith Kovi)</h6>
+-        <span className="hero-label">Documentation Engineer | Technical Writer</span>
++          <span className="hero-label">
++            Documentation Engineer | Technical Writer
++          </span>
+           <p className="hero-description">
+-            A Documentation Engineer and Technical Writer with over 3+ years of experience creating developer-focused docs that simplify complex concepts.
++            I design and own docs-as-code systems for developer platforms — API
++            references, developer guides, and the review and publishing pipelines that
++            keep them accurate at scale.
+           </p>
+           <p className="hero-description">
+-            I build scalable docs-as-code workflows, partner with engineering teams on guides and APIs, contribute to open source, and write about developer experience and documentation strategy.
++            A documentation rebuild I led cut inbound support tickets by roughly 80%. I
++            come from a DevOps background, hold the KCNA certification, and contribute to
++            open source including Helm's documentation.
+           </p>
+           <div className="hero-meta">
+-            {/* <span>📍 Lagos, Nigeria</span>
+-            <span>·</span> */}
+-            {/* <span>✍️ Freelance</span> */}
++            <span>📍 Oslo, Norway</span>
++            <span>·</span>
++            <span>🌍 Remote / international</span>
+           </div>
+           <div className="hero-actions">
+             <a href="/work" className="btn-primary">
+               See My Work
+             </a>
+-            <a href="/contact" className="btn-outline">
+-              Get In Touch
++            <a href="/docs/intro" className="btn-outline">
++              Read Doc Samples
++            </a>
++            <a
++              href="/Faith-Wachukwu-CV.pdf"
++              className="btn-outline"
++              target="_blank"
++              rel="noopener noreferrer"
++            >
++              Download CV ↓
+             </a>
+           </div>
+         </div>
+         <div className="hero-image-wrapper">
+-          <img
+-            className="hero-image"
+-            src="/img/profile.jpg"
+-            alt="Faith Wachukwu"
+-          />
++          <img className="hero-image" src="/img/profile.jpg" alt="Faith Wachukwu" />
+         </div>
+       </div>
+     </section>
+   );
+ }
+ 
++function MetricsSection() {
++  return (
++    <div className="work-section-bg">
++      <section className="portfolio-section">
++        <p className="section-label">By the numbers</p>
++        <h2 className="section-title">Impact, not just output</h2>
++        <div className="metrics-grid">
++          {METRICS.map((m) => {
++            const inner = (
++              <>
++                <span className="metric-value">{m.value}</span>
++                <span className="metric-label">{m.label}</span>
++                <span className="metric-detail">{m.detail}</span>
++              </>
++            );
++            return m.href ? (
++              <a className="metric-card metric-card-link" href={m.href} key={m.label}>
++                {inner}
++              </a>
++            ) : (
++              <div className="metric-card" key={m.label}>
++                {inner}
++              </div>
++            );
++          })}
++        </div>
++      </section>
++    </div>
++  );
++}
++
+ function ServicesSection() {
+   return (
+     <section className="portfolio-section" id="services">
+       <p className="section-label">What I Do</p>
+-      <h2 className="section-title">
+-        Documentation that drives product adoption
+-      </h2>
++      <h2 className="section-title">Documentation that drives product adoption</h2>
+       <div className="services-grid">
+         {SERVICES.map((service) => (
+           <div className="service-card" key={service.title}>
+@@ -154,26 +217,48 @@ function ServicesSection() {
+ 
+ function SkillsSection() {
+   return (
+-      <div className="work-section-bg">
+-        <section className="portfolio-section">
+-          <p className="section-label">Skills & Tools</p>
+-          <h2 className="section-title">What I work with</h2>
+-          <div className="skills-grid">
+-            {SKILLS.map((group) => (
+-              <div className="skill-card" key={group.category}>
+-                <h3>{group.category}</h3>
+-                <div className="skill-tags">
+-                  {group.items.map((item) => (
+-                    <span className="skill-tag" key={item}>
+-                      {item}
+-                    </span>
+-                  ))}
+-                </div>
++    <div className="work-section-bg">
++      <section className="portfolio-section">
++        <p className="section-label">Skills & Tools</p>
++        <h2 className="section-title">What I work with</h2>
++        <div className="skills-grid">
++          {SKILLS.map((group) => (
++            <div className="skill-card" key={group.category}>
++              <h3>{group.category}</h3>
++              <div className="skill-tags">
++                {group.items.map((item) => (
++                  <span className="skill-tag" key={item}>
++                    {item}
++                  </span>
++                ))}
+               </div>
+-            ))}
+-          </div>
+-        </section>
++            </div>
++          ))}
++        </div>
++      </section>
++    </div>
++  );
++}
++
++function TestimonialsSection() {
++  return (
++    <section className="portfolio-section">
++      <p className="section-label">What people say</p>
++      <h2 className="section-title">Working with me</h2>
++      <div className="testimonials-grid">
++        {TESTIMONIALS.map((t, i) => (
++          <figure className="testimonial-card" key={i}>
++            <blockquote>&ldquo;{t.quote}&rdquo;</blockquote>
++            <figcaption>
++              <strong>{t.name}</strong>
++              <span>
++                {t.role} · {t.company}
++              </span>
++            </figcaption>
++          </figure>
++        ))}
+       </div>
++    </section>
+   );
+ }
+ 
+@@ -181,15 +266,15 @@ function CTASection() {
+   return (
+     <div className="work-section-bg">
+       <section className="cta-section">
+-        <h2>Need documentation that developers will actually read?</h2>
++        <h2>Looking for someone to own your documentation?</h2>
+         <p>
+-          I help engineering teams and developer-focused companies create clear,
+-          impactful documentation that reduces support tickets and accelerates
+-          product adoption.
++          I build documentation systems that reduce support load and accelerate adoption —
++          and keep them accurate as the product changes. Open to senior documentation
++          engineering and technical writing roles, and select consulting.
+         </p>
+         <div className="cta-actions">
+           <a href="/contact" className="btn-primary">
+-            Let's Talk
++            Get In Touch
+           </a>
+           <a href="/work" className="btn-outline">
+             See My Work
+@@ -210,8 +295,10 @@ export default function Home(): React.JSX.Element {
+     >
+       <main>
+         <HeroSection />
++        <MetricsSection />
+         <ServicesSection />
+         <SkillsSection />
++        <TestimonialsSection />
+         <CTASection />
+       </main>
+     </Layout>
+-- 
+2.43.0
+
+
+From 381b299d789c195f588666e0770f5961fa998041 Mon Sep 17 00:00:00 2001
+From: Portfolio Bot <noreply@example.com>
+Date: Tue, 2 Jun 2026 11:04:18 +0000
+Subject: [PATCH 2/3] feat: work.tsx OSS tab + case study, CSS, config nav,
+ contact reword, CV PDF
+
+---
+ docusaurus.config.js         |   4 +-
+ scripts/build_cv.py          | 144 +++++++++++++++++++
+ src/css/custom.css           | 270 ++++++++++++++++++++++++++++++++++-
+ src/pages/contact.tsx        |  15 +-
+ src/pages/work.tsx           | 234 +++++++++++++++++++++---------
+ static/Faith-Wachukwu-CV.pdf |  80 +++++++++++
+ 6 files changed, 677 insertions(+), 70 deletions(-)
+ create mode 100644 scripts/build_cv.py
+ create mode 100644 static/Faith-Wachukwu-CV.pdf
+
+diff --git a/docusaurus.config.js b/docusaurus.config.js
+index 460c16f..65cf5f0 100644
+--- a/docusaurus.config.js
++++ b/docusaurus.config.js
+@@ -34,7 +34,7 @@ const config = {
+       attributes: {
+         property: "og:description",
+         content:
+-          "Documentation Engineer with 3+ years of experience creating developer-focused docs, API references, and technical tutorials. Available for freelance and full-time roles.",
++          "Documentation Engineer building docs-as-code systems, API references, and developer guides that measurably reduce support load. KCNA-certified, DevOps background, open-source contributor to Helm.",
+       },
+     },
+     {
+@@ -115,6 +115,7 @@ const config = {
+         items: [
+           { to: "/about", label: "About", position: "left" },
+           { to: "/work", label: "Work", position: "left" },
++          { to: "/docs/intro", label: "Writing Samples", position: "left" },
+           { to: "/blog", label: "Blog", position: "left" },
+           { to: "/contact", label: "Contact", position: "left" },
+           {
+@@ -142,6 +143,7 @@ const config = {
+             items: [
+               { label: "About", to: "/about" },
+               { label: "Work", to: "/work" },
++              { label: "Writing Samples", to: "/docs/intro" },
+               { label: "Blog", to: "/blog" },
+               { label: "Contact", to: "/contact" },
+             ],
+diff --git a/scripts/build_cv.py b/scripts/build_cv.py
+new file mode 100644
+index 0000000..6bd82eb
+--- /dev/null
++++ b/scripts/build_cv.py
+@@ -0,0 +1,144 @@
++#!/usr/bin/env python3
++"""Generate a clean 1-page CV PDF -> static/Faith-Wachukwu-CV.pdf
++
++Data is sourced from src/pages/work.tsx (EXPERIENCE / EDUCATION / CERTIFICATES).
++This is a generated placeholder CV; replace with the canonical version when ready.
++"""
++from reportlab.lib.pagesizes import A4
++from reportlab.lib.units import mm
++from reportlab.lib import colors
++from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
++from reportlab.lib.enums import TA_LEFT
++from reportlab.platypus import (
++    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable,
++)
++
++ACCENT = colors.HexColor("#2563eb")
++DARK = colors.HexColor("#1e293b")
++MUTED = colors.HexColor("#64748b")
++
++styles = getSampleStyleSheet()
++
++name = ParagraphStyle("name", parent=styles["Normal"], fontName="Helvetica-Bold",
++                      fontSize=20, textColor=DARK, spaceAfter=2, leading=23)
++title = ParagraphStyle("title", parent=styles["Normal"], fontName="Helvetica",
++                       fontSize=11, textColor=ACCENT, spaceAfter=4, leading=14)
++contact = ParagraphStyle("contact", parent=styles["Normal"], fontName="Helvetica",
++                         fontSize=8.5, textColor=MUTED, spaceAfter=2, leading=12)
++section = ParagraphStyle("section", parent=styles["Normal"], fontName="Helvetica-Bold",
++                         fontSize=10.5, textColor=ACCENT, spaceBefore=10, spaceAfter=4,
++                         leading=13)
++role = ParagraphStyle("role", parent=styles["Normal"], fontName="Helvetica-Bold",
++                      fontSize=9.5, textColor=DARK, leading=12)
++meta = ParagraphStyle("meta", parent=styles["Normal"], fontName="Helvetica-Oblique",
++                      fontSize=8, textColor=MUTED, leading=11, spaceAfter=2)
++bullet = ParagraphStyle("bullet", parent=styles["Normal"], fontName="Helvetica",
++                        fontSize=8.5, textColor=DARK, leading=11.5, leftIndent=8,
++                        bulletIndent=0, spaceAfter=1.5, alignment=TA_LEFT)
++body = ParagraphStyle("body", parent=styles["Normal"], fontName="Helvetica",
++                      fontSize=8.5, textColor=DARK, leading=12, spaceAfter=2)
++
++
++def hr():
++    return HRFlowable(width="100%", thickness=0.6, color=colors.HexColor("#e2e8f0"),
++                      spaceBefore=2, spaceAfter=4)
++
++
++def job(r, company, location, period, bullets):
++    flow = [Paragraph(f"{r} &middot; {company}", role),
++            Paragraph(f"{period}  |  {location}", meta)]
++    for b in bullets:
++        flow.append(Paragraph(f"&bull; {b}", bullet))
++    flow.append(Spacer(1, 4))
++    return flow
++
++
++def build(path):
++    doc = SimpleDocTemplate(path, pagesize=A4,
++                            leftMargin=16 * mm, rightMargin=16 * mm,
++                            topMargin=14 * mm, bottomMargin=12 * mm,
++                            title="Faith Wachukwu - CV",
++                            author="Faith Wachukwu")
++    el = []
++
++    # Header
++    el.append(Paragraph("Faith Wachukwu", name))
++    el.append(Paragraph("Documentation Engineer &amp; Technical Writer", title))
++    el.append(Paragraph(
++        "Oslo, Norway (CET) &middot; Remote / open to relocation &middot; "
++        "faithkovi@gmail.com &middot; faithkovi.xyz &middot; "
++        "github.com/FaithKovi &middot; linkedin.com/in/faith-kovi", contact))
++    el.append(hr())
++
++    # Summary
++    el.append(Paragraph("Summary", section))
++    el.append(Paragraph(
++        "Documentation Engineer with 3+ years building docs-as-code systems, API "
++        "references, and developer guides. Drove an approximately 80% reduction in "
++        "inbound support tickets at Clouddley by rebuilding the documentation around "
++        "the Diataxis framework. KCNA-certified with a DevOps background across "
++        "Kubernetes, AWS, GCP, Docker, and CI/CD; open-source contributor to Helm.",
++        body))
++
++    # Experience
++    el.append(Paragraph("Experience", section))
++    el.append(hr())
++    for j in EXPERIENCE:
++        el.extend(job(*j))
++
++    # Two-column footer: Education / Certifications + Skills
++    el.append(Paragraph("Education &amp; Certifications", section))
++    el.append(hr())
++    el.append(Paragraph("<b>BSc, Biochemistry</b> &middot; University of Port Harcourt (2016&ndash;2021)", body))
++    el.append(Paragraph("<b>Kubernetes and Cloud Native Associate (KCNA)</b> &middot; 2024", body))
++
++    el.append(Paragraph("Core Skills", section))
++    el.append(hr())
++    el.append(Paragraph(
++        "<b>Documentation:</b> Diataxis, docs-as-code, API reference, developer guides, "
++        "information architecture, Markdown/MDX, Docusaurus<br/>"
++        "<b>Cloud &amp; DevOps:</b> Kubernetes, Helm, AWS, GCP, Docker, Terraform, "
++        "GitHub Actions, CI/CD, observability<br/>"
++        "<b>Open source:</b> Helm (helm-www), Kubernetes SIGs image-builder, CHAOSS Africa",
++        body))
++
++    doc.build(el)
++    print("wrote", path)
++
++
++EXPERIENCE = [
++    ("Freelance Technical Writer", "Literally", "Oslo, Norway (Remote)",
++     "Aug 2025 - Present", [
++         "Create and maintain API documentation, onboarding guides, and product "
++         "tutorials for SaaS and developer-tool clients.",
++         "Collaborate with engineers and product managers to ensure accuracy and "
++         "close gaps in technical content across audiences.",
++     ]),
++    ("Documentation Engineer", "Clouddley", "Delaware, USA (Remote)",
++     "Jul 2023 - Dec 2025", [
++         "Rebuilt product documentation around the Diataxis framework, letting users "
++         "self-serve by intent instead of searching a flat help center.",
++         "Drove an approximately 80% reduction in inbound support tickets by closing "
++         "high-volume documentation gaps and rewriting onboarding content.",
++         "Implemented docs-as-code workflows in Git with version control, peer review, "
++         "and automated publishing alongside the product.",
++     ]),
++    ("Freelance DevOps Engineer", "Freelance", "Remote", "Nov 2022 - Jun 2023", [
++        "Authored database migration runbooks and documented CI/CD pipelines built on "
++        "AWS CodeBuild, CodeDeploy, and CodePipeline.",
++        "Built reference documentation for AWS services (ECS Fargate, DynamoDB, Lambda).",
++    ]),
++    ("Junior DevOps/QA Engineer", "Grais", "New York, USA (Remote)",
++     "Apr 2022 - Oct 2022", [
++         "Automated deployments on ECS Fargate with GitHub Actions and maintained "
++         "internal deployment guides and operational runbooks.",
++     ]),
++    ("Cloud Engineer Intern", "She Code Africa", "Lagos, Nigeria (Remote)",
++     "Aug 2021 - Oct 2021", [
++         "Containerized applications with Docker, provisioned GCP infrastructure with "
++         "Terraform, and documented provisioning to speed up onboarding.",
++     ]),
++]
++
++if __name__ == "__main__":
++    build("static/Faith-Wachukwu-CV.pdf")
+diff --git a/src/css/custom.css b/src/css/custom.css
+index fd739db..6a73230 100644
+--- a/src/css/custom.css
++++ b/src/css/custom.css
+@@ -1142,4 +1142,272 @@ body {
+ .experience-card:nth-child(2) { animation-delay: 0.2s; }
+ .experience-card:nth-child(3) { animation-delay: 0.3s; }
+ .experience-card:nth-child(4) { animation-delay: 0.35s; }
+-.experience-card:nth-child(5) { animation-delay: 0.4s; }
+\ No newline at end of file
++.experience-card:nth-child(5) { animation-delay: 0.4s; }
++/* ==========================================
++   METRICS / BY THE NUMBERS (homepage)
++   ========================================== */
++
++.metrics-grid {
++  display: grid;
++  grid-template-columns: repeat(4, 1fr);
++  gap: 1.25rem;
++  max-width: 1100px;
++  margin: 2rem auto 0;
++}
++
++.metric-card,
++.metric-card-link {
++  display: flex;
++  flex-direction: column;
++  gap: 0.4rem;
++  padding: 1.75rem 1.5rem;
++  background: var(--surface-card);
++  border: 1px solid var(--border-subtle);
++  border-radius: 12px;
++  text-decoration: none;
++  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
++}
++
++.metric-card-link:hover {
++  border-color: var(--accent-blue);
++  transform: translateY(-3px);
++  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
++  text-decoration: none;
++}
++
++.metric-value {
++  font-size: 2.4rem;
++  font-weight: 700;
++  color: var(--accent-blue);
++  line-height: 1;
++}
++
++.metric-label {
++  font-size: 0.95rem;
++  font-weight: 600;
++  color: var(--text-primary);
++}
++
++.metric-detail {
++  font-size: 0.82rem;
++  color: var(--text-muted);
++  line-height: 1.45;
++}
++
++/* ==========================================
++   TESTIMONIALS (homepage)
++   ========================================== */
++
++.testimonials-grid {
++  display: grid;
++  grid-template-columns: repeat(2, 1fr);
++  gap: 1.5rem;
++  max-width: 1100px;
++  margin: 2rem auto 0;
++}
++
++.testimonial-card {
++  margin: 0;
++  padding: 2rem;
++  background: var(--surface-card);
++  border: 1px solid var(--border-subtle);
++  border-radius: 12px;
++}
++
++.testimonial-card blockquote {
++  margin: 0 0 1.25rem;
++  padding: 0;
++  border: none;
++  font-size: 1.05rem;
++  line-height: 1.6;
++  color: var(--text-primary);
++}
++
++.testimonial-card figcaption {
++  font-size: 0.9rem;
++  color: var(--text-muted);
++}
++
++.testimonial-card figcaption strong {
++  display: block;
++  color: var(--text-primary);
++  font-weight: 600;
++}
++
++/* ==========================================
++   PAGE HEADER ACTIONS (work page)
++   ========================================== */
++
++.page-header-actions {
++  margin-top: 1.5rem;
++  display: flex;
++  gap: 0.75rem;
++  flex-wrap: wrap;
++}
++
++.page-header-actions .btn-outline {
++  display: inline-flex;
++  align-items: center;
++  padding: 0.6rem 1.25rem;
++  border-radius: 8px;
++  font-weight: 600;
++  font-size: 0.9rem;
++  text-decoration: none;
++}
++
++/* ==========================================
++   FEATURED CASE STUDY (work page)
++   ========================================== */
++
++.featured-case-study {
++  display: block;
++  max-width: 1100px;
++  margin: 0 auto;
++  padding: 2rem;
++  background: var(--surface-card);
++  border: 1px solid var(--border-subtle);
++  border-left: 4px solid var(--accent-blue);
++  border-radius: 12px;
++  text-decoration: none;
++  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
++}
++
++.featured-case-study:hover {
++  transform: translateY(-3px);
++  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.12);
++  text-decoration: none;
++}
++
++.fcs-tag {
++  display: inline-block;
++  font-size: 0.72rem;
++  font-weight: 700;
++  letter-spacing: 0.06em;
++  text-transform: uppercase;
++  color: var(--accent-blue);
++  margin-bottom: 0.6rem;
++}
++
++.featured-case-study h3 {
++  margin: 0 0 0.6rem;
++  font-size: 1.45rem;
++  font-weight: 700;
++  color: var(--text-primary);
++  line-height: 1.25;
++}
++
++.featured-case-study p {
++  margin: 0 0 0.9rem;
++  color: var(--text-secondary);
++  line-height: 1.6;
++  max-width: 700px;
++}
++
++.fcs-link {
++  font-weight: 600;
++  color: var(--accent-blue);
++  font-size: 0.92rem;
++}
++
++/* ==========================================
++   OPEN SOURCE TAB (work page)
++   ========================================== */
++
++.oss-list {
++  display: grid;
++  grid-template-columns: 1fr;
++  gap: 1.25rem;
++  max-width: 860px;
++}
++
++.oss-card {
++  padding: 1.75rem;
++  background: var(--surface-card);
++  border: 1px solid var(--border-subtle);
++  border-radius: 12px;
++}
++
++.oss-header {
++  display: flex;
++  align-items: center;
++  gap: 0.75rem;
++  margin-bottom: 0.75rem;
++}
++
++.oss-icon {
++  font-size: 1.5rem;
++  line-height: 1;
++}
++
++.oss-org {
++  margin: 0;
++  font-size: 1.15rem;
++  font-weight: 700;
++  color: var(--text-primary);
++}
++
++.oss-blurb {
++  margin: 0 0 1rem;
++  color: var(--text-secondary);
++  line-height: 1.6;
++}
++
++.oss-links {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 0.5rem 1.25rem;
++}
++
++.oss-links a {
++  font-size: 0.85rem;
++  font-weight: 500;
++  color: var(--accent-blue);
++  text-decoration: none;
++}
++
++.oss-links a:hover {
++  text-decoration: underline;
++}
++
++/* ==========================================
++   EXPERIENCE CASE STUDY LINK (work page)
++   ========================================== */
++
++.exp-case-link {
++  display: inline-block;
++  margin: 0.25rem 0 0.75rem;
++  font-size: 0.88rem;
++  font-weight: 600;
++  color: var(--accent-blue);
++  text-decoration: none;
++}
++
++.exp-case-link:hover {
++  text-decoration: underline;
++}
++
++/* ==========================================
++   RESPONSIVE — new components
++   ========================================== */
++
++@media (max-width: 768px) {
++  .metrics-grid {
++    grid-template-columns: repeat(2, 1fr);
++    gap: 1rem;
++  }
++  .testimonials-grid {
++    grid-template-columns: 1fr;
++  }
++  .metric-value {
++    font-size: 2rem;
++  }
++  .featured-case-study h3 {
++    font-size: 1.25rem;
++  }
++}
++
++@media (max-width: 480px) {
++  .metrics-grid {
++    grid-template-columns: 1fr;
++  }
++}
+diff --git a/src/pages/contact.tsx b/src/pages/contact.tsx
+index 094c6cd..1dcd9c3 100644
+--- a/src/pages/contact.tsx
++++ b/src/pages/contact.tsx
+@@ -69,7 +69,8 @@ export default function Contact(): React.JSX.Element {
+                 }}
+               >
+                 Whether it's API docs, developer guides, or a full docs-as-code
+-                setup — I'm available for freelance projects and full-time roles.
++                setup — I'm open to senior documentation roles, remote or with
++                relocation, and select consulting. Based in Oslo, Norway (CET).
+               </p>
+               <div className="contact-direct-links">
+                 <a
+@@ -106,6 +107,18 @@ export default function Contact(): React.JSX.Element {
+                     <span>faithkovi@gmail.com</span>
+                   </div>
+                 </a>
++                <a
++                  href="/Faith-Wachukwu-CV.pdf"
++                  target="_blank"
++                  rel="noopener noreferrer"
++                  className="contact-direct-link"
++                >
++                  <span className="contact-link-icon">📄</span>
++                  <div>
++                    <strong>Download CV</strong>
++                    <span>PDF résumé</span>
++                  </div>
++                </a>
+               </div>
+             </div>
+ 
+diff --git a/src/pages/work.tsx b/src/pages/work.tsx
+index bf6c246..004e571 100644
+--- a/src/pages/work.tsx
++++ b/src/pages/work.tsx
+@@ -4,6 +4,14 @@ import Layout from "@theme/Layout";
+ // ─── DATA ────────────────────────────────────────────────────
+ 
+ const PROJECTS = [
++  {
++    title: "Documentation Sample Set (Diátaxis)",
++    description:
++      "A walk-the-talk documentation set built on the Diátaxis framework — tutorials, how-to guides, reference, and explanation — documenting a real CLI tool. Demonstrates information architecture, task-oriented writing, and docs-as-code structure end to end.",
++    emoji: "📚",
++    tech: ["Diátaxis", "Docs-as-Code", "Technical Writing", "Information Architecture"],
++    live: "/docs/intro",
++  },
+   {
+     title: "AI Changelog Generator",
+     description:
+@@ -12,6 +20,14 @@ const PROJECTS = [
+     tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
+     code: "https://github.com/FaithKovi/changelog-generator",
+   },
++  {
++    title: "Helm Documentation (helm-www)",
++    description:
++      "Ongoing open-source documentation contributions to Helm, the Kubernetes package manager — including the v3-to-v4 plugin migration guide and contributor-workflow improvements on the official helm.sh site.",
++    emoji: "⎈",
++    tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
++    code: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi",
++  },
+   {
+     title: "Portfolio Website",
+     description:
+@@ -21,14 +37,40 @@ const PROJECTS = [
+     code: "https://github.com/FaithKovi/portfolio",
+     live: "https://faithkovi.xyz",
+   },
+-  // {
+-  //   title: "Helm Documentation Contributions",
+-  //   description:
+-  //     "Open-source contributions to Helm's official documentation — improving clarity of installation guides, chart development workflows, and plugin reference pages for the Kubernetes package manager.",
+-  //   emoji: "⎈",
+-  //   tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
+-  //   code: "https://github.com/helm/helm-www",
+-  // },
++];
++
++const OPEN_SOURCE = [
++  {
++    org: "Helm",
++    icon: "⎈",
++    blurb:
++      "Authoring the v3-to-v4 plugin migration guide for the new Wasm-based plugin system, plus contributor-guide and release-history improvements on the official documentation site.",
++    links: [
++      { label: "Migration guide PR #2074", url: "https://github.com/helm/helm-www/pull/2074" },
++      { label: "MDX/CommonMark note #2044", url: "https://github.com/helm/helm-www/pull/2044" },
++      { label: "Helm 4 history #2036", url: "https://github.com/helm/helm-www/pull/2036" },
++      { label: "All my Helm PRs ↗", url: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi" },
++    ],
++  },
++  {
++    org: "Kubernetes SIGs · image-builder",
++    icon: "☸",
++    blurb:
++      "Cleaned up YAML formatting across the image-builder project to improve consistency and readability of build configuration.",
++    links: [
++      { label: "YAML cleanup PR #1328", url: "https://github.com/kubernetes-sigs/image-builder/pull/1328" },
++    ],
++  },
++  {
++    org: "CHAOSS Africa",
++    icon: "🤝",
++    blurb:
++      "Contributing to the CHAOSS community's African open-source initiatives — repository structure and documentation for the AFOS (African Open Source) program.",
++    links: [
++      { label: "chaoss-africa structure #4", url: "https://github.com/chaoss/chaoss-africa/pull/4" },
++      { label: "AFOS docs #17", url: "https://github.com/chaoss/AFOS-AfricanOpenSource/pull/17" },
++    ],
++  },
+ ];
+ 
+ const ARTICLES = [
+@@ -114,8 +156,7 @@ const EXPERIENCE = [
+     bullets: [
+       "Create and maintain API documentation, developer onboarding guides, and product tutorials for SaaS and developer-tool clients, translating complex features into clear, task-oriented content.",
+       "Collaborate with engineers, product managers, and stakeholders to ensure accuracy and identify gaps in technical content.",
+-      "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users."
+-
++      "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users.",
+     ],
+     tags: ["Technical Writing", "API Docs", "Markdown", "Developer Guides"],
+   },
+@@ -126,18 +167,13 @@ const EXPERIENCE = [
+     location: "Delaware, USA · Remote",
+     period: "Jul 2023 – Dec 2025",
+     bullets: [
+-      "Produced comprehensive technical documentation for internal and customer use, enhancing product understanding and user experience.",
+-      "Curated and maintained a repository of tutorials and help systems, improving user onboarding and support efficiency.",
+-      "Collaborated with engineering teams to translate technical features into user-friendly docs, resulting in an 80% reduction in support tickets.",
+-      "Implemented documentation-as-code workflows using Git, enabling version control, peer reviews, and automated publishing.",
+-    ],
+-    tags: [
+-      "Docs-as-Code",
+-      "Git",
+-      "Tutorials",
+-      "Technical Docs",
+-      "Onboarding",
++      "Rebuilt the product documentation around the Diátaxis framework — separating tutorials, how-to guides, reference, and explanation — so users could self-serve by intent instead of hunting through a flat help center.",
++      "Drove an approximately 80% reduction in inbound support tickets by closing the highest-volume documentation gaps and rewriting onboarding and troubleshooting content.",
++      "Implemented documentation-as-code workflows using Git, enabling version control, peer reviews, and automated publishing alongside the product.",
++      "Partnered with engineering to turn new features into clear, accurate docs as part of the release process rather than after it.",
+     ],
++    tags: ["Docs-as-Code", "Diátaxis", "Git", "Information Architecture", "Onboarding"],
++    caseStudy: "/case-studies/clouddley",
+   },
+   {
+     logo: "",
+@@ -149,17 +185,9 @@ const EXPERIENCE = [
+     bullets: [
+       "Migrated PostgreSQL databases to DigitalOcean Managed Database and authored migration runbooks ensuring replicability and knowledge transfer across teams.",
+       "Automated CI/CD pipelines using AWS CodeBuild, CodeDeploy, and CodePipeline; documented deployment workflows and infrastructure architecture for cross-team reference.",
+-      "Leveraged AWS services (ECS Fargate, DynamoDB, Lambda) to optimize application scalability, creating technical reference documentation for each component."
+-
+-    ],
+-    tags: [
+-      "AWS",
+-      "ECS Fargate",
+-      "DynamoDB",
+-      "Lambda",
+-      "CI/CD",
+-      "DigitalOcean",
++      "Leveraged AWS services (ECS Fargate, DynamoDB, Lambda) to optimize application scalability, creating technical reference documentation for each component.",
+     ],
++    tags: ["AWS", "ECS Fargate", "DynamoDB", "Lambda", "CI/CD", "DigitalOcean"],
+   },
+   {
+     logo: "",
+@@ -170,16 +198,9 @@ const EXPERIENCE = [
+     period: "Apr 2022 – Oct 2022",
+     bullets: [
+       "Automated web application packaging and deployment on ECS Fargate using GitHub Actions; maintained internal deployment guides and operational runbooks.",
+-      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documenting operational procedures and integrated various AWS services to meet business/client needs."
+-
+-    ],
+-    tags: [
+-      "GitHub Actions",
+-      "AWS",
+-      "Route53",
+-      "CloudWatch",
+-      "ECS Fargate",
++      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documenting operational procedures and integrated various AWS services to meet business/client needs.",
+     ],
++    tags: ["GitHub Actions", "AWS", "Route53", "CloudWatch", "ECS Fargate"],
+   },
+   {
+     logo: "",
+@@ -190,7 +211,7 @@ const EXPERIENCE = [
+     period: "Aug 2021 – Oct 2021",
+     bullets: [
+       "Containerized web applications with Docker, provisioned GCP infrastructure using Terraform, and scripted CI/CD pipelines with Jenkins and CircleCI.",
+-      "Automated infrastructure setup using Ansible; documented provisioning procedures to reduce onboarding time for incoming team members."
++      "Automated infrastructure setup using Ansible; documented provisioning procedures to reduce onboarding time for incoming team members.",
+     ],
+     tags: ["Docker", "Ansible", "Terraform", "GCP", "Jenkins", "CircleCI"],
+   },
+@@ -208,12 +229,43 @@ const CERTIFICATES = [
+   { name: "Kubernetes and Cloud Native Associate", year: "2024" },
+ ];
+ 
++const CV_URL = "/Faith-Wachukwu-CV.pdf";
++
++// ─── HELPERS ─────────────────────────────────────────────────
++
++function isExternal(href: string): boolean {
++  return /^https?:\/\//.test(href);
++}
++
++function SmartLink({
++  href,
++  children,
++  className,
++}: {
++  href: string;
++  children: React.ReactNode;
++  className?: string;
++}): React.JSX.Element {
++  if (isExternal(href)) {
++    return (
++      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
++        {children}
++      </a>
++    );
++  }
++  return (
++    <a href={href} className={className}>
++      {children}
++    </a>
++  );
++}
++
+ // ─── PAGE ────────────────────────────────────────────────────
+ 
+ export default function Work(): React.JSX.Element {
+-  const [tab, setTab] = useState<"projects" | "articles" | "experience">(
+-    "experience"
+-  );
++  const [tab, setTab] = useState<
++    "experience" | "projects" | "opensource" | "articles"
++  >("experience");
+ 
+   return (
+     <Layout title="Work" description="Projects, articles, and experience">
+@@ -222,11 +274,31 @@ export default function Work(): React.JSX.Element {
+           <p className="section-label">Work</p>
+           <h1 className="page-title">Things I've built and written</h1>
+           <p className="page-subtitle">
+-            Projects, published articles, and professional experience.
++            Projects, published articles, open-source contributions, and
++            professional experience.
+           </p>
++          <div className="page-header-actions">
++            <a className="btn-outline" href={CV_URL} target="_blank" rel="noopener noreferrer">
++              Download CV ↓
++            </a>
++          </div>
++        </section>
++
++        {/* Featured case study banner */}
++        <section className="portfolio-section" style={{ paddingTop: 0, paddingBottom: 0 }}>
++          <a className="featured-case-study" href="/case-studies/clouddley">
++            <span className="fcs-tag">Featured case study</span>
++            <h3>Cutting support tickets ~80% with a Diátaxis docs rebuild</h3>
++            <p>
++              How restructuring Clouddley's documentation around user intent —
++              and closing the highest-volume gaps — measurably reduced inbound
++              support load.
++            </p>
++            <span className="fcs-link">Read the case study →</span>
++          </a>
+         </section>
+ 
+-        <section className="portfolio-section" style={{ paddingTop: 0 }}>
++        <section className="portfolio-section" style={{ paddingTop: "2rem" }}>
+           <div className="tab-buttons">
+             <button
+               className={`tab-btn ${tab === "experience" ? "active" : ""}`}
+@@ -234,18 +306,24 @@ export default function Work(): React.JSX.Element {
+             >
+               Experience
+             </button>
+-            <button
+-              className={`tab-btn ${tab === "articles" ? "active" : ""}`}
+-              onClick={() => setTab("articles")}
+-            >
+-              Articles
+-            </button>
+             <button
+               className={`tab-btn ${tab === "projects" ? "active" : ""}`}
+               onClick={() => setTab("projects")}
+             >
+               Projects
+             </button>
++            <button
++              className={`tab-btn ${tab === "opensource" ? "active" : ""}`}
++              onClick={() => setTab("opensource")}
++            >
++              Open Source
++            </button>
++            <button
++              className={`tab-btn ${tab === "articles" ? "active" : ""}`}
++              onClick={() => setTab("articles")}
++            >
++              Articles
++            </button>
+           </div>
+ 
+           {/* Projects Tab */}
+@@ -259,22 +337,12 @@ export default function Work(): React.JSX.Element {
+                     <p>{project.description}</p>
+                     <div className="project-links">
+                       {project.code && (
+-                        <a
+-                          href={project.code}
+-                          target="_blank"
+-                          rel="noopener noreferrer"
+-                        >
+-                          Code ↗
+-                        </a>
++                        <SmartLink href={project.code}>Code ↗</SmartLink>
+                       )}
+                       {project.live && (
+-                        <a
+-                          href={project.live}
+-                          target="_blank"
+-                          rel="noopener noreferrer"
+-                        >
+-                          Live ↗
+-                        </a>
++                        <SmartLink href={project.live}>
++                          {isExternal(project.live) ? "Live ↗" : "View →"}
++                        </SmartLink>
+                       )}
+                     </div>
+                     <div className="project-tech-tags">
+@@ -290,6 +358,33 @@ export default function Work(): React.JSX.Element {
+             </div>
+           )}
+ 
++          {/* Open Source Tab */}
++          {tab === "opensource" && (
++            <div className="oss-list">
++              {OPEN_SOURCE.map((oss) => (
++                <div className="oss-card" key={oss.org}>
++                  <div className="oss-header">
++                    <span className="oss-icon">{oss.icon}</span>
++                    <h4 className="oss-org">{oss.org}</h4>
++                  </div>
++                  <p className="oss-blurb">{oss.blurb}</p>
++                  <div className="oss-links">
++                    {oss.links.map((l) => (
++                      <a
++                        key={l.url}
++                        href={l.url}
++                        target="_blank"
++                        rel="noopener noreferrer"
++                      >
++                        {l.label}
++                      </a>
++                    ))}
++                  </div>
++                </div>
++              ))}
++            </div>
++          )}
++
+           {/* Articles Tab */}
+           {tab === "articles" && (
+             <div className="articles-list">
+@@ -341,6 +436,11 @@ export default function Work(): React.JSX.Element {
+                           <li key={i}>{b}</li>
+                         ))}
+                       </ul>
++                      {exp.caseStudy && (
++                        <a className="exp-case-link" href={exp.caseStudy}>
++                          Read the full case study →
++                        </a>
++                      )}
+                       <div className="exp-tags">
+                         {exp.tags.map((t) => (
+                           <span className="project-tech-tag" key={t}>
+@@ -404,4 +504,4 @@ export default function Work(): React.JSX.Element {
+       </main>
+     </Layout>
+   );
+-}
+\ No newline at end of file
++}
+diff --git a/static/Faith-Wachukwu-CV.pdf b/static/Faith-Wachukwu-CV.pdf
+new file mode 100644
+index 0000000..c277c02
+--- /dev/null
++++ b/static/Faith-Wachukwu-CV.pdf
+@@ -0,0 +1,80 @@
++%PDF-1.4
++%���� ReportLab Generated PDF document (opensource)
++1 0 obj
++<<
++/F1 2 0 R /F2 3 0 R /F3 4 0 R
++>>
++endobj
++2 0 obj
++<<
++/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
++>>
++endobj
++3 0 obj
++<<
++/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
++>>
++endobj
++4 0 obj
++<<
++/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
++>>
++endobj
++5 0 obj
++<<
++/Contents 9 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 8 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++6 0 obj
++<<
++/PageMode /UseNone /Pages 8 0 R /Type /Catalog
++>>
++endobj
++7 0 obj
++<<
++/Author (Faith Wachukwu) /CreationDate (D:20260602110404+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260602110404+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
++  /Subject (\(unspecified\)) /Title (Faith Wachukwu - CV) /Trapped /False
++>>
++endobj
++8 0 obj
++<<
++/Count 1 /Kids [ 5 0 R ] /Type /Pages
++>>
++endobj
++9 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 2381
++>>
++stream
++Gau0EhfIM](4OS:EF-);lnsfQ@^u/D$)D:hDNZU<o\LHlKFskG[TM4;ZI;&;*_F@+$)DH3-Cp*)bL/C@htN[_<#6PPEV8c[!Os&aj]`O+%n8?o"$;%\8%9V2rI*go1IKdf_nc!iML=0"JdB-/f=(!7D>_:pgJ66)_"N0-O*m&\1L/D2[dddji"dAYNnVAAeHY2T$-O.SRDb"m\LB.=oG<I8<VucH5DSqBUY=SN2fQ1\g(RP)A%P%jF?<n-SW;lg@!=amCj48f3$3sd88+HUS;@r_dlC&MQ1+uI1gZt/-6,3BQ;cJP/?aEE/2sq'D4.l>XJ6i0BtgkV!uHVVfC?WdNN((-qhtmjmY'AW/WA$Qf;%j>N4jB;T4fEh$C;l91kf1bUg1jX"[-:k,.\J(p=h\QN8(U.T"M;BD#Z5Nk4ka>W%")0+?n^frFY6_3G7T>:0FU[Yk1gHdSd,&#tiri5N8IJ)k?O!bjKT,?DNS_]lal?h*=7352Da*HAMcVY%NN,4=1:m%$.R[q"=<@T(N#-Gigt"&m`PJKPReO/<Y\-mC+*Oj/DqT"R,8sXrq++E=@XB71K9(Ybaa"0I[jZK:'PU`*&"/X]S7GAD8Z58S19Wi>/+@UQVK/`P4u*Kdg:P3**Q=]O4[,feALs:%;M3^1=X7iX8CM:AGYdc7c]K["u+59`:H:!a!O%eOmn&EY^<BScQs,cUBRZEk6tH(-ehCb84-G=EB9h]nUhf?mI+,=B=fRP9ch@+dY*7khl&:0pObg0fh2K',]*hr<g4cnT&Nu+gD_a"s8^/PpstCZb=[P$Z>eO(18PW<#YN.\!R'0Il(#+R4)T>X)2@/k)rGr>Y)i-GEaIuK6-cJ-O&;u(H`Y6%]me/JaL)oRG(E6[f.ETFopel[hQ'A^dh[sP]DAI4VLbh4<N+8E8H+^@5k35IT/08VAgU<3oI.NGd!KEqXHmc_1SO$+r%c.'<O+n42,B9=N@ng6Qtc[\]@cjg=Q6=68j"^#l9].'fCA9]obTO6:L9)7TgjqQUGT&)/:,/,F9-j+]lHkKP)u+J.Dr(md!.h(P5#u&USfS!;L!`SDI2\3LL/PgsoZ-V=%oAXs>8=F7g)Y9%0l'(n<Q<,`0!V?Hbi-@89WD0N<<$2T9WX^85"p@]G:9aP1l?!UfH1cp&gXNl\ut8Yr^%bRV9an`5,7'i05<aahBc11,%BabE?$_4SX%pG'XH%L9)19$Qiq+nS?=S\2h^2q&79l,Ed"o3Cg`a:u3@b%E:G@<TS2`XI#mMTM,W6-Sg]Omtc_-SXSJrYCa%*n(G@VQp60Zkf8t&A,:Z5FBaDA]5nUhL`ugXgR((a=$N-*)i)cFG!2GP:QZKE`DV48M$V(a[P;L=`LH8`WBVQ:/Y^gj'nc`ieHPaEn5L-au*H7#]@IN&Pph4UDou,"I2qT'*YA&E0_@IE08F%P[+a$&q,a%%UKp:T^BEf&h^5`I;Pri2m=8l-dn;BYuZJ9TshTe;Bmu)bI4:!+kT`+Js,b`Hm,9e%1:(-?q*`?>T2D@!mrTc#5^JSd'C<;'jFOOP,KhVF3Mk.)TD&$V,sZB[e+N(='TQ!Uajfkk7?\+9u,d18NK(%QRconeM]N5]W*!:01lutVG<BRli%IP&iiHO@'.+:8Kn@?(47CLA4jiX:#']^MY.3%ptbGD/Gp=i&7Z.I0Eeo`U\BED2j-:H,KHq[4$h,iT;t7ZEej[AbZT8e(%18irhoA9pZ>L@4=[*jabWjiVAd&R(7@L5%0B!e;,,p_'Bn[3PO4X<ppE_j1<"k3ELF+CeMC2_WmO:\7>r8G)P@Cd^T=A_E)K-Tjk(f2DRFNi8OH/TMUKk@8ZY/rf^>A*;p2npIDhA.R/0A9!ZQbRL@m>IhZkXo<FiNk$nN\$#GH^f$>8Md.PjoTFmk\qf1]afS:tfCJd;an/=2`9<<JoWNi80F,q?0k$?PmJ^5`bd@9.lBh-sCMSshpgEF'D308dIi=T/e>]*j.UXsL9VRP4g@#5[ICU^Y\\NV+LAm_7[4JJYb1lgFrI.@hB-ibB<7E5b5XTF&O-2-ird;<N[<J#5o+CACo\iX`&2I>@L*-u^k(pDgZE5<L$7?9(mtBEE9/n4r5pj/&!NJ^SRYLSophGq[?/b`lq(cdc<&C#3oLdIs5aj_hPVe3A@!e]7LkL.fO3':cV,mCsjjgo.sd^'E$rSBG5srU8ohh_g5@?J"]-<n2M>TkZ#f64)@'SCf"I<,7^%^D"/JMG8Emqr#6c?F%XC+U\rg(#>>CAR9X\Q73%IXP\3$gWDm-Si&slccMKP<@naq<QgL2j%-#!L>8j0<A9c9#HU``,C6Wh9j4%2Ape%;%"mO+%CT=ERF@J9%9>C[ht?Dm_o"JHcMe?2TAgC~>endstream
++endobj
++xref
++0 10
++0000000000 65535 f 
++0000000061 00000 n 
++0000000112 00000 n 
++0000000219 00000 n 
++0000000331 00000 n 
++0000000446 00000 n 
++0000000649 00000 n 
++0000000717 00000 n 
++0000001004 00000 n 
++0000001063 00000 n 
++trailer
++<<
++/ID 
++[<9c0b1dd8eb5075b7a3f109e2a1d47c02><9c0b1dd8eb5075b7a3f109e2a1d47c02>]
++% ReportLab generated PDF document -- digest (opensource)
++
++/Info 7 0 R
++/Root 6 0 R
++/Size 10
++>>
++startxref
++3535
++%%EOF
+-- 
+2.43.0
+
+
+From 59c27509b7b8a2a862a201ce34fa43e587c7e1db Mon Sep 17 00:00:00 2001
+From: Portfolio Bot <noreply@example.com>
+Date: Tue, 2 Jun 2026 11:07:12 +0000
+Subject: [PATCH 3/3] fix: hyphenate runbooks blog slug (was space-separated,
+ unroutable)
+
+---
+ blog/2026-05-18-why-on-call-engineers-ignore-your-runbooks.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/blog/2026-05-18-why-on-call-engineers-ignore-your-runbooks.md b/blog/2026-05-18-why-on-call-engineers-ignore-your-runbooks.md
+index 3917821..64a2555 100644
+--- a/blog/2026-05-18-why-on-call-engineers-ignore-your-runbooks.md
++++ b/blog/2026-05-18-why-on-call-engineers-ignore-your-runbooks.md
+@@ -1,5 +1,5 @@
+ ---
+-slug: why on-call engineers ignore your runbooks
++slug: why-on-call-engineers-ignore-your-runbooks
+ title: 'Why On-Call Engineers Ignore Your Runbooks '
+ authors: Faith Wachukwu
+ tags: [On-call, documentation, technical writing, engineer ]
+-- 
+2.43.0
+

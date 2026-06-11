@@ -7,45 +7,39 @@ tags: [devops, docs]
 
 <img src="/img/blog/cover-writing-engineer.jpg" alt="An engineer working in the dark." />
 
-There’s a moment where you’re staring at some internal documentation at 11 PM, trying to figure out why a deployment pipeline is failing, and the doc is incomplete. It just stops like the person who wrote it got pulled into a meeting and never came back.
+You’re staring at internal documentation at 11 PM, trying to figure out why a deployment pipeline is failing, but it's incomplete. It looks like whoever wrote it stopped midway, like they got pulled into a meeting and never came back. Well, what matters now is that you’re stuck. 
 
+As someone who has been in this situation, you should think differently when writing documentation about who you’re writing for and how they would feel with incomplete docs. In this post, you’ll learn how to approach documentation as an engineer.
 <!-- truncate -->
-
-Maybe they left, or got promoted and never got back to finishing it. Well, it doesn’t matter. What matters is that you’re the one sitting there now, feeling betrayed by the doc.
-I’ve been on both sides of that moment, staring at broken docs and leaving unfinished ones behind. But somewhere along the way, I started thinking differently about who I was actually writing for and how they would feel with an incomplete doc. And this changed everything about how I approach documentation.
 
 ## You're Not Writing for Your Team
 
-What nobody tells you early: your colleagues might not need your docs. Yes, that's right, they might not. They were in the same Slack threads. Same meetings. They know why the authentication service talks to three different caches because they were there when someone made that questionable decision at 4 PM on a Friday.
-Your real audience is the person who is employed 18 months later, gets handed a laptop, and is told, “You own this now.”
-With no context, no slack history, and no memory of what happened previously, that shaped how the system works today. All they have is what you left behind.
+When starting a new role or in your current role, you might think your colleagues might not need your docs. And yes, that’s right, they might not. I mean, they were in the same Slack threads and meetings. They were there when someone made a questionable decision on the infrastructure on a Friday.  
 
-## The "Why" Matters More Than the "What"
+Your real audience is the person who is employed 18 months later, handed the workload and is told, “You own this now.” With no context, no Slack history, and no memory of what has happened previously that shaped how the systems work today. All they have is what was left behind.
 
-When I started my career, I documented what things I did. Each step was written clearly, with every procedure cleanly written. Well, it became completely useless six months down the line when the step had changed completely, and I didn’t update the doc.
-What I’ve learned is that knowing the why is important. What stays beyond the steps and dashboard interfaces is the reasoning behind the decision.  
+## The "Why" Matters
 
-*Why did we choose Kafka over RabbitMQ?* *Why is the timeout set to 30 seconds and not 10 seconds?*  
+Initially, at the start of my career in DevOps, I would document things I did by writing things clearly. Well, it became useless six months down the line when the steps had changed. I didn’t go back to update the document.  
 
-Knowing the context behind decisions is quite important. It’s what lets the next person make good decisions instead of just following what they don’t understand. I started adding more context to almost everything I write. Not like a full-blown write-up every time, sometimes it’s just two sentences that can save someone the time a mistake can cost them.
+Knowing the reason why decisions were made is important in documentation. Beyond writing out the steps of actions taken, you should know the context behind decisions to understand the why, instead of following what you don’t understand. This could be as simple as two sentences, not like a full-blown write-up, and it can save someone the time and financial cost due to a mistake.
 
 ## Write for the 2 AM Version of That Person
 
-If you’ve ever been on-call, you know there is a difference between reading documentation at your desk while drinking coffee versus reading it at 2 AM when everything is on fire, and your phone keeps buzzing.
-That’s a different reader. One who is not interested in whether you wrote it stylishly. They just want answers fast. They want to know: 
+When you’re on call, you know there is a difference between reading documentation to find out how a tool works versus reading it when there is downtime, and you are getting pinged nonstop. At that moment, you’re a different reader. One who is not interested in how it was written, you just want answers fast. You’d want to know:
 
 - what does this service depend on?
 - what breaks when it goes down?
-- how do I restart it without making it worse?  
+- how do I restart it without making it worse?
 
-So when I am structuring anything operational, I try to keep that person in mind. I make sure I use short sentences, clear headings, and remove doubt from their minds. If there’s a command they’ll need to run, I include it, making sure it's easy to find and not buried deep into a paragraph section.
+So when you’re structuring anything operational, keep that person in mind. Make sure you use short sentences, clear headings, and remove what would create doubt in their minds. If there’s a command they’ll need to run, include it, make it visible and easy to find and not buried deep into a paragraph section.
 
 ## Treat Documentation Like a Product
 
-One big shift in my thinking came when I stopped treating doc as a side work and started treating it as a product.
-Think about it this way: if the person replacing you can’t understand the system from your documentation, then you haven’t finished working on that doc.  
+Treating your documentation as a product, not a side work, is a shift you should make. Think about it this way: if the person replacing you can’t understand the system from your documentation, then you haven’t finished working on that documentation.  
 
-When you see documentation as a product, something that has users, a purpose, and a quality standard to follow, you start making different choices. You will think about the structure, what is important to add or what to leave out, and how to maintain it.
+When you see documentation as a product that has users, a purpose, and a quality standard to follow, you start making different choices. You’ll think about the structure, what is important to add or leave out, and how to maintain it.
+
 
 <div style={{ textAlign: 'center' }}>
   <img src="/img/blog/writingEngineer2.png" alt="A simple flowchart showing Documentation-Users-Feedback-Improvements." />
@@ -53,20 +47,18 @@ When you see documentation as a product, something that has users, a purpose, an
   *A simple workflow diagram of documentation lifecycle*
 </div>
 
-## What I Actually Do Differently Now
+## What To Do Differently
 
-Over time, I’ve settled into a few habits that came directly from this mindset. 
-I write a summary about the state of things for every system I own. I mention what works well, what’s been held together with tape, and what the potential risks are.  
+With the mindset of seeing documentation as a product, you’d document the state of things for every system you own. Mention what works well, what’s been held together by strings, and if there are potential risks in the systems.  
 
-I document the things I almost forgot. Like if I had to dig through three Jira tickets and a Slack thread to figure something out, then that's a sign it needs to be written down. The fact that it was hard to find means someone will also face the same issue.
-I revisit docs when I use them. Like if I use my own runbook and something is confusing or wrong. I fix it right then and not later. Because the next person who reads it won’t have context to know it’s wrong, they will just trust it.  
+If you had to dig through 3 Jira tickets and a Slack thread to figure something out that is needed, then it’s a sign you should document it. The fact that it was hard to find means someone will face the same issue. It’s easier to revisit docs than to dig through Slack threads.  
 
-And I write like a human, I use “we” and “you.” When something is genuinely confusing, I say, “This is confusing, but here’s the deal”.  
+In cases where there were recent additions or something was confusing in a runbook you own, correct it right then and not later. That’s because the next person who’ll read it won’t have context to know there is a problem. They’ll trust it blindly.  
 
-I don’t pretend everything works perfectly when it doesn’t. Being honest in documentation helps build trust, even with someone you’ll never meet.
+Additionally, write like a human. Use “we” and “you” occasionally. When something is genuinely confusing, you’d say, “This is confusing, but here’s the deal”. Don’t pretend everything works perfectly when it doesn’t. Writing honestly in documentation helps to build trust, even with someone you’ll never meet.
 
-## The Uncomfortable Truth
+## Conclusion
 
-A part that’s hard to say out loud is: most of us will eventually leave our jobs. That’s how careers work. Everything you build, every pipeline you configure, every weird shortcut you take to implement things will be inherited by someone else. And the quality of what you leave behind says something about you as a professional.  
+At the end, everything you’ll build, configure, or every shortcut you’ll take to implement things will be inherited by someone else. The quality of the documentation you leave behind says something about you as a professional.  
 
-I say this because I’ve been on the receiving end of both brilliant and terrible handoffs. When I say brilliant, they weren’t perfect systems. They were brilliant because someone took the time to write things down with the next person in mind. They left a trail that said, "I cared about whoever came after me."
+Leave brilliant documentation handoffs to the next person. Brilliant, not in the sense of perfect documentation, but documentation that is written with the next person in mind. Let it be written clearly with the necessary information. This leaves a trail that says, “I cared about whoever came after me.”  
