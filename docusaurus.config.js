@@ -4,7 +4,7 @@
 const config = {
   title: "Faith Wachukwu",
   tagline: "Documentation Engineer & Technical Writer",
-  favicon: "/static/img/favicon-img.svg",
+  favicon: "/img/favicon.ico",
 
   url: "https://faithkovi.xyz",
   baseUrl: "/",
