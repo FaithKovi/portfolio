@@ -6,7 +6,7 @@ description: Add a new entry to the top of an existing CHANGELOG.md.
 
 # Append a release without overwriting history
 
-**Goal:** add a new release entry to the **top** of an existing `CHANGELOG.md` while
+**Goal:** Add a new release entry to the **top** of an existing `CHANGELOG.md` while
 keeping everything already in the file.
 
 By default, `--output` overwrites the target file. That's fine for a one-off, but during a
@@ -22,7 +22,7 @@ python changelog.py \
   --prepend
 ```
 
-With `--prepend`, the tool inserts the new entry above the existing content instead of
+With `--prepend`, the tool inserts the new entry before the existing content instead of
 replacing the file. Your older releases stay exactly where they are.
 
 ## A complete release flow
@@ -35,7 +35,7 @@ git commit -m "docs: update changelog for v1.1.0"
 ```
 
 :::tip Scope the range with `--since`
-Passing the previous tag to `--since` keeps the entry focused on what actually changed in
+Passing the previous tag to `--since` keeps the entry focused on what changed in
 this release, instead of re-summarizing commits you've already documented.
 :::
 
