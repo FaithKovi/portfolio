@@ -6,7 +6,7 @@ const config = {
   tagline: "Documentation Engineer & Technical Writer",
   favicon: "/img/favicon.ico",
 
-  url: "https://faithkovi.xyz",
+  url: "https://faithwachukwu.com",
   baseUrl: "/",
 
   organizationName: "FaithKovi",
@@ -48,14 +48,14 @@ const config = {
       tagName: "meta",
       attributes: {
         property: "og:url",
-        content: "https://faithkovi.xyz",
+        content: "https://faithwachukwu.com",
       },
     },
     {
       tagName: "meta",
       attributes: {
         property: "og:image",
-        content: "https://faithkovi.xyz/img/profile.jpg",
+        content: "https://faithwachukwu.com/img/profile.jpg",
       },
     },
     {
