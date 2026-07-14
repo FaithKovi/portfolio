@@ -59,7 +59,7 @@ const SERVICES = [
 const SKILLS = [
   {
     category: "Documentation Tools",
-    items: ["Docusaurus", "Markdown / MDX", "OpenAPI / Swagger", "Mintlify", "GitBook", "Hugo", "Zensical"],
+    items: ["Docusaurus", "Markdown / MDX", "OpenAPI / Swagger", "Postman", "Mintlify", "GitBook", "Hugo", "Zensical"],
   },
   {
     category: "Writing & Content",
@@ -109,6 +109,14 @@ const TESTIMONIALS = [
     name: "Chibuzor Ojukwu",
     role: "Co-founder & CTO",
     company: "Clouddley",
+    link: "https://www.linkedin.com/in/faith-kovi/details/recommendations/",
+  },
+  {
+    quote:
+      "I am pleased to recommend Faith Wachukwu, who has worked with us as a Technical Writer. Throughout her time on our team, she has proven to be a highly responsible, focused and reliable professional. She consistently delivers high-quality content, even when working under tight deadlines or with complex technical material. One of her key strengths is her ability to quickly understand technical concepts and translate them into clear, structured, and user-friendly content. Her writing is precise, well-organized, and always tailored to the intended audience, which has really helped make the content we produce clear and simple to understand.",
+    name: "Tijana Glušac",
+    role: "Operations Manager",
+    company: "Literally",
     link: "https://www.linkedin.com/in/faith-kovi/details/recommendations/",
   },
 ];

@@ -5,6 +5,14 @@ import Layout from "@theme/Layout";
 
 const PROJECTS = [
   {
+    title: "Runbook as Code (Zensical)",
+    description:
+      "Docs-as-code site of executable AWS incident-response runbooks (ECS, RDS, Lambda, ALB), built with Zensical and deployed to Netlify. Enforced a consistent runbook template via a custom Python structure validator and ShellCheck linting in GitHub Actions CI, with automated deploys and per-PR previews.",
+    emoji: "📝",
+    tech: ["Zensical", "Docs-as-Code", "Python", "ShellCheck", "GitHub Actions", "CI/CD"],
+    live: "https://runbook-as-code.netlify.app/",
+  },
+  {
     title: "Documentation Sample Set (Diátaxis)",
     description:
       "A walk-the-talk documentation set built on the Diátaxis framework — tutorials, how-to guides, reference, and explanation — documenting a real CLI tool. Demonstrates information architecture, task-oriented writing, and docs-as-code structure end to end.",
@@ -20,14 +28,6 @@ const PROJECTS = [
     tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
     code: "https://github.com/FaithKovi/changelog-generator",
   },
-  // {
-  //   title: "Helm Documentation (helm-www)",
-  //   description:
-  //     "Ongoing open-source documentation contributions to Helm, the Kubernetes package manager — including the v3-to-v4 plugin migration guide and contributor-workflow improvements on the official helm.sh site.",
-  //   emoji: "⎈",
-  //   tech: ["Helm", "Kubernetes", "Markdown", "Open Source"],
-  //   code: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi",
-  // },
   {
     title: "Portfolio Website",
     description:
@@ -35,7 +35,7 @@ const PROJECTS = [
     emoji: "🌐",
     tech: ["Docusaurus", "Docs-as-Code", "React", "GitHub Pages", "CI/CD"],
     code: "https://github.com/FaithKovi/portfolio",
-    live: "https://faithkovi.xyz",
+    live: "https://faithwachukwu.com",
   },
 ];
 
@@ -44,11 +44,8 @@ const OPEN_SOURCE = [
     org: "Helm",
     icon: "⎈",
     blurb:
-      "Authoring the v3-to-v4 plugin migration guide for the new Wasm-based plugin system, plus contributor-guide and release-history improvements on the official documentation site.",
+      "Fixed a broken community-update job by adding a drift guard to the CI workflow, authored the plugins v3→v4 migration guide, contributed to the Helm 4 release history, the contributing guide, and the Go SDK docs.",
     links: [
-      { label: "Migration guide PR #2074", url: "https://github.com/helm/helm-www/pull/2074" },
-      { label: "MDX/CommonMark note #2044", url: "https://github.com/helm/helm-www/pull/2044" },
-      { label: "Helm 4 history #2036", url: "https://github.com/helm/helm-www/pull/2036" },
       { label: "All my Helm PRs ↗", url: "https://github.com/helm/helm-www/pulls?q=author%3AFaithKovi" },
     ],
   },
@@ -154,11 +151,11 @@ const EXPERIENCE = [
     location: "Oslo, Norway · Remote",
     period: "Aug 2025 – Present",
     bullets: [
-      "Develop AI-assisted documentation workflows for identifying documentation gaps, improving consistency, reducing manual effort, while maintaining quality through editorial review.",
+      "Built AI-assisted documentation workflows using prompt engineering and RAG to identify content gaps and improve consistency in writing, reducing manual review time while maintaining editorial quality.",
       "Collaborate with engineers, product managers, and stakeholders to ensure accuracy and identify gaps in technical content.",
       "Tailor tone, structure, and depth for diverse audiences ranging from senior developers to non-technical end users.",
     ],
-    tags: ["Docs-as-Code", "Technical Writing", "Markdown", "Developer Guides"],
+    tags: ["Docs-as-Code", "Technical Writing", "Markdown", "Developer Guides", "AI-assisted Documentation", "RAG"],
   },
   {
     logo: "/img/clouddley-logo.jpg",
@@ -168,8 +165,8 @@ const EXPERIENCE = [
     period: "Jul 2023 – Dec 2025",
     bullets: [
       "Collaborated closely with engineering teams to translate technical features into user-friendly documentation and tutorials, resulting in an 80% reduction in customer support tickets.",
-      "Produced comprehensive technical documentation for internal and customer use, enhancing product understanding and user experience.","Curated and maintained a repository of tutorials and help systems, improving user onboarding and support efficiency.",
-      "Implemented documentation-as-code workflows using Git, enabling version control, peer reviews, and automated publishing processes.",
+      "Maintained a repository of tutorials and developer guides in GitBook and the technical blog on Mintlify, reducing onboarding time for new users.",
+      "Implemented docs-as-code workflows using Git and CI/CD pipelines, enabling peer reviews and automated publishing, reducing deployment time.",
     ],
     tags: ["Docs-as-Code", "Diátaxis", "Git", "Information Architecture", "Onboarding"],
     // caseStudy: "/case-studies/clouddley",
@@ -197,7 +194,7 @@ const EXPERIENCE = [
     period: "Apr 2022 – Oct 2022",
     bullets: [
       "Automated web application packaging and deployment on ECS Fargate using GitHub Actions; maintained internal deployment guides and operational runbooks.",
-      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documenting operational procedures and integrated various AWS services to meet business/client needs.",
+      "Orchestrated 3-tier application deployments on AWS (Amplify, Elastic Beanstalk, RDS) and implemented CloudWatch monitoring, documented operational procedures and integrated various AWS services to meet business/client needs.",
     ],
     tags: ["GitHub Actions", "AWS", "Route53", "CloudWatch", "ECS Fargate"],
   },
@@ -219,13 +216,13 @@ const EXPERIENCE = [
 const EDUCATION = [
   {
     school: "University of Port Harcourt",
-    degree: "Bachelor of Science, Biochemistry",
+    degree: "Bachelor of Science in Biochemistry",
     year: "2016 – 2021",
   },
 ];
 
 const CERTIFICATES = [
-  { name: "Kubernetes and Cloud Native Associate", year: "2024" },
+  { name: "Kubernetes and Cloud Native Associate (KCNA) — The Linux Foundation", year: "2024" },
 ];
 
 const CV_URL = "/Faith_Wachukwu_Resume.pdf";
