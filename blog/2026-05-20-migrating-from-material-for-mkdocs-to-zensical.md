@@ -1,6 +1,6 @@
 ---
 slug: migrating-from-material-for-mkdocs-to-zensical
-title: "Migrating from Material for MkDocs to Zensical: A Documentation Engineer Walkthrough"
+title: "Migrating from Material for MkDocs to Zensical: What Changed, How to Move, and When to Wait"
 authors: Faith Wachukwu
 tags: [technical-writing, documentation, Zensical, Material for MkDocs, Docs]
 ---
@@ -13,22 +13,22 @@ You picked it for good reasons. You can get a docs site running in minutes, writ
 
 What you might not know is that there is a shift. The team behind Material for MkDocs has introduced [Zensical](https://squidfunk.github.io/mkdocs-material/blog/2025/11/05/zensical/), a new static site generator written from scratch in Rust, and [placed Material for MkDocs into maintenance mode](https://github.com/squidfunk/mkdocs-material/issues/8523). At the same time, MkDocs 2.0 is heading in a direction that won’t remain compatible with Material for MkDocs or much of its existing plugin ecosystem.  
 
-If your team builds docs-as-code, then this matters to you. In this walkthrough, you’ll learn what Zensical actually is, how to migrate an existing Material for MkDocs project step by step, and whether it makes sense to move now or wait.
+If your team builds docs-as-code, then this matters to you. In this walkthrough, you’ll learn what Zensical is, how to migrate an existing Material for MkDocs project step by step, and whether it makes sense to move now or wait.
 <!-- truncate -->
 
-## How We Got Here
+## How we got here
 
 [MkDocs](https://www.mkdocs.org/) has been around since 2014. It’s a simple Python-based static site generator that works by pointing it to a folder of Markdown files, providing a YAML config, and generating a searchable documentation site. It has a minimal and clean architecture.  
 
 In 2016, [Martin Donath (known online as Squidfunk)](https://github.com/squidfunk) released [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/). Technically, it’s a theme, but it has evolved into a framework for technical writing. We’re talking about tabs, admonitions, code annotations, versioned navigation, and instant search.  
 
-Here's the part most people miss: **Material for MkDocs and MkDocs are two different projects with two different teams**. Squidfunk's team maintains Material for MkDocs. They have no control over MkDocs itself; they just depend on it.  
+Here's the part most people miss: **Material for MkDocs and MkDocs are two different projects with two different teams**. Squidfunk's team maintains Material for MkDocs. They have no control over MkDocs itself: they depend on it.  
 
-As for the underlying MkDocs engine, MkDocs 1.x has been effectively unmaintained since August 2024, with [version 1.6.1, released on August 30, 2024](https://github.com/mkdocs/mkdocs/releases/tag/1.6.1). It remains the last release to date, as of the time of writing this article.  
+As for the underlying MkDocs engine, maintainers stopped updating MkDocs 1.x after August 2024, with [version 1.6.1, released on August 30, 2024](https://github.com/mkdocs/mkdocs/releases/tag/1.6.1) as the last release to date.
 
-With issues piling up and no maintained path forward, the Material for MkDocs team faced a strategic question: keep building on a stagnant dependency, or move, and they chose to move.  
+With issues piling up and no maintained path forward, the Material for MkDocs team faced a strategic question: keep building on a stagnant dependency or move. They chose to move.  
 
-On [November 5, 2025, the Material for MkDocs team announced Zensical](https://squidfunk.github.io/mkdocs-material/blog/2025/11/05/zensical/) — a static site generator they'd been building from scratch for over a year. About six days later, they shipped [Material for MkDocs 9.7.0](https://squidfunk.github.io/mkdocs-material/blog/2025/11/11/insiders-now-free-for-everyone/), which made all previously paid “insiders”  features free, and put the project into a [12-month maintenance window](https://github.com/squidfunk/mkdocs-material/issues/8523) covering critical bug fixes and security updates only.  
+On [November 5, 2025, the Material for MkDocs team announced Zensical](https://squidfunk.github.io/mkdocs-material/blog/2025/11/05/zensical/)—a static site generator they'd been building from scratch for over a year. About six days later, they shipped [Material for MkDocs 9.7.0](https://squidfunk.github.io/mkdocs-material/blog/2025/11/11/insiders-now-free-for-everyone/), which made all previously paid “insiders”  features free, and put the project into a [12-month maintenance window](https://github.com/squidfunk/mkdocs-material/issues/8523) covering critical bug fixes and security updates only.  
 
 In late January 2026, MkDocs 2.0 entered pre-release as a ground-up rewrite with breaking changes that would have broken Material for MkDocs and the plugins built on top of it based on the [team's analysis](https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/). The decision to build Zensical was already validated.  
 
@@ -38,9 +38,9 @@ In late January 2026, MkDocs 2.0 entered pre-release as a ground-up rewrite with
   *The ecosystem shift from Material for MkDocs to Zensical, marked by stagnation, announcement, and rapid post-launch development through 2026.*
 </div>
 
-## What Zensical Actually Is
+## What is Zensical
 
-[Zensical](https://zensical.org/) is a modern static site generator designed to replace the MkDocs stack while staying backwards-compatible with existing projects.  It’s built from years of experience, so they’ve learned what works and what doesn’t. They created it to fix the problems in MkDocs and go beyond what MkDocs can do.  
+[Zensical](https://zensical.org/) is a modern static site generator designed to replace the MkDocs stack while staying backwards-compatible with existing projects. It’s built from years of experience, so the team behind it has learned what works and what doesn’t. They created it to fix the problems in MkDocs and go beyond what MkDocs can do.  
 
 Although it’s a new project, it’s compatible with your existing `mkdocs.yml`. Not all plugins are supported yet, but your core configuration works.  
 
@@ -55,7 +55,7 @@ Zensical ships two theme variants. The **classic** variant, which matches the Ma
 
 There is, however, an honest caveat; Zensical is still in its early stage (alpha). The current version on PyPI is [0.0.43, released May 19, 2026](https://pypi.org/project/zensical/), as of the time of writing. However, the project has shipped frequently since going public in November 2025.  
 
-Even though it’s in its early stages, it works. The [GitHub Repo](https://github.com/zensical) already has 4,700+ stars, and major projects are already migrating.  
+Even though it’s in its early stages, it works. The [GitHub Repo](github.com/zensical/zensical) already has 4,700+ stars, and major projects are already migrating.  
 
 <div style={{ textAlign: 'center' }}>
   <img src="/img/blog/zensical.png" alt="Zensical homepage displaying its documentation tooling features and navigation layout." />
@@ -76,7 +76,7 @@ Before migrating to Zensical, make sure your current setup meets the following p
 
 Before making changes, audit your project dependencies against the [Zensical compatibility documentation](https://zensical.org/compatibility/). To get a clear picture of what you are working on, spend time looking at these three areas:
 
-- **Plugins**: Review everything under `plugins:` in your `mkdocs.yml`. Zensical supports many of them, but not all yet. So make sure you check the [compatibility matrix below](https://claude.ai/chat/c13daa5b-7562-429e-bec2-2662e56d64e1#plugin-compatibility-matrix-current-state) or [Zensical's official plugins page](https://zensical.org/compatibility/plugins/) before committing to a migration timeline.
+- **Plugins**: Review everything under `plugins:` in your `mkdocs.yml`. Zensical supports many of them, but not all yet. So make sure you check the [compatibility matrix below](#plugin-compatibility-matrix-current-state) or [Zensical's official plugins page](https://zensical.org/compatibility/plugins/) before committing to a migration timeline.
 - **Theme overrides**: List out your custom templates, CSS, JavaScript, and any hooks. These are the usual suspects when things don’t render the same.
 - **Markdown extensions**: Look for anything using `material.extensions.*`. You’ll need to rename those later.
 
@@ -127,9 +127,9 @@ Some of the common ones include:
 | Error | Fix |
 |---|---|
 | `docs_dir` cannot be set to `'.'` | Set `docs_dir` to a subdirectory such as `docs` and move your source files there. |
-| Unknown plugin `<name>` | Plugin not yet supported. Check the [compatibility matrix](https://claude.ai/chat/c13daa5b-7562-429e-bec2-2662e56d64e1#plugin-compatibility-matrix-current-state); remove the plugin or stay on MkDocs. |
+| Unknown plugin `<name>` | Plugin not yet supported. Check the [compatibility matrix](https://zensical.org/compatibility/plugins/); remove the plugin or stay on MkDocs. |
 | Unknown setting remote_branch / hooks / etc. | One of the unsupported settings. Remove. |
-| `material.extensions.*` unresolved | Rename to `zensical.extensions.*` — see step 5. |
+| `material.extensions.*` unresolved | Rename to `zensical.extensions.*`—see step 5. |
 
 #### Step 4: Select your theme variant
 
@@ -173,7 +173,7 @@ zensical serve
 # default: http://localhost:8000
 ```
 
-Open `http://local:8000` and click through your docs. Don't just spot-check the homepage.  
+Open `http://localhost:8000` and go through your docs. Don't spot-check the homepage only.  
 
 Compare against your live MkDocs site and look for:
 
@@ -190,7 +190,7 @@ Some setups need temporary pinning to avoid conflicts.
 
 #### Step 7: Update your build pipeline
 
-If you have a pipeline already setup, replace your CI build command with:
+If you have a pipeline already set up, replace your CI build command with:
 
 ```bash
 zensical build --clean
@@ -232,7 +232,7 @@ If you're on Read the Docs, build with Zensical and copy the output into their e
 
 If anything breaks in production after deployment, the rollback is straightforward: revert the merge of the `migrate/zensical` branch.  
 
-That’s it. Your `mkdocs.yml` keeps working, and your Markdown files don’t need changes to work with Zensical. Your templates, override, CSS, and JavaScript extensions carry over the same configuration because Zensical uses the same HTML structure and Python-Markdown parser under the hood.  
+That’s it. Your `mkdocs.yml` keeps working, and your Markdown files don’t need changes to work with Zensical. Your templates, overrides, CSS, and JavaScript extensions carry over the same configuration because Zensical uses the same HTML structure and Python-Markdown parser under the hood.  
 
 ## Plugin compatibility matrix (current state)
 
@@ -243,7 +243,7 @@ The Zensical team analyzed the top 1,000 GitHub repositories using Material for 
 A few details matter if you’re planning a migration:
 
 - Many teams still use the popular [awesome-pages](https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin) plugin, but its original author has replaced it with [awesome-nav](https://lukasgeiter.github.io/mkdocs-awesome-nav/). Zensical is building support around `awesome-nav`, not `awesome-pages`. If your project still depends on `awesome-pages`, you’ll likely need a two-step migration: move from awesome-pages to awesome-nav in MkDocs first, then migrate to Zensical.
-- Some plugins don’t appear in either tier because Zensical plans to handle those features differently at the architectural level. The`typeset` plugin is a good example. Material for MkDocs has already [deprecated](https://zensical.org/compatibility/plugins/) it because the upcoming modular navigation system will support rich navigation content natively.  
+- Some plugins don’t appear in either tier because Zensical plans to handle those features differently at the architectural level. The `typeset` plugin is a good example. Material for MkDocs has already [deprecated](https://zensical.org/compatibility/plugins/) it because the upcoming modular navigation system will support rich navigation content natively.  
 
 If your site depends on a Tier 2 plugin that Zensical hasn’t shipped yet, you have options to choose from: wait for support, replace the feature with a workaround, or stay on Material for MkDocs during its 12-month maintenance window until the matching Zensical module becomes available.  
 
@@ -261,13 +261,13 @@ Based on where the project stands today.
 
 - Rely heavily on plugins that aren’t supported yet
 - Maintain docs for a regulated product where switching to “alpha software” is a hard no
-- Have a 500-line customized mkdocs.yml stitched together by three different people that span over four years
+- Have a 500-line customized mkdocs.yml stitched together by three different people that spans over four years
 
-The best advice is for you not to wait indefinitely, though. And that’s because Material for MkDocs is in a [12-month maintenance window that already began November 6, 2025](https://github.com/squidfunk/mkdocs-material/issues/8523), with focus on critical bugs and security fixes only, so no new features will be released. After that, you’ll be running unmaintained software.  
+The best advice is for you not to wait indefinitely, though. And that’s because Material for MkDocs is in a [12-month maintenance window](https://github.com/squidfunk/mkdocs-material/issues/8523), with focus on critical bugs and security fixes only, so no new features will be released. After that, you’ll be running unmaintained software.  
 
-There are early adopters already talking about how easy the process is. Here are some:
+There are early adopters already talking about the process. Here are some:
 - [Eleni Grosdouli](https://blog.grosdouli.dev/blog/mkdocs-material-migration-zensical) migrated the [Sveltos project documentation](https://projectsveltos.github.io/sveltos/) and described the process as "easy and headache-free," noting that the main work was adjusting the GitHub Actions workflow.
-- The [DDEV team](https://github.com/ddev/ddev/issues/7840) and [Renovate](https://github.com/renovatebot/renovate/discussions/39232) have all either completed the move or filed migration issues.  
+- The [DDEV team](https://github.com/ddev/ddev/issues/7840) and [Renovate](https://github.com/renovatebot/renovate/discussions/39232) have both either completed the move or filed migration issues.  
 
 The plugin ecosystem hasn't fully caught up though, so if your project depends on a lot of plugins, expect some friction.  
 
@@ -275,7 +275,7 @@ The plugin ecosystem hasn't fully caught up though, so if your project depends o
 
 In my view, for docs-as-code, Zensical is bigger than the tool itself. There are three things worth noting about it:
 
-- **End of the sponsorware era**: Material for MkDocs used a model in which sponsors received early access to features. But with the 9.7.0 release, [all Insider features became free for everyone](https://squidfunk.github.io/mkdocs-material/blog/2025/11/11/insiders-now-free-for-everyone/). Zensical, however, replaced sponsorware with [Zensical Spark](https://zensical.org/spark/)  — a support-and-services tier aimed at organizations rather than individual developers.
+- **End of the sponsorware era**: Material for MkDocs used a model in which sponsors received early access to features. But with the 9.7.0 release, [all Insider features became free for everyone](https://squidfunk.github.io/mkdocs-material/blog/2025/11/11/insiders-now-free-for-everyone/). Zensical, however, replaced sponsorware with [Zensical Spark](https://zensical.org/spark/)—a support-and-services tier aimed at organizations rather than individual developers.
 
 - **Compatibility**: The team could have shipped a clean-break rewrite and forced the users to rewrite their docs, but they didn’t. They shipped something that can work with your existing config. That’s a good product decision, and it’s why adoption is moving faster.
 
@@ -283,8 +283,8 @@ In my view, for docs-as-code, Zensical is bigger than the tool itself. There are
 
 ## Conclusion
 
-MkDocs 1.x is no longer actively maintained, and Material for MkDocs has received only limited support for about a year. The same team has already moved forward with Zensical, which is faster, still works with your current setup, and is actively being built.
+MkDocs 1.x is no longer actively maintained, and Material for MkDocs has received only limited support for about a year. The same team has already moved forward with Zensical, which is faster, still works with your current setup, and is actively evolving.
 
-If your docs matter to your product, your team, or your users, then you need a plan. Start with the [compatibility matrix](https://claude.ai/chat/c13daa5b-7562-429e-bec2-2662e56d64e1#plugin-compatibility-matrix-current-state), try a small migration in a separate branch, see what breaks, and plan from there.  If you're stuck on a Tier 2 plugin, watch the [Zensical backlog](https://github.com/orgs/zensical/projects/2) or consider contributing a module.  
+If your docs matter to your product, your team, or your users, then you need a plan. Start with the [compatibility matrix](https://zensical.org/compatibility/), try a small migration in a separate branch, see what breaks, and plan from there. If you're stuck on a Tier 2 plugin, watch the [Zensical backlog](https://github.com/orgs/zensical/projects/2) or consider contributing a module.  
 
 For deeper context on the ecosystem dynamics that led here, Florian Maas's The [Slow Collapse of MkDocs](https://fpgmaas.com/blog/collapse-of-mkdocs/) is the most thorough public account, and Martin Donath's interview on [Talk Python #542](https://talkpython.fm/episodes/show/542/zensical-a-modern-static-site-generator) covers the technical and strategic reasoning behind Zensical from the team itself.
