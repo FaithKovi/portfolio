@@ -55,7 +55,7 @@ Zensical ships two theme variants. The **classic** variant, which matches the Ma
 
 There is, however, an honest caveat; Zensical is still in its early stage (alpha). The current version on PyPI is [0.0.43, released May 19, 2026](https://pypi.org/project/zensical/), as of the time of writing. However, the project has shipped frequently since going public in November 2025.  
 
-Even though it’s in its early stages, it works. The [GitHub Repo](github.com/zensical/zensical) already has 4,700+ stars, and major projects are already migrating.  
+Even though it’s in its early stages, it works. The [GitHub Repo](https://github.com/zensical/zensical) already has 4,700+ stars, and major projects are already migrating.  
 
 <div style={{ textAlign: 'center' }}>
   <img src="/img/blog/zensical.png" alt="Zensical homepage displaying its documentation tooling features and navigation layout." />
