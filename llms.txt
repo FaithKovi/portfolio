@@ -1,0 +1,19 @@
+# Faith Wachukwu — Documentation Engineer & Technical Writer
+
+> Docs-as-code systems, API references, and developer guides that measurably reduce support load. DevOps background, Helm docs contributor.
+
+## Key pages
+
+- [Case study](https://faithwachukwu.com/case-studies/clouddley): ~80% support-ticket reduction at Clouddley, with measurement methodology
+- [Docs Sample](https://faithwachukwu.com/docs/intro/): a working Diátaxis docs set for a real open-source CLI
+- [Work](https://faithwachukwu.com/work/): projects, open source, experience
+- [Writing](https://faithwachukwu.com/writing/): 30+ external articles and the blog
+- [Resume](https://faithwachukwu.com/resume/): full experience and skills
+- [About](https://faithwachukwu.com/about/): background and how I work
+- [Contact](https://faithwachukwu.com/contact/): availability, timezone, scope
+
+## Contact
+
+- Email: faithkovi@gmail.com
+- GitHub: https://github.com/FaithKovi
+- LinkedIn: https://linkedin.com/in/faith-wachukwu
