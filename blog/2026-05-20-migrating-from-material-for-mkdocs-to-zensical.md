@@ -3,6 +3,7 @@ slug: migrating-from-material-for-mkdocs-to-zensical
 title: "Migrating from Material for MkDocs to Zensical: What Changed, How to Move, and When to Wait"
 authors: Faith Wachukwu
 tags: [technical-writing, documentation, Zensical, Material for MkDocs, Docs]
+image: /img/blog/mkdocs1.png
 ---
 
 <img src="/img/blog/mkdocs1.png" alt="#" />

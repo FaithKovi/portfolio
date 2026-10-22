@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import Layout from "@theme/Layout";
 
 // ─── DATA ────────────────────────────────────────────────────
 
 const PROJECTS = [
   {
-    title: "Runbook as Code (Zensical)",
+    title: "AI Changelog Generator",
     description:
-      "Docs-as-code site of executable AWS incident-response runbooks (ECS, RDS, Lambda, ALB), built with Zensical and deployed to Netlify. Enforced a consistent runbook template via a custom Python structure validator and ShellCheck linting in GitHub Actions CI, with automated deploys and per-PR previews.",
-    emoji: "📝",
-    tech: ["Zensical", "Docs-as-Code", "Python", "ShellCheck", "GitHub Actions", "CI/CD"],
-    live: "https://runbook-as-code.netlify.app/",
+      "A Python CLI tool that reads git commit history and generates polished, categorized changelogs using Gemini's API or Claude's API. Parses commits, filters noise, groups changes by type (Added, Changed, Fixed, Security), and outputs publish-ready markdown following the Keep a Changelog standard. Documented end to end in the live docs sample on this site.",
+    emoji: "✨",
+    tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
+    code: "https://github.com/FaithKovi/changelog-generator",
   },
   {
     title: "Documentation Sample Set (Diátaxis)",
@@ -21,17 +21,17 @@ const PROJECTS = [
     live: "/docs/intro",
   },
   {
-    title: "AI Changelog Generator",
+    title: "Runbook as Code (Zensical)",
     description:
-      "A Python CLI tool that reads git commit history and generates polished, categorized changelogs using Gemini's API or Claude's API. Parses commits, filters noise, groups changes by type (Added, Changed, Fixed, Security), and outputs publish-ready markdown following the Keep a Changelog standard.",
-    emoji: "✨",
-    tech: ["Markdown", "Docs-as-Code", "Python", "Anthropic API", "Git", "Gemini API"],
-    code: "https://github.com/FaithKovi/changelog-generator",
+      "Docs-as-code site of executable AWS incident-response runbooks (ECS, RDS, Lambda, ALB), built with Zensical and deployed to Netlify. Enforced a consistent runbook template via a custom Python structure validator and ShellCheck linting in GitHub Actions CI, with automated deploys and per-PR previews.",
+    emoji: "📝",
+    tech: ["Zensical", "Docs-as-Code", "Python", "ShellCheck", "GitHub Actions", "CI/CD"],
+    live: "https://runbook-as-code.netlify.app/",
   },
   {
     title: "Portfolio Website",
     description:
-      "My portfolio built with Docusaurus, auto-deployed via GitHub Actions, with RSS, dark mode, and Formspree contact integration.",
+      "My portfolio built with Docusaurus, auto-deployed via GitHub Actions, with RSS, dark mode, prose linting (Vale) in CI, an llms.txt for AI retrieval, and Formspree contact integration.",
     emoji: "🌐",
     tech: ["Docusaurus", "Docs-as-Code", "React", "GitHub Pages", "CI/CD"],
     code: "https://github.com/FaithKovi/portfolio",
@@ -70,93 +70,13 @@ const OPEN_SOURCE = [
   },
 ];
 
-const ARTICLES = [
-  {
-    title: "Accessibility in Writing: How to Create Accessible Documentation That Works for Everyone",
-    platform: "HackerNoon",
-    description: "Accessibility in writing is crucial for creating inclusive documentation that can be understood and used by everyone, including people with disabilities. This article explores how to create accessible documentation that meets the needs of all users, ensuring that your content is usable and effective for a diverse audience.",
-    url: "https://hackernoon.com/accessibility-in-writing-how-to-create-accessible-documentation-that-works-for-everyone",
-    date: "Jul. 2026",
-  },
-  {
-    title: "How to Set Up Your Monitoring System Alerts",
-    platform: "AppSignal Blog",
-    description: "Learn how to set up your monitoring system alerts for your application in AppSignal. This article provides a guide to configuring effective alerts that help you stay on top of your application's performance and reliability.",
-    url: "https://blog.appsignal.com/2026/04/07/how-to-set-up-your-monitoring-system-alerts",
-    date: "Apr. 2026",
-  },
-  {
-    title: "Run apps, databases, brokers, and AI anywhere - with no vendor lock-in",
-    platform: "Clouddley",
-    description: "Discover how to run your applications, databases, message brokers, and AI workloads anywhere without vendor lock-in. This article explores strategies for achieving cloud portability and flexibility in modern application deployment with Clouddley",
-    url: "https://blog.clouddley.com/posts/run-apps-databases-brokers-and-ai-anywhere-with-no-vendor-lock-in",
-    date: "Dec. 2025",
-  },
-  {
-    title: "How We Cut Our Google Cloud Bill by 60% with Clouddley",
-    platform: "Clouddley",
-    description: "Discover how we optimized our Google Cloud costs by 60% using Clouddley. This article shares practical strategies and insights for managing cloud expenses effectively.",
-    url: "https://blog.clouddley.com/posts/how-we-cut-our-cloud-bill-by-60-percent-with-clouddley",
-    date: "Nov. 2025",
-  },
-  {
-    title: "Exploring API latency analysis using Golang",
-    platform: "Medium",
-    description: "Users expect instantaneous responses and seamless experience from applications. If an application doesn't do this it impacts the user experience. This is why a critical performance metric called API latency is important to monitor.",
-    url: "https://vera-kaka.medium.com/exploring-api-latency-analysis-using-golang-372d54178ff8",
-    date: "Apr. 2024",
-  },
-  {
-    title: "Serverless Computing and DevOps: The Future of Cloud Deployment",
-    platform: "HackerNoon",
-    description: "The world of serverless computing is where innovation drives operations and applications scale seamlessly to meet demand. It is a game changer in the computing industry. This article will highlight its benefits in the future of cloud deployment.",
-    url: "https://hackernoon.com/serverless-computing-and-devops-the-future-of-cloud-deployment",
-    date: "Nov. 2023",
-  },
-  {
-    title: "Introduction to AWS Elastic Beanstalk",
-    platform: "AWS in Plain English",
-    description: "AWS Elastic Beanstalk is a powerful platform-as-a-service (PaaS) offering that simplifies the deployment and management of applications in the AWS cloud. It abstracts away the underlying infrastructure, allowing developers to focus on writing code and delivering value to users.",
-    url: "https://awstip.com/introduction-to-aws-elastic-beanstalk-126d5628c657",
-    date: "Jan. 2023",
-  },
-  {
-    title: "How to Add Environment Variables to Applications Deployed on AWS Amplify",
-    platform: "AWS in Plain English",
-    description: "Environment variables are essential for managing application configurations in different environments. This article explains how to set and manage environment variables for applications deployed on AWS Amplify.",
-    url: "https://awstip.com/how-to-add-environment-variables-to-applications-deployed-on-aws-amplify-9610e6b6e20e",
-    date: "Jan. 2023",
-  },
-  {
-    title: "My DevSecOps Journey",
-    platform: "Medium",
-    description: "A personal journey through the world of DevSecOps, exploring best practices and lessons learned in integrating security into the development lifecycle.",
-    url: "https://vera-kaka.medium.com/my-devsecops-journey-65e3708562a9",
-    date: "Mar. 2022",
-  },
-  {
-    title: "How to deploy a 3-tier application using docker-compose on GCE",
-    platform: "Medium",
-    description: "This article explains how to deploy a 3-tier application using docker-compose on Google Compute Engine (GCE). It covers setting up the environment, creating the necessary Docker containers, and deploying the application.",
-    url: "https://vera-kaka.medium.com/deploying-a-three-tier-application-to-google-kubernetes-engine-gke-c0ce25f7a3c3",
-    date: "Oct. 2021",
-  },
-  {
-    title: "How to automate the creation of VPC and subnets using Terraform",
-    platform: "Medium",
-    description: "Terraform is a powerful infrastructure-as-code tool that allows you to define and provision cloud infrastructure using declarative configuration files. This article explains how to automate the creation of VPC and subnets using Terraform.",
-    url: "https://vera-kaka.medium.com/automate-the-creation-of-vpc-and-subnets-using-terraform-f198f1f57900",
-    date: "Oct. 2021",
-  },
-];
-
-const EXPERIENCE = [
+export const EXPERIENCE = [
   {
     logo: "/img/literally-logo.jpg",
     role: "Freelance Technical Writer",
     company: "Literally(agency)",
     location: "Oslo, Norway · Remote",
-    period: "Aug 2025 – Present",
+    period: "Aug 2025 – Present (concurrent with Clouddley contract)",
     bullets: [
       "Built AI-assisted documentation workflows using prompt engineering and RAG to identify content gaps and improve consistency in writing, reducing manual review time while maintaining editorial quality.",
       "Collaborate with engineers, product managers, and stakeholders to ensure accuracy and identify gaps in technical content.",
@@ -168,15 +88,14 @@ const EXPERIENCE = [
     logo: "/img/clouddley-logo.jpg",
     role: "Documentation Engineer (Contract)",
     company: "Clouddley",
-    location: "Delaware, USA · Remote",
+    location: "Remote (US company)",
     period: "Jul 2023 – Dec 2025",
     bullets: [
-      "Reduced customer support tickets by 80% by rebuilding developer documentation and tutorials in GitBook, working with engineers to turn platform features into clear, task-focused guides.",
+      "Reduced customer support tickets by ~80% by rebuilding developer documentation and tutorials in GitBook, working with engineers to turn platform features into clear, task-focused guides.",
       "Built docs-as-code workflows using Git and CI/CD, introducing peer reviews and automated publishing to replace manual documentation releases with merge-triggered deployments.",
       "Managed the technical blog on Mintlify and maintained a growing tutorial library, making it easier for new users to understand and adopt the platform.",
     ],
     tags: ["Docs-as-Code", "Diátaxis", "Git", "Information Architecture", "Onboarding"],
-    // caseStudy: "/case-studies/clouddley",
   },
   {
     logo: "",
@@ -220,7 +139,7 @@ const EXPERIENCE = [
   },
 ];
 
-const EDUCATION = [
+export const EDUCATION = [
   {
     school: "University of Port Harcourt",
     degree: "Bachelor of Science in Biochemistry",
@@ -228,7 +147,7 @@ const EDUCATION = [
   },
 ];
 
-const CV_URL = "/Faith_Wachukwu_Resume.pdf";
+export const CV_URL = "/Faith_Wachukwu_Resume.pdf";
 
 // ─── HELPERS ─────────────────────────────────────────────────
 
@@ -262,240 +181,147 @@ function SmartLink({
 // ─── PAGE ────────────────────────────────────────────────────
 
 export default function Work(): React.JSX.Element {
-  const [tab, setTab] = useState<
-    "experience" | "projects" | "opensource" | "articles"
-  >("experience");
-
   return (
-    <Layout title="Work" description="Projects, articles, and experience">
+    <Layout
+      title="Work"
+      description="Projects, open-source contributions, and professional experience of Faith Wachukwu, Documentation Engineer."
+    >
       <main>
         <section className="page-header">
           <p className="section-label">Work</p>
           <h1 className="page-title">Things I've built and written</h1>
           <p className="page-subtitle">
-            Projects, published articles, open-source contributions, and
-            professional experience.
+            Projects, open-source contributions, and professional experience.
           </p>
           <div className="page-header-actions">
             <a className="btn-outline" href={CV_URL} target="_blank" rel="noopener noreferrer">
-              Download CV ↓
+              Download Resume ↓
             </a>
           </div>
         </section>
 
-        {/* Featured case study banner */}
-        {/* <section className="portfolio-section" style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <a className="featured-case-study" href="/case-studies/clouddley">
-            <span className="fcs-tag">Featured case study</span>
-            <h3>Cutting support tickets ~80% with a Diátaxis docs rebuild</h3>
-            <p>
-              How restructuring Clouddley's documentation around user intent —
-              and closing the highest-volume gaps — measurably reduced inbound
-              support load.
-            </p>
-            <span className="fcs-link">Read the case study →</span>
-          </a>
-        </section> */}
-
-        <section className="portfolio-section" style={{ paddingTop: "2rem" }}>
-          <div className="tab-buttons">
-            <button
-              className={`tab-btn ${tab === "experience" ? "active" : ""}`}
-              onClick={() => setTab("experience")}
-            >
-              Experience
-            </button>
-            <button
-              className={`tab-btn ${tab === "projects" ? "active" : ""}`}
-              onClick={() => setTab("projects")}
-            >
-              Projects
-            </button>
-            <button
-              className={`tab-btn ${tab === "opensource" ? "active" : ""}`}
-              onClick={() => setTab("opensource")}
-            >
-              Open Source
-            </button>
-            <button
-              className={`tab-btn ${tab === "articles" ? "active" : ""}`}
-              onClick={() => setTab("articles")}
-            >
-              Articles
-            </button>
-          </div>
-
-          {/* Projects Tab */}
-          {tab === "projects" && (
-            <div className="projects-grid">
-              {PROJECTS.map((project) => (
-                <div className="project-card" key={project.title}>
-                  <div className="project-card-img">{project.emoji}</div>
-                  <div className="project-card-body">
-                    <h4>{project.title}</h4>
-                    <p>{project.description}</p>
-                    <div className="project-links">
-                      {project.code && (
-                        <SmartLink href={project.code}>Code ↗</SmartLink>
-                      )}
-                      {project.live && (
-                        <SmartLink href={project.live}>
-                          {isExternal(project.live) ? "Live ↗" : "View →"}
-                        </SmartLink>
-                      )}
-                    </div>
-                    <div className="project-tech-tags">
-                      {project.tech.map((t) => (
-                        <span className="project-tech-tag" key={t}>
-                          {t}
-                        </span>
-                      ))}
-                    </div>
+        <section className="portfolio-section" id="projects" style={{ paddingTop: "2rem" }}>
+          <h2 className="section-title">Projects</h2>
+          <div className="projects-grid">
+            {PROJECTS.map((project) => (
+              <div className="project-card" key={project.title}>
+                <div className="project-card-img">{project.emoji}</div>
+                <div className="project-card-body">
+                  <h4>{project.title}</h4>
+                  <p>{project.description}</p>
+                  <div className="project-links">
+                    {project.code && (
+                      <SmartLink href={project.code}>Code ↗</SmartLink>
+                    )}
+                    {project.live && (
+                      <SmartLink href={project.live}>
+                        {isExternal(project.live) ? "Live ↗" : "View →"}
+                      </SmartLink>
+                    )}
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Open Source Tab */}
-          {tab === "opensource" && (
-            <div className="oss-list">
-              {OPEN_SOURCE.map((oss) => (
-                <div className="oss-card" key={oss.org}>
-                  <div className="oss-header">
-                    <span className="oss-icon">{oss.icon}</span>
-                    <h4 className="oss-org">{oss.org}</h4>
-                  </div>
-                  <p className="oss-blurb">{oss.blurb}</p>
-                  <div className="oss-links">
-                    {oss.links.map((l) => (
-                      <a
-                        key={l.url}
-                        href={l.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {l.label}
-                      </a>
+                  <div className="project-tech-tags">
+                    {project.tech.map((t) => (
+                      <span className="project-tech-tag" key={t}>
+                        {t}
+                      </span>
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        </section>
 
-          {/* Articles Tab */}
-          {tab === "articles" && (
-            <div className="articles-list">
-              {ARTICLES.map((article) => (
-                <a
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="article-card"
-                  key={article.title}
-                >
-                  <div className="article-card-content">
-                    <div className="article-meta">
-                      <span className="article-platform">
-                        {article.platform}
-                      </span>
-                      <span className="article-date">{article.date}</span>
-                    </div>
-                    <h4>{article.title}</h4>
-                    <p>{article.description}</p>
+        <section className="portfolio-section" id="opensource">
+          <h2 className="section-title">Open source</h2>
+          <div className="oss-list">
+            {OPEN_SOURCE.map((oss) => (
+              <div className="oss-card" key={oss.org}>
+                <div className="oss-header">
+                  <span className="oss-icon">{oss.icon}</span>
+                  <h4 className="oss-org">{oss.org}</h4>
+                </div>
+                <p className="oss-blurb">{oss.blurb}</p>
+                <div className="oss-links">
+                  {oss.links.map((l) => (
+                    <a
+                      key={l.url}
+                      href={l.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {l.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="portfolio-section" id="experience">
+          <h2 className="section-title">Experience</h2>
+          <div className="experience-list">
+            {EXPERIENCE.map((exp) => (
+              <div className="experience-card" key={exp.role + exp.company}>
+                {exp.logo ? (
+                  <img className="exp-logo" src={exp.logo} alt={exp.company} />
+                ) : (
+                  <div className="exp-logo exp-logo-initials">
+                    {exp.initials || exp.company.substring(0, 2).toUpperCase()}
                   </div>
-                  <span className="article-arrow">↗</span>
-                </a>
-              ))}
-            </div>
-          )}
+                )}
+                <div className="exp-content">
+                  <h4>{exp.role}</h4>
+                  <p className="exp-company">{exp.company}</p>
+                  <p className="exp-meta">
+                    {exp.period} · {exp.location}
+                  </p>
+                  <ul>
+                    {exp.bullets.map((b, i) => (
+                      <li key={i}>{b}</li>
+                    ))}
+                  </ul>
+                  <div className="exp-tags">
+                    {exp.tags.map((t) => (
+                      <span className="project-tech-tag" key={t}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-          {/* Experience Tab */}
-          {tab === "experience" && (
-            <>
-              <div className="experience-list">
-                {EXPERIENCE.map((exp) => (
-                  <div className="experience-card" key={exp.role + exp.company}>
-                    {exp.logo ? (
-                      <img className="exp-logo" src={exp.logo} alt={exp.company} />
-                    ) : (
-                      <div className="exp-logo exp-logo-initials">
-                        {exp.initials || exp.company.substring(0, 2).toUpperCase()}
-                      </div>
-                    )}
-                    <div className="exp-content">
-                      <h4>{exp.role}</h4>
-                      <p className="exp-company">{exp.company}</p>
-                      <p className="exp-meta">
-                        {exp.period} · {exp.location}
-                      </p>
-                      <ul>
-                        {exp.bullets.map((b, i) => (
-                          <li key={i}>{b}</li>
-                        ))}
-                      </ul>
-                      {/* {exp.caseStudy && (
-                        <a className="exp-case-link" href={exp.caseStudy}>
-                          Read the full case study →
-                        </a>
-                      )} */}
-                      <div className="exp-tags">
-                        {exp.tags.map((t) => (
-                          <span className="project-tech-tag" key={t}>
-                            {t}
-                          </span>
-                        ))}
-                      </div>
+        <section className="portfolio-section" id="education">
+          <div className="about-details-stacked">
+            <div>
+              <p className="section-label">Education</p>
+              <div className="education-list">
+                {EDUCATION.map((edu) => (
+                  <div className="education-card" key={edu.school}>
+                    <div className="edu-icon">🎓</div>
+                    <div className="edu-content">
+                      <h4>{edu.school}</h4>
+                      <p>{edu.degree}</p>
+                      <p className="edu-year">{edu.year}</p>
                     </div>
                   </div>
                 ))}
               </div>
+            </div>
 
-              {/* Education & Communities */}
-              <div className="about-details-stacked" style={{ marginTop: "3rem" }}>
-                <div>
-                  <p className="section-label">Education</p>
-                  <div className="education-list">
-                    {EDUCATION.map((edu) => (
-                      <div className="education-card" key={edu.school}>
-                        <div className="edu-icon">🎓</div>
-                        <div className="edu-content">
-                          <h4>{edu.school}</h4>
-                          <p>{edu.degree}</p>
-                          <p className="edu-year">{edu.year}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* <div>
-                  <p className="section-label">Certificates</p>
-                  <div
-                    style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}
-                  >
-                    {CERTIFICATES.map((cert) => (
-                      <span className="cert-badge" key={cert.name}>
-                        🏅 {cert.name} ({cert.year})
-                      </span>
-                    ))}
-                  </div>
-                </div> */}
-
-                <div>
-                  <p className="section-label">Communities</p>
-                  <div
-                    style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}
-                  >
-                    <span className="cert-badge">
-                      ⎈ Helm Documentation (Contributor)
-                    </span>
-                  </div>
-                </div>
+            <div>
+              <p className="section-label">Communities</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+                <span className="cert-badge">
+                  ⎈ Helm Documentation (Contributor)
+                </span>
               </div>
-            </>
-          )}
+            </div>
+          </div>
         </section>
       </main>
     </Layout>

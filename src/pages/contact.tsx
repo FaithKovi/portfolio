@@ -43,9 +43,21 @@ export default function Contact(): React.JSX.Element {
           <h1 className="page-title">Let's work together</h1>
           <p className="page-subtitle">
             Need documentation that actually helps your users? I'd love to hear
-            about your project.
+            about your project.  Open to documentation engineering and technical writing roles, and select consulting.
           </p>
         </section>
+
+        {/* <section className="portfolio-section" id="services" style={{ paddingTop: 0, paddingBottom: "1rem" }}>
+          <h2 className="section-title" style={{ fontSize: "1.5rem" }}>What I can own</h2>
+          <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, maxWidth: "700px" }}>
+            API references built from OpenAPI specs or source. Developer guides
+            and tutorials that take users from zero to productive. End-to-end
+            docs-as-code pipelines — Docusaurus, GitBook, or Mintlify, with
+            review, CI/CD publishing, and versioning from day one. Open to
+            full-time documentation engineering and technical writing roles,
+            and select consulting.
+          </p>
+        </section> */}
 
         <section className="portfolio-section contact-page" style={{ paddingTop: 0 }}>
           <div className="contact-wrapper">
@@ -68,13 +80,10 @@ export default function Contact(): React.JSX.Element {
                   marginBottom: "1.5rem",
                 }}
               >
-                Whether it's API docs, developer guides, or a full docs-as-code
-                setup — I'm open to documentation roles, remote or with
-                relocation, and select consulting.
               </p>
               <div className="contact-direct-links">
                 <a
-                  href="https://www.linkedin.com/in/faith-kovi/"
+                  href="https://www.linkedin.com/in/faith-wachukwu/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="contact-direct-link"
@@ -107,18 +116,6 @@ export default function Contact(): React.JSX.Element {
                     <span>faithkovi@gmail.com</span>
                   </div>
                 </a>
-                <a
-                  href="/Faith_Wachukwu_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="contact-direct-link"
-                >
-                  <span className="contact-link-icon">📄</span>
-                  <div>
-                    <strong>Download CV</strong>
-                    <span>PDF résumé</span>
-                  </div>
-                </a>
               </div>
             </div>
 
@@ -129,7 +126,7 @@ export default function Contact(): React.JSX.Element {
                   <h3>Message sent!</h3>
                   <p>Thanks for reaching out. I'll get back to you soon.</p>
                   <button
-                    className="tab-btn active"
+                    className="btn-outline"
                     onClick={() => setStatus("idle")}
                     style={{ marginTop: "1rem" }}
                   >
@@ -140,7 +137,7 @@ export default function Contact(): React.JSX.Element {
                 <div className="contact-form-card">
                   <h3>Send a message</h3>
                   <p className="form-subtitle">
-                    Fill out the form and I'll respond within 24–48 hours.
+                    Fill out the form and I'll respond within 24 hours.
                   </p>
                   <form onSubmit={handleSubmit}>
                     <div className="form-row">

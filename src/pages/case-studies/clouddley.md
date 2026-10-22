@@ -59,6 +59,20 @@ The second-order effects mattered as much as the headline number:
 - **A maintainable system, not a snapshot.** Because the docs lived in a reviewed, continuously
   deployed pipeline, the deflection held instead of decaying.
 
+
+## How the number was measured
+
+<!-- TODO(Faith): replace the bracketed placeholders with real figures before deploying.
+     This section must be filled in — do not publish it with brackets. -->
+
+The baseline was average monthly inbound support ticket volume in [period]
+before the rebuild, compared against the same measure in [period] after the
+new docs shipped, drawn from [support platform reporting / team tracking].
+The comparison covers [ticket categories included]. [Caveat — e.g., user
+growth over the same window, which makes the per-user reduction larger than
+the headline figure.] Documentation wasn't the only change in this period,
+but it was the primary intervention targeting these ticket categories.
+
 ## What I'd track to prove it on day one
 
 For a hiring manager evaluating this: the metric I anchor to is **ticket deflection** — tickets

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: Documentation Samples
+title: Docs Sample
 description: A working documentation set, organized with the Diátaxis framework.
 ---
 
-# Documentation Sample
+# Docs Sample
 
 This section is a **working writing sample**, not a description of one. Rather than
 link to scattered PDFs, I documented a real, open-source tool I created end to end and organized

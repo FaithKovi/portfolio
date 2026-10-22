@@ -3,6 +3,7 @@ slug: how-to-write-documentation-for-both-humans-and-ai-retrieval-systems
 title: How to Write Documentation for Both Humans and AI Retrieval Systems
 authors: Faith Wachukwu
 tags: [technical-writing, documentation, AI, RAG, developer-experience, content-strategy, LLM]
+image: /img/blog/cover-docs-humans-ai.png
 ---
 
 <img src="/img/blog/cover-docs-humans-ai.png" alt="A hand-drawn style illustration showing a document in the center with two readers: a stick-figure human on the left reading the document from top to bottom, and a boxy robot on the right reaching in to grab a single highlighted chunk. Text reads: Your docs now have two readers. Write for both, compromise on neither." />

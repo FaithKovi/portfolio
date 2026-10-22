@@ -3,6 +3,7 @@ slug: why-on-call-engineers-ignore-your-runbooks
 title: 'Why On-Call Engineers Ignore Your Runbooks '
 authors: Faith Wachukwu
 tags: [On-call, documentation, technical writing, engineer ]
+image: /img/blog/oncall-cover.png
 ---
 
 <img src="/img/blog/oncall-cover.png" alt="#" />

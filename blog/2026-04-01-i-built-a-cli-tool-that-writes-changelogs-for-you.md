@@ -3,6 +3,7 @@ slug: i-built-a-cli-tool-that-writes-changelogs-for-you
 title: I Built a CLI Tool That Writes Changelogs For You — Here's Why
 authors: Faith Wachukwu
 tags: [changelog automation, LLM, AI tools for developers, technical writing, prompt engineering, documentation engineering, Google Gemini API, LLM developer tools, Keep a Changelog, CI/CD automation]
+image: /img/blog/cli-tool.png
 ---
 
 <img src="/img/blog/cli-tool.png" alt="I Built a CLI Tool That Writes Changelogs For You — Here's Why" />

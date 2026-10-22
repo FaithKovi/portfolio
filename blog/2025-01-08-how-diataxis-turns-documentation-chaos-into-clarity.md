@@ -3,6 +3,7 @@ slug: how-diataxis-turns-documentation-chaos-into-clarity
 title: How Diátaxis Turns Documentation Chaos into Clarity
 authors: Faith Wachukwu
 tags: [diataxis, docs]
+image: /img/blog/diataxis.png
 ---
 
 Let’s be honest, working on documentation can feel overwhelming. It’s easy to feel stuck when you’re staring at a blank page, or you’re trying to clean up existing content. That’s where [Diátaxis](https://diataxis.fr/) comes in. <!-- truncate -->  

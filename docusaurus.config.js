@@ -21,6 +21,11 @@ const config = {
     },
   },
 
+  stylesheets: [
+    "https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;600;700&display=swap",
+    "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@400;600;700&family=Manrope:wght@400;500;600;700&display=swap",
+  ],
+
   headTags: [
     {
       tagName: "meta",
@@ -109,15 +114,15 @@ const config = {
         title: "Faith Wachukwu",
         logo: {
           alt: "Faith Wachukwu",
-          src: "img/favicon-image.png",
-          srcDark: "img/favicon-image.png",
+          src: "img/fw-mark.svg",
+          srcDark: "img/fw-mark.svg",
         },
         items: [
-          { to: "/about", label: "About", position: "left" },
           { to: "/work", label: "Work", position: "left" },
-          { to: "/docs/intro", label: "How I Structure Docs", position: "left" },
-          { to: "/blog", label: "Blog", position: "left" },
-          { to: "/contact", label: "Contact", position: "left" },
+          { to: "/writing", label: "Writing", position: "left" },
+          { to: "/docs/intro", label: "Docs Sample", position: "left" },
+          { to: "/about", label: "About", position: "left" },
+          { to: "/contact", label: "Contact", position: "right", className: "navbar-cta" },
           {
             href: "https://github.com/FaithKovi",
             position: 'right',
@@ -125,7 +130,7 @@ const config = {
             'aria-label': 'GitHub',
           },
           {
-            href: "https://linkedin.com/in/faith-kovi",
+            href: "https://linkedin.com/in/faith-wachukwu",
             position: 'right',
             className: 'header-linkedin-link',
             'aria-label': 'LinkedIn',
@@ -133,7 +138,7 @@ const config = {
         ],
       },
       colorMode: {
-        defaultMode: "dark",
+        defaultMode: "light",
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
@@ -143,10 +148,12 @@ const config = {
           {
             title: "Pages",
             items: [
-              { label: "About", to: "/about" },
               { label: "Work", to: "/work" },
-              { label: "How I Structure Docs", to: "/docs/intro" },
+              { label: "Writing", to: "/writing" },
               { label: "Blog", to: "/blog" },
+              { label: "Docs Sample", to: "/docs/intro" },
+              { label: "Resume", to: "/resume" },
+              { label: "About", to: "/about" },
               { label: "Contact", to: "/contact" },
             ],
           },
@@ -154,7 +161,7 @@ const config = {
             title: "Connect",
             items: [
               { label: "GitHub", href: "https://github.com/FaithKovi" },
-              { label: "LinkedIn", href: "https://linkedin.com/in/faith-kovi" },
+              { label: "LinkedIn", href: "https://linkedin.com/in/faith-wachukwu" },
               { label: "Email", href: "mailto:faithkovi@gmail.com" },
               // { label: "RSS Feed", href: "/blog/rss.xml" },
             ],

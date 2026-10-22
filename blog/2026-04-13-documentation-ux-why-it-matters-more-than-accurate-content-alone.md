@@ -3,12 +3,13 @@ slug: documentation-ux-and-why-matters-more-than-accurate-content-alone
 title: 'Documentation UX: Why It Matters More Than Accurate Content Alone'
 authors: Faith Wachukwu
 tags: [Documentation UX, documentation, technical writing ]
+image: /img/blog/cover-doc-ux.png
 ---
 
 <img src="/img/blog/cover-doc-ux.png" alt="#" />
 
 
-When a user lands on your documentation, they’re looking for answers. If they hit a wall of text with no starting point or see steps that assume knowledge they don’t have yet. Within minutes, they’ll be frustrated and say it's a bad product.  
+When a user lands on your documentation, they’re looking for answers. If they hit a wall of text with no starting point, or steps that assume knowledge they don’t have yet, they’ll be frustrated within minutes — and they’ll say it's a bad product.  
 
 Believing that if the content is accurate and up to date, the docs are good is wrong. The docs being accurate is a starting point. In this article, we’ll dive into what documentation user experience (UX) is, how writing and structure shape it, what having bad documentation UX costs for your product, and how to improve it.
 

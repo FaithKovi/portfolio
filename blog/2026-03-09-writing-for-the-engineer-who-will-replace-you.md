@@ -3,6 +3,7 @@ slug: writing-for-the-engineer-who-will-replace-you
 title: Writing for the Engineer Who Will Replace You
 authors: Faith Wachukwu
 tags: [devops, docs]
+image: /img/blog/cover-writing-engineer.jpg
 ---
 
 <img src="/img/blog/cover-writing-engineer.jpg" alt="An engineer working in the dark." />

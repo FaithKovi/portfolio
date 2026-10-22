@@ -16,7 +16,7 @@ command is meant to be run exactly as written.
 
 ## What you'll need
 
-- **Python 3.8 or newer** (`python --version` to check)
+- **Python 3.10 or newer** (`python --version` to check)
 - **Git** installed and on your `PATH`
 - A free **Google account** — we'll use Gemini, which has no credit-card requirement
 
