@@ -152,7 +152,6 @@ const config = {
               { label: "Writing", to: "/writing" },
               { label: "Blog", to: "/blog" },
               { label: "Docs Sample", to: "/docs/intro" },
-              { label: "Resume", to: "/resume" },
               { label: "About", to: "/about" },
               { label: "Contact", to: "/contact" },
             ],
