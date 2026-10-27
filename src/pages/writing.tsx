@@ -7,6 +7,13 @@ const PUBLICATIONS = ["AppSignal", "HackerNoon", "Clouddley", "AWS in Plain Engl
 
 const ARTICLES = [
   {
+    title: "7 ETL Tools Built for Real-Time Data Integration",
+    platform: "TECH DEBT WEEKLY",
+    description: "Real-time ETL can mean CDC, event streaming, or a warehouse refreshed every few minutes. How Estuary, Confluent, Striim, Informatica, Dataflow, Lakeflow, and AWS Glue compare, and where Fivetran and Airbyte fit.",
+    url: "https://www.techdebtweekly.com/real-time-etl-tools",
+    date: "Oct. 2026",
+  },
+  {
     title: "Architecture Decision Records (ADRs): A Beginner's Guide",
     platform: "HackerNoon",
     description: "Architecture Decision Records (ADRs) are a way to document architectural decisions made during the development of a software system. This article provides a beginner's guide to understanding ADRs, their benefits, and how to implement them effectively in your projects.",
